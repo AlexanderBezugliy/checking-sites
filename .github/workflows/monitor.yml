@@ -25,10 +25,9 @@ jobs:
                   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
               run: node monitor.js
 
-            - name: Commit and Push new status
+            - name: Commit and push changes
               run: |
                   git config --global user.name "github-actions[bot]"
-                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                  git add status.json
-                  git diff-index --quiet HEAD || git commit -m "chore: auto-update status [skip ci]"
-                  git push origin main
+                    git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                    git add status.json
+                    git diff-index --quiet HEAD || (git commit -m "chore: auto-update status [skip ci]" && git pull --rebase origin main && git push origin main)
