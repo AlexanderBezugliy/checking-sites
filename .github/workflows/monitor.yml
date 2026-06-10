@@ -1,0 +1,34 @@
+name: Periodic Site Monitor
+
+on:
+    schedule:
+        - cron: "*/30 * * * *" # Запуск каждые 30 минут
+    workflow_dispatch: # Позволяет запускать кнопкой из веб-интерфейса
+
+jobs:
+    check-status:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Run monitoring script
+              env:
+                  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+                  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+              run: node monitor.js
+
+            - name: Commit and Push new status
+              run: |
+                  git config --global user.name "github-actions[bot]"
+                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                  git add status.json
+                  git diff-index --quiet HEAD || git commit -m "chore: auto-update status [skip ci]"
+                  git push origin main
