@@ -2,7 +2,7 @@ name: Periodic Site Monitor
 
 on:
     schedule:
-        - cron: "*/5 * * * *" # Запуск каждые 5 минут (для теста)
+        - cron: "*/3 * * * *" # Запуск каждые 3 минуты
     workflow_dispatch: # Позволяет запускать кнопкой из веб-интерфейса
 
 concurrency:

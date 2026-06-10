@@ -55,8 +55,28 @@ async function runMonitor() {
     };
     fs.writeFileSync("./status.json", JSON.stringify(statusData, null, 2));
 
-    if (failures.length > 0 && BOT_TOKEN && CHAT_ID) {
-        const message = `⚠️ *Проблемы со статусом сайтов (${failures.length}/${sites.length}):*\n\n${failures.join("\n")}`;
+    if (BOT_TOKEN && CHAT_ID) {
+        const time = new Date().toLocaleTimeString("ru-RU", {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+        const okCount = results.filter((r) => r.ok).length;
+        const slow = [...results]
+            .filter((r) => r.status !== "ERROR")
+            .sort((a, b) => b.duration - a.duration)
+            .slice(0, 3)
+            .map(
+                (r) =>
+                    `   • ${r.url.replace("https://", "")} — ${r.duration}ms`,
+            )
+            .join("\n");
+
+        let message;
+        if (failures.length > 0) {
+            message = `⚠️ *Проверка ${time} — проблемы ${failures.length}/${sites.length}:*\n\n${failures.join("\n")}\n\n✅ Работают: ${okCount}\n⏱ Топ медленных:\n${slow}`;
+        } else {
+            message = `✅ *Проверка ${time} — всё ок (${sites.length}/${sites.length})*\n\n⏱ Топ медленных:\n${slow}`;
+        }
 
         try {
             await fetch(
@@ -71,13 +91,13 @@ async function runMonitor() {
                     }),
                 },
             );
-            console.log("Алерт отправлен в Telegram");
+            console.log("Сообщение отправлено в Telegram");
         } catch (tgError) {
             console.error("Ошибка отправки в TG:", tgError);
         }
     } else {
         console.log(
-            "Все важные сайты работают (или отдают ожидаемый 503). В ТГ пусто.",
+            "TELEGRAM_BOT_TOKEN/CHAT_ID не заданы — пропускаем отправку",
         );
     }
 }
