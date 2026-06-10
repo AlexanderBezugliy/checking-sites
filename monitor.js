@@ -88,6 +88,17 @@ async function runMonitor() {
                         chat_id: CHAT_ID,
                         text: message,
                         parse_mode: "Markdown",
+                        // КНОПКA:
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    {
+                                        text: "🔄 Проверить статус сейчас",
+                                        callback_data: "check_now",
+                                    },
+                                ],
+                            ],
+                        },
                     }),
                 },
             );
