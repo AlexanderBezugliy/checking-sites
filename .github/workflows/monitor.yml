@@ -2,8 +2,12 @@ name: Periodic Site Monitor
 
 on:
     schedule:
-        - cron: "*/30 * * * *" # Запуск каждые 30 минут
+        - cron: "*/5 * * * *" # Запуск каждые 5 минут (для теста)
     workflow_dispatch: # Позволяет запускать кнопкой из веб-интерфейса
+
+concurrency:
+    group: monitor
+    cancel-in-progress: false
 
 jobs:
     check-status:
