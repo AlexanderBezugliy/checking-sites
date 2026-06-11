@@ -100,9 +100,8 @@ async function runMonitor() {
             .join("\n");
 
         let message;
-        // Изменили заголовки сообщений — убрали вывод времени
         if (failures.length > 0) {
-            message = `⚠️ *Обнаружены проблемы со статусом сайтов (${failures.length}/${sites.length}):*\n\n${failures.join("\n")}\n\n✅ Работают штатно: ${okCount}\n⏱ Топ медленных:\n${slow}`;
+            message = `⚠️ *Обнаружены проблемы со статусом сайтов (${failures.length}/${sites.length}):*\n\n${failures.join("\n")}\n\n⏱ Топ медленных:\n${slow}`;
         } else {
             message = `✅ *Все сайты работают стабильно (${sites.length}/${sites.length})*\n\n⏱ Топ медленных:\n${slow}`;
         }
