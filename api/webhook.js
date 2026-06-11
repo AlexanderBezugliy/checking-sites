@@ -1,5 +1,3 @@
-import https from 'https';
-
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -22,42 +20,22 @@ export default async function handler(req, res) {
                 })
             });
 
-            // 2. Стучимся в GitHub через IPv4
-            const postData = JSON.stringify({ ref: 'main' }); 
-
-            const options = {
-                hostname: 'api.github.org',
-                port: 443,
-                path: '/repos/AlexanderBezugliy/checking-sites/actions/workflows/monitor.yml/dispatches',
+            // 2. Стучимся в GitHub (ПРАВИЛЬНЫЙ АДРЕС: api.github.com)
+            const ghResponse = await fetch('https://api.github.com/repos/AlexanderBezugliy/checking-sites/actions/workflows/monitor.yml/dispatches', {
                 method: 'POST',
-                family: 4, // <-- ЖЕСТКО ФОРСИРУЕМ IPV4. ЭТО УБЕРЕТ БАГ С ENOTFOUND
                 headers: {
                     'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
                     'Accept': 'application/vnd.github+json',
                     'User-Agent': 'Vercel-Telegram-Bot',
-                    'X-GitHub-Api-Version': '2022-11-28',
-                    'Content-Type': 'application/json',
-                    'Content-Length': Buffer.byteLength(postData)
-                }
-            };
-
-            await new Promise((resolve, reject) => {
-                const request = https.request(options, (response) => {
-                    if (response.statusCode >= 200 && response.statusCode < 300) {
-                        resolve(response);
-                    } else {
-                        reject(new Error(`GitHub API ответил статусом: ${response.statusCode}`));
-                    }
-                });
-
-                request.on('error', (e) => {
-                    console.error('Ошибка классического запроса к GitHub:', e);
-                    reject(e);
-                });
-
-                request.write(postData);
-                request.end();
+                    'X-GitHub-Api-Version': '2022-11-28'
+                },
+                body: JSON.stringify({ ref: 'main' }) 
             });
+
+            if (!ghResponse.ok) {
+                const errText = await ghResponse.text();
+                console.error('Ошибка GitHub API:', errText);
+            }
 
         } catch (error) {
             console.error('Ошибка обработки хука:', error);
