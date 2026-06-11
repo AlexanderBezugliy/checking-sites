@@ -1,5 +1,19 @@
 const fs = require("fs");
 
+// Хелпер для расшифровки точных HTTP статусов
+function getHttpDesc(status) {
+    const codes = {
+        400: "Bad Request",
+        401: "Unauthorized",
+        403: "Forbidden / Access Denied",
+        404: "Not Found",
+        500: "Internal Server Error",
+        502: "Bad Gateway",
+        504: "Gateway Timeout",
+    };
+    return codes[status] || "";
+}
+
 async function runMonitor() {
     const sites = JSON.parse(fs.readFileSync("./sites.json", "utf8"));
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -28,25 +42,43 @@ async function runMonitor() {
                     duration,
                 });
 
-                // ИЗМЕНЕНИЕ ЗДЕСЬ: шлем алерт, только если статус не OK И это НЕ 503 ошибка
+                // Проверяем на ошибки, полностью игнорируя статус 503 (клоака)
                 if (!response.ok && response.status !== 503) {
-                    failures.push(`❌ *${site.url}* — HTTP ${response.status}`);
+                    const desc = getHttpDesc(response.status);
+                    const statusText = desc
+                        ? `HTTP ${response.status} (${desc})`
+                        : `HTTP ${response.status}`;
+                    failures.push(`❌ *${site.url}* — ${statusText}`);
                 }
             } catch (error) {
+                // Анализируем текст ошибки и системный код для поиска проблем с SSL
+                const errContext =
+                    `${error.message} ${error.cause?.message || ""} ${error.cause?.code || ""}`.toLowerCase();
+                const isSslError =
+                    errContext.includes("cert") ||
+                    errContext.includes("expired") ||
+                    errContext.includes("tls");
+
                 results.push({
                     url: site.url,
-                    status: "ERROR",
+                    status: isSslError ? "SSL_ERROR" : "ERROR",
                     ok: false,
                     error: error.message,
                 });
-                failures.push(`🚨 *${site.url}* — Ошибка: ${error.message}`);
+
+                if (isSslError) {
+                    failures.push(`🔒 *${site.url}* — Истёк SSL-сертификат!`);
+                } else {
+                    failures.push(
+                        `🚨 *${site.url}* — Ошибка: ${error.message}`,
+                    );
+                }
             }
         });
 
         await Promise.allSettled(promises);
     }
 
-    // Счетчик завязан на массив failures, так что 503 сюда тоже теперь не попадет как сбой
     const statusData = {
         last_update: new Date().toISOString(),
         total_sites: sites.length,
@@ -56,13 +88,9 @@ async function runMonitor() {
     fs.writeFileSync("./status.json", JSON.stringify(statusData, null, 2));
 
     if (BOT_TOKEN && CHAT_ID) {
-        const time = new Date().toLocaleTimeString("ru-RU", {
-            hour: "2-digit",
-            minute: "2-digit",
-        });
         const okCount = results.filter((r) => r.ok).length;
         const slow = [...results]
-            .filter((r) => r.status !== "ERROR")
+            .filter((r) => r.status !== "ERROR" && r.status !== "SSL_ERROR")
             .sort((a, b) => b.duration - a.duration)
             .slice(0, 3)
             .map(
@@ -72,10 +100,11 @@ async function runMonitor() {
             .join("\n");
 
         let message;
+        // Изменили заголовки сообщений — убрали вывод времени
         if (failures.length > 0) {
-            message = `⚠️ *Проверка ${time} — проблемы ${failures.length}/${sites.length}:*\n\n${failures.join("\n")}\n\n✅ Работают: ${okCount}\n⏱ Топ медленных:\n${slow}`;
+            message = `⚠️ *Обнаружены проблемы со статусом сайтов (${failures.length}/${sites.length}):*\n\n${failures.join("\n")}\n\n✅ Работают штатно: ${okCount}\n⏱ Топ медленных:\n${slow}`;
         } else {
-            message = `✅ *Проверка ${time} — всё ок (${sites.length}/${sites.length})*\n\n⏱ Топ медленных:\n${slow}`;
+            message = `✅ *Все сайты работают стабильно (${sites.length}/${sites.length})*\n\n⏱ Топ медленных:\n${slow}`;
         }
 
         try {
@@ -88,7 +117,6 @@ async function runMonitor() {
                         chat_id: CHAT_ID,
                         text: message,
                         parse_mode: "Markdown",
-                        // КНОПКA:
                         reply_markup: {
                             inline_keyboard: [
                                 [
