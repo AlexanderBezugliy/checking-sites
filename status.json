@@ -1,157 +1,169 @@
 {
-  "last_update": "2026-07-08T23:11:32.819Z",
+  "last_update": "2026-07-09T01:20:42.296Z",
   "total_sites": 34,
-  "failed_count": 30,
+  "failed_count": 1,
   "data": [
     {
-      "url": "https://freshbet-uk.org",
-      "status": 200,
-      "ok": true,
-      "duration": 397
-    },
-    {
-      "url": "https://instaspin7.com",
-      "status": 200,
-      "ok": true,
-      "duration": 461
-    },
-    {
-      "url": "https://truefortune-go.com",
-      "status": 200,
-      "ok": true,
-      "duration": 528
-    },
-    {
-      "url": "https://slotlaircasino-uk.org",
-      "status": 200,
-      "ok": true,
-      "duration": 702
-    },
-    {
       "url": "https://winbeastcasino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 513
     },
     {
       "url": "https://slotlaircasino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 505
     },
     {
       "url": "https://slotscharmcasino.org.uk",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "status": 200,
+      "ok": true,
+      "duration": 510
     },
     {
       "url": "https://slotscharm-casino.org.uk",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 521
     },
     {
       "url": "https://britsinocasino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 565
     },
     {
       "url": "https://prestigespin-casino.org.uk",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 653
     },
     {
       "url": "https://hotstreak-casino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 682
     },
     {
       "url": "https://hotstreakcasino-uk.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://true-fortune-casino.gb.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://freshbetcasino.gb.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://instaspin-casino.gb.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://tradacasino-uk.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://truefortune7.co.uk",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://truefortune-casino.gb.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 802
     },
     {
       "url": "https://instaspin-win.co.uk",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "status": 200,
+      "ok": true,
+      "duration": 877
     },
     {
-      "url": "https://insta-spin.gb.net",
-      "status": "ERROR",
+      "url": "https://true-fortune-casino.gb.net",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 887
+    },
+    {
+      "url": "https://freshbetcasino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 898
+    },
+    {
+      "url": "https://instaspin-casino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 973
+    },
+    {
+      "url": "https://freshbet-uk.org",
+      "status": 503,
+      "ok": false,
+      "duration": 979
     },
     {
       "url": "https://tradacasino-go.co.uk",
-      "status": "ERROR",
+      "status": 200,
+      "ok": true,
+      "duration": 1051
+    },
+    {
+      "url": "https://tradacasino-uk.net",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 1098
+    },
+    {
+      "url": "https://instaspin7.com",
+      "status": 503,
+      "ok": false,
+      "duration": 1100
+    },
+    {
+      "url": "https://truefortune-casino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 1130
+    },
+    {
+      "url": "https://truefortune7.co.uk",
+      "status": 503,
+      "ok": false,
+      "duration": 1145
+    },
+    {
+      "url": "https://truefortune-go.com",
+      "status": 503,
+      "ok": false,
+      "duration": 1243
+    },
+    {
+      "url": "https://insta-spin.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 1249
     },
     {
       "url": "https://winbeast-casino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 1317
     },
     {
       "url": "https://slotlair-casino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 1422
     },
     {
       "url": "https://slotscharmcasino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 1422
+    },
+    {
+      "url": "https://slotlaircasino-uk.org",
+      "status": 503,
+      "ok": false,
+      "duration": 1446
     },
     {
       "url": "https://britsino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 1478
+    },
+    {
+      "url": "https://hotstreak-casino.org.uk",
+      "status": 200,
+      "ok": true,
+      "duration": 177
+    },
+    {
+      "url": "https://prestigespincasino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 363
     },
     {
       "url": "https://this-domain-is-fake-and-dead.com",
@@ -160,52 +172,40 @@
       "error": "fetch failed"
     },
     {
-      "url": "https://prestigespincasino.gb.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://hotstreak-casino.org.uk",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
       "url": "https://hotstreakcasino-uk.org",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
-    },
-    {
-      "url": "https://freshbet-casino.gb.net",
-      "status": "ERROR",
-      "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 473
     },
     {
       "url": "https://fresh-bet.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 520
+    },
+    {
+      "url": "https://freshbet-casino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 545
     },
     {
       "url": "https://hustlescasino.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 569
     },
     {
       "url": "https://vibro-bet.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 587
     },
     {
       "url": "https://betnjet.gb.net",
-      "status": "ERROR",
+      "status": 503,
       "ok": false,
-      "error": "The operation was aborted due to timeout"
+      "duration": 601
     }
   ]
 }
