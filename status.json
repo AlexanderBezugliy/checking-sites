@@ -1,157 +1,163 @@
 {
-  "last_update": "2026-07-16T19:50:27.223Z",
+  "last_update": "2026-07-16T21:03:49.895Z",
   "total_sites": 34,
   "failed_count": 1,
   "data": [
     {
+      "url": "https://freshbet-uk.org",
+      "status": 200,
+      "ok": true,
+      "duration": 420
+    },
+    {
       "url": "https://slotlaircasino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 445
+      "duration": 461
     },
     {
       "url": "https://winbeastcasino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 510
-    },
-    {
-      "url": "https://freshbet-uk.org",
-      "status": 200,
-      "ok": true,
-      "duration": 462
+      "duration": 564
     },
     {
       "url": "https://slotscharm-casino.org.uk",
       "status": 503,
       "ok": false,
-      "duration": 479
-    },
-    {
-      "url": "https://tradacasino-uk.net",
-      "status": 200,
-      "ok": true,
-      "duration": 480
+      "duration": 557
     },
     {
       "url": "https://slotscharmcasino.org.uk",
       "status": 503,
       "ok": false,
-      "duration": 498
+      "duration": 589
     },
     {
-      "url": "https://britsinocasino.gb.net",
-      "status": 503,
-      "ok": false,
-      "duration": 587
+      "url": "https://tradacasino-uk.net",
+      "status": 200,
+      "ok": true,
+      "duration": 580
     },
     {
       "url": "https://hotstreak-casino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 594
-    },
-    {
-      "url": "https://prestigespin-casino.org.uk",
-      "status": 503,
-      "ok": false,
-      "duration": 603
+      "duration": 630
     },
     {
       "url": "https://truefortune-go.com",
       "status": 200,
       "ok": true,
-      "duration": 615
+      "duration": 628
+    },
+    {
+      "url": "https://britsinocasino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 649
     },
     {
       "url": "https://true-fortune-casino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 685
+      "duration": 696
+    },
+    {
+      "url": "https://prestigespin-casino.org.uk",
+      "status": 503,
+      "ok": false,
+      "duration": 728
     },
     {
       "url": "https://hotstreakcasino-uk.net",
       "status": 200,
       "ok": true,
-      "duration": 721
-    },
-    {
-      "url": "https://freshbetcasino.gb.net",
-      "status": 200,
-      "ok": true,
-      "duration": 734
+      "duration": 732
     },
     {
       "url": "https://instaspin-casino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 751
+      "duration": 766
+    },
+    {
+      "url": "https://freshbetcasino.gb.net",
+      "status": 200,
+      "ok": true,
+      "duration": 778
     },
     {
       "url": "https://instaspin7.com",
       "status": 200,
       "ok": true,
-      "duration": 819
-    },
-    {
-      "url": "https://truefortune-casino.gb.net",
-      "status": 503,
-      "ok": false,
-      "duration": 835
+      "duration": 824
     },
     {
       "url": "https://truefortune7.co.uk",
       "status": 503,
       "ok": false,
-      "duration": 870
+      "duration": 927
     },
     {
-      "url": "https://instaspin-win.co.uk",
+      "url": "https://truefortune-casino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 871
+      "duration": 963
     },
     {
       "url": "https://insta-spin.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 930
-    },
-    {
-      "url": "https://slotlair-casino.gb.net",
-      "status": 503,
-      "ok": false,
       "duration": 1058
     },
     {
-      "url": "https://tradacasino-go.co.uk",
+      "url": "https://instaspin-win.co.uk",
       "status": 503,
       "ok": false,
-      "duration": 1073
-    },
-    {
-      "url": "https://britsino.gb.net",
-      "status": 503,
-      "ok": false,
-      "duration": 1126
-    },
-    {
-      "url": "https://slotscharmcasino.gb.net",
-      "status": 503,
-      "ok": false,
-      "duration": 1144
+      "duration": 1105
     },
     {
       "url": "https://winbeast-casino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 1159
+      "duration": 1102
+    },
+    {
+      "url": "https://slotlair-casino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 1108
+    },
+    {
+      "url": "https://tradacasino-go.co.uk",
+      "status": 503,
+      "ok": false,
+      "duration": 1145
     },
     {
       "url": "https://slotlaircasino-uk.org",
       "status": 200,
       "ok": true,
-      "duration": 1171
+      "duration": 1200
+    },
+    {
+      "url": "https://britsino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 1209
+    },
+    {
+      "url": "https://slotscharmcasino.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 1235
+    },
+    {
+      "url": "https://hotstreakcasino-uk.org",
+      "status": 200,
+      "ok": true,
+      "duration": 196
     },
     {
       "url": "https://this-domain-is-fake-and-dead.com",
@@ -160,52 +166,46 @@
       "error": "fetch failed"
     },
     {
-      "url": "https://hotstreakcasino-uk.org",
-      "status": 200,
-      "ok": true,
-      "duration": 169
-    },
-    {
       "url": "https://prestigespincasino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 407
+      "duration": 386
     },
     {
       "url": "https://hotstreak-casino.org.uk",
       "status": 503,
       "ok": false,
-      "duration": 417
+      "duration": 431
     },
     {
       "url": "https://freshbet-casino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 473
-    },
-    {
-      "url": "https://fresh-bet.gb.net",
-      "status": 503,
-      "ok": false,
-      "duration": 504
-    },
-    {
-      "url": "https://betnjet.gb.net",
-      "status": 503,
-      "ok": false,
-      "duration": 511
+      "duration": 571
     },
     {
       "url": "https://hustlescasino.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 525
+      "duration": 587
+    },
+    {
+      "url": "https://fresh-bet.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 603
     },
     {
       "url": "https://vibro-bet.gb.net",
       "status": 503,
       "ok": false,
-      "duration": 528
+      "duration": 623
+    },
+    {
+      "url": "https://betnjet.gb.net",
+      "status": 503,
+      "ok": false,
+      "duration": 630
     }
   ]
 }
