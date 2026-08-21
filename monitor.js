@@ -189,9 +189,70 @@ function normalizeHost(host) {
 
 function nsKey(ns) {
     return (ns || [])
-        .map((name) => String(name).toLowerCase().replace(/\.$/, ""))
+        .map((name) => String(name).trim().toLowerCase().replace(/\.$/, ""))
+        .filter(Boolean)
         .sort()
         .join(",");
+}
+
+function normalizeNsName(name) {
+    return String(name || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\.$/, "");
+}
+
+function normalizeNsList(ns) {
+    const out = [];
+    const seen = new Set();
+    for (const name of ns || []) {
+        const n = normalizeNsName(name);
+        if (!n || seen.has(n)) continue;
+        seen.add(n);
+        out.push(n);
+    }
+    return out;
+}
+
+function nsProvider(name) {
+    const parts = normalizeNsName(name).split(".").filter(Boolean);
+    if (parts.length < 2) return normalizeNsName(name);
+    return parts.slice(-2).join(".");
+}
+
+function attachEtalon(result, site) {
+    const ns_expected = normalizeNsList(site?.ns);
+    const live = normalizeNsList(result.dns?.ns);
+    const ns_match = ns_expected.length
+        ? Boolean(live.length) && nsKey(ns_expected) === nsKey(live)
+        : null;
+    return { ...result, ns_expected, ns_match };
+}
+
+function logNsEtalon(results) {
+    let ok = 0;
+    let bad = 0;
+    let skip = 0;
+    for (const row of results) {
+        if (row.ns_match == null) {
+            skip += 1;
+            continue;
+        }
+        const live = normalizeNsList(row.dns?.ns);
+        const expProv = [
+            ...new Set((row.ns_expected || []).map(nsProvider)),
+        ].join(",") || "—";
+        const liveProv = [...new Set(live.map(nsProvider))].join(",") || "—";
+        if (row.ns_match) {
+            ok += 1;
+            continue;
+        }
+        bad += 1;
+        console.log(
+            `NS mismatch ${row.url} expected=[${(row.ns_expected || []).join(", ")}] (${expProv}) live=[${live.join(", ") || "—"}] (${liveProv})`,
+        );
+    }
+    console.log(`NS etalon: ${ok} OK, ${bad} mismatch, ${skip} no etalon`);
 }
 
 function isForeignRedirect(fromUrl, location) {
@@ -306,6 +367,8 @@ function buildDiff(prevMap, results) {
     const down = [];
     const recovered = [];
     const nsChanged = [];
+    const nsEtalonMismatch = [];
+    const nsEtalonRecovered = [];
     const sslSoon = [];
     const redirects = [];
 
@@ -328,6 +391,18 @@ function buildDiff(prevMap, results) {
             }
         }
 
+        const prevMatch = prev?.ns_match;
+        if (curr.ns_match === false && prevMatch !== false) {
+            nsEtalonMismatch.push({
+                url: curr.url,
+                expected: curr.ns_expected || [],
+                actual: curr.dns?.ns || [],
+            });
+        }
+        if (curr.ns_match === true && prevMatch === false) {
+            nsEtalonRecovered.push({ url: curr.url });
+        }
+
         if (
             curr.ssl &&
             curr.ssl.daysLeft != null &&
@@ -343,7 +418,15 @@ function buildDiff(prevMap, results) {
         }
     }
 
-    return { down, recovered, nsChanged, sslSoon, redirects };
+    return {
+        down,
+        recovered,
+        nsChanged,
+        nsEtalonMismatch,
+        nsEtalonRecovered,
+        sslSoon,
+        redirects,
+    };
 }
 
 function diffHasEvents(diff) {
@@ -351,6 +434,8 @@ function diffHasEvents(diff) {
         diff.down.length ||
         diff.recovered.length ||
         diff.nsChanged.length ||
+        diff.nsEtalonMismatch.length ||
+        diff.nsEtalonRecovered.length ||
         diff.sslSoon.length ||
         diff.redirects.length
     );
@@ -391,6 +476,21 @@ function buildChangeMessage(diff) {
                 (row) =>
                     `   • ${row.url}\n     было: ${formatNsList(row.from)}\n     стало: ${formatNsList(row.to)}`,
             ),
+        );
+    }
+    if (diff.nsEtalonMismatch.length) {
+        blocks.push(
+            `\n🧭 *Эталон NS не совпал (${diff.nsEtalonMismatch.length}):*`,
+            ...diff.nsEtalonMismatch.map(
+                (row) =>
+                    `   • ${row.url}\n     ожидалось: ${formatNsList(row.expected) || "—"}\n     сейчас: ${formatNsList(row.actual) || "не резолвится"}`,
+            ),
+        );
+    }
+    if (diff.nsEtalonRecovered.length) {
+        blocks.push(
+            `\n✅ *NS снова совпадают с эталоном (${diff.nsEtalonRecovered.length}):*`,
+            ...diff.nsEtalonRecovered.map((row) => `   • ${row.url}`),
         );
     }
     if (diff.sslSoon.length) {
@@ -445,16 +545,19 @@ async function checkSite(site) {
         : { ns: [], a: [], ok: false, error: "некорректный URL" };
 
     if (!dns.ok) {
-        return {
-            url: site.url,
-            status: "DNS_ERROR",
-            ok: false,
-            alive: false,
-            dns,
-            error: dns.error,
-            ssl: null,
-            redirect: null,
-        };
+        return attachEtalon(
+            {
+                url: site.url,
+                status: "DNS_ERROR",
+                ok: false,
+                alive: false,
+                dns,
+                error: dns.error,
+                ssl: null,
+                redirect: null,
+            },
+            site,
+        );
     }
 
     try {
@@ -492,16 +595,19 @@ async function checkSite(site) {
             }
         }
 
-        return {
-            url: site.url,
-            status: response.status,
-            ok: response.ok,
-            alive,
-            duration,
-            dns,
-            ssl,
-            redirect,
-        };
+        return attachEtalon(
+            {
+                url: site.url,
+                status: response.status,
+                ok: response.ok,
+                alive,
+                duration,
+                dns,
+                ssl,
+                redirect,
+            },
+            site,
+        );
     } catch (error) {
         const errContext =
             `${error.message} ${error.cause?.message || ""} ${error.cause?.code || ""}`.toLowerCase();
@@ -510,17 +616,20 @@ async function checkSite(site) {
             errContext.includes("expired") ||
             errContext.includes("tls");
 
-        return {
-            url: site.url,
-            status: isSslError ? "SSL_ERROR" : "ERROR",
-            ok: false,
-            alive: false,
-            duration: Date.now() - startTime,
-            dns,
-            ssl: null,
-            redirect: null,
-            error: error.message,
-        };
+        return attachEtalon(
+            {
+                url: site.url,
+                status: isSslError ? "SSL_ERROR" : "ERROR",
+                ok: false,
+                alive: false,
+                duration: Date.now() - startTime,
+                dns,
+                ssl: null,
+                redirect: null,
+                error: error.message,
+            },
+            site,
+        );
     }
 }
 
@@ -537,23 +646,37 @@ async function runMonitor() {
     for (let i = 0; i < sites.length; i += BATCH_SIZE) {
         const batch = sites.slice(i, i + BATCH_SIZE);
         const settled = await Promise.allSettled(batch.map(checkSite));
-        for (const item of settled) {
+        for (let j = 0; j < settled.length; j++) {
+            const item = settled[j];
+            const site = batch[j];
             if (item.status === "fulfilled") {
                 results.push(item.value);
             } else {
-                results.push({
-                    url: "unknown",
-                    status: "ERROR",
-                    ok: false,
-                    alive: false,
-                    dns: { ns: [], a: [], ok: false, error: String(item.reason) },
-                    error: String(item.reason),
-                    ssl: null,
-                    redirect: null,
-                });
+                results.push(
+                    attachEtalon(
+                        {
+                            url: site?.url || "unknown",
+                            status: "ERROR",
+                            ok: false,
+                            alive: false,
+                            dns: {
+                                ns: [],
+                                a: [],
+                                ok: false,
+                                error: String(item.reason),
+                            },
+                            error: String(item.reason),
+                            ssl: null,
+                            redirect: null,
+                        },
+                        site,
+                    ),
+                );
             }
         }
     }
+
+    logNsEtalon(results);
 
     const aliveCount = results.filter((r) => r.alive).length;
     const failedCount = results.filter((r) => !r.alive).length;
