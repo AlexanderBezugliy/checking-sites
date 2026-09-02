@@ -75,7 +75,7 @@ HTTP-проверку бот всегда делает с `/?view=d7Fm2Kp9Qx4Nw8
 
 В git их нет (локальный `.env` в `.gitignore`).
 
-После пуша: Actions → **Daily Index Monitor** → Run workflow. В логе сразу `SEO network probe`, `SEO start` и `SEO auth ok` по каждой почте. Раннер GitHub ходит в Google **только по IPv4** (IPv6 там часто зависает). Если снова «Главных проверено: 0 из 433» — пришлите лог шагов **Probe Google IPv4** и **Run index inspection**.
+После пуша: Actions → **Daily Index Monitor** → Run workflow. В логе сразу `SEO secrets`, `SEO start` и `SEO auth ok` по каждой почте. Клиент GSC у googleapis заморожен — OAuth берём отдельно, не через `sc.oauth2`.
 
 В `status.json` у каждой строки поле `index`: `indexed` — главная, `pages[]` — все проверенные URL. Аптайм это поле копирует и не затирает. Дашборд может рисовать ОК / не в индексе по `index.indexed`.
 

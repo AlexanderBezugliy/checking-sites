@@ -28,12 +28,35 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Check GSC secret shape
+              env:
+                  GSC_CLIENT_SECRET_JSON: ${{ secrets.GSC_CLIENT_SECRET_JSON }}
+                  GSC_ACCOUNTS_JSON: ${{ secrets.GSC_ACCOUNTS_JSON }}
+              run: |
+                  node -e '
+                    const c = process.env.GSC_CLIENT_SECRET_JSON || "";
+                    const a = process.env.GSC_ACCOUNTS_JSON || "";
+                    console.log("client_bytes", c.length);
+                    console.log("accounts_bytes", a.length);
+                    const cj = JSON.parse(c);
+                    const block = cj.web || cj.installed;
+                    if (!block || !block.client_id || !block.client_secret) {
+                      throw new Error("GSC_CLIENT_SECRET_JSON: нет web.client_id / client_secret");
+                    }
+                    console.log("client_id_prefix", String(block.client_id).slice(0, 16));
+                    const aj = JSON.parse(a);
+                    const n = Object.values(aj).filter((v) => v && v.refreshToken).length;
+                    console.log("refresh_tokens", n);
+                    if (n < 1) throw new Error("GSC_ACCOUNTS_JSON: нет refreshToken");
+                  '
+
             - name: Probe Google IPv4
               run: |
+                  set -x
                   echo "ipv4 oauth2.googleapis.com:"
                   curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 https://oauth2.googleapis.com/ || echo "ipv4 oauth FAIL"
-                  echo "ipv4 searchconsole.googleapis.com:"
-                  curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 https://searchconsole.googleapis.com/ || echo "ipv4 gsc FAIL"
+                  echo "ipv4 oauth2 token endpoint:"
+                  curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 -X POST https://oauth2.googleapis.com/token || echo "ipv4 token FAIL"
                   echo "ipv6 oauth2 (often hangs on GHA):"
                   curl -6 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 8 https://oauth2.googleapis.com/ || echo "ipv6 FAIL/timeout"
 

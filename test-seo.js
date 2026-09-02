@@ -19,6 +19,7 @@ const {
     buildSeoDiff,
     hasPriorIndex,
     formatSeoMessage,
+    formatAuthFailMessage,
     applyIndexToStatusData,
     inspectUrlWithFallback,
     withTimeout,
@@ -206,6 +207,18 @@ async function main() {
 
     await test("дифф: выпало / попало, первый прогон — база", () => {
         assert.equal(hasPriorIndex({ data: [] }), false);
+        assert.equal(
+            hasPriorIndex({
+                index_last_update: "2026-09-01T00:00:00Z",
+                data: [
+                    {
+                        url: "https://a.com",
+                        index: { pages: [], error: "GSC auth failed" },
+                    },
+                ],
+            }),
+            false,
+        );
         const prev = {
             index_last_update: "2026-09-01T00:00:00Z",
             data: [
@@ -248,21 +261,13 @@ async function main() {
         });
         assert.ok(baseline.includes("база записана"));
         assert.ok(baseline.includes("из 10"));
-        const stalledAuth = formatSeoMessage({
-            isBaseline: true,
-            diff,
-            stats: {
-                homesChecked: 0,
-                homesIndexed: 0,
-                pagesCheckedToday: 0,
-                pagesIndexed: 0,
-                skipped: 7,
-                eligible: 433,
-                stalled: true,
-                stalledReason: "auth",
-            },
+        const authFail = formatAuthFailMessage({
+            eligible: 433,
+            skipped: 7,
+            detail: "invalid_client",
         });
-        assert.ok(stalledAuth.includes("авторизоваться"));
+        assert.ok(authFail.includes("прогон не начался"));
+        assert.ok(!authFail.includes("база записана"));
         const change = formatSeoMessage({
             isBaseline: false,
             diff,
@@ -488,6 +493,16 @@ async function main() {
         }
         assert.equal(threw, true);
         assert.ok(Date.now() - start < 400);
+    });
+
+    await test("googleapis freeze'ит searchconsole: sc.oauth2 нельзя записать", () => {
+        const { google } = require("googleapis");
+        const auth = new google.auth.OAuth2("id", "secret");
+        const sc = google.searchconsole({ version: "v1", auth });
+        assert.equal(Object.isFrozen(sc), true);
+        sc.oauth2 = auth;
+        assert.equal(sc.oauth2, undefined);
+        assert.equal(typeof sc.context._options.auth.getAccessToken, "function");
     });
 
     await test("hostFromSiteUrl", () => {

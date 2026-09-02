@@ -34,21 +34,6 @@ function preferIpv4() {
 
 preferIpv4();
 
-const GSC_HTTPS_AGENT = new https.Agent({
-    family: 4,
-    keepAlive: true,
-    timeout: INSPECT_TIMEOUT_MS,
-});
-
-function gscTransportOptions() {
-    return {
-        agent: GSC_HTTPS_AGENT,
-        timeout: INSPECT_TIMEOUT_MS,
-        retry: true,
-        retryConfig: { retry: 2, retryDelay: 1000 },
-    };
-}
-
 function logSeo(message) {
     const line = `${new Date().toISOString()} ${message}\n`;
     try {
@@ -400,8 +385,11 @@ function buildSeoDiff(prevStatus, nextByHost) {
 }
 
 function hasPriorIndex(status) {
-    if (status?.index_last_update) return true;
-    return (status?.data || []).some((row) => row?.index && row.index.pages);
+    return (status?.data || []).some((row) =>
+        (row?.index?.pages || []).some(
+            (page) => page && (page.indexed === true || page.indexed === false),
+        ),
+    );
 }
 
 function formatSeoMessage({ isBaseline, diff, stats }) {
@@ -416,9 +404,7 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
         ];
         if (stats.stalled) {
             lines.push(
-                stats.stalledReason === "auth"
-                    ? "⚠️ Прогон оборван: GitHub не смог авторизоваться в Google (таймаут OAuth). Это не полный список."
-                    : "⚠️ Прогон оборван: Google с GitHub не отвечал (таймаут). Это не полный список.",
+                "⚠️ Прогон оборван: Google с GitHub не отвечал (таймаут). Это не полный список.",
             );
         }
         lines.push("Дальше писать буду только если что-то изменится.");
@@ -450,6 +436,18 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
         );
     }
     return blocks.join("\n");
+}
+
+function formatAuthFailMessage({ eligible, skipped, detail }) {
+    return [
+        "🔍 *Индексация: прогон не начался*",
+        "GitHub не получил OAuth-токен Google. Это не база и не список сайтов.",
+        detail ? `Причина: ${detail}` : null,
+        `Сайтов к проверке: ${eligible}, skip: ${skipped}`,
+        "`status.json` не менял.",
+    ]
+        .filter(Boolean)
+        .join("\n");
 }
 
 function applyIndexToStatusData(data, indexByHost) {
@@ -504,7 +502,6 @@ async function inspectOnce(sc, inspectionUrl, siteUrl) {
                     siteUrl,
                 },
                 timeout: INSPECT_TIMEOUT_MS,
-                agent: GSC_HTTPS_AGENT,
             }),
             INSPECT_TIMEOUT_MS + 2000,
             "GSC inspect timeout",
@@ -535,6 +532,15 @@ async function inspectOnceWithRetry(sc, inspectionUrl, siteUrl) {
     return last;
 }
 
+function authErrorText(err) {
+    const data = err?.response?.data;
+    if (data && typeof data === "object") {
+        return [data.error, data.error_description].filter(Boolean).join(": ");
+    }
+    if (typeof data === "string" && data.trim()) return data.trim().slice(0, 180);
+    return String(err?.message || err);
+}
+
 async function probeGoogleIpv4() {
     const started = Date.now();
     try {
@@ -542,7 +548,7 @@ async function probeGoogleIpv4() {
             new Promise((resolve, reject) => {
                 const req = https.get(
                     "https://oauth2.googleapis.com/",
-                    { family: 4, agent: GSC_HTTPS_AGENT, timeout: PROBE_TIMEOUT_MS },
+                    { family: 4, timeout: PROBE_TIMEOUT_MS },
                     (res) => {
                         res.resume();
                         resolve(res.statusCode);
@@ -574,9 +580,9 @@ async function warmupAccounts(getClient, secrets) {
     const results = await Promise.all(
         entries.map(async ([email, token]) => {
             try {
-                const sc = getClient(email, token);
+                const { auth } = getClient(email, token);
                 const got = await withTimeout(
-                    Promise.resolve(sc.oauth2.getAccessToken()),
+                    Promise.resolve(auth.getAccessToken()),
                     AUTH_TIMEOUT_MS,
                     "GSC auth timeout",
                 );
@@ -584,14 +590,20 @@ async function warmupAccounts(getClient, secrets) {
                     typeof got === "string" ? got : got && got.token;
                 if (!access) throw new Error("empty access token");
                 logSeo(`SEO auth ok ${email}`);
-                return true;
+                return { ok: true, email, error: null };
             } catch (err) {
-                logSeo(`SEO auth FAIL ${email}: ${err.message || err}`);
-                return false;
+                const error = authErrorText(err);
+                logSeo(`SEO auth FAIL ${email}: ${error}`);
+                return { ok: false, email, error };
             }
         }),
     );
-    return results.filter(Boolean).length;
+    const failures = results.filter((row) => !row.ok);
+    return {
+        ok: results.length - failures.length,
+        total: results.length,
+        sampleError: failures[0]?.error || null,
+    };
 }
 
 async function runPool(items, concurrency, worker) {
@@ -633,25 +645,20 @@ async function inspectUrlWithFallback(inspectFn, inspectionUrl, domain, quota) {
 
 function clientCache(clientBlock) {
     const { google } = require("googleapis");
-    google.options(gscTransportOptions());
     const cache = new Map();
     return (accountEmail, refreshToken) => {
         const key = String(accountEmail).toLowerCase();
         if (cache.has(key)) return cache.get(key);
-        const auth = new google.auth.OAuth2({
-            clientId: clientBlock.client_id,
-            clientSecret: clientBlock.client_secret,
-            transporterOptions: gscTransportOptions(),
-        });
+        const auth = new google.auth.OAuth2(
+            clientBlock.client_id,
+            clientBlock.client_secret,
+        );
         auth.setCredentials({ refresh_token: refreshToken });
-        const sc = google.searchconsole({
-            version: "v1",
-            auth,
-            ...gscTransportOptions(),
-        });
-        sc.oauth2 = auth;
-        cache.set(key, sc);
-        return sc;
+        // googleapis freeze'ит клиент — вешать auth на sc.oauth2 нельзя
+        const sc = google.searchconsole({ version: "v1", auth });
+        const pair = { sc, auth };
+        cache.set(key, pair);
+        return pair;
     };
 }
 
@@ -668,6 +675,9 @@ async function runSeo(options = {}) {
         console.log("GSC_ACCOUNTS_JSON без refresh token — пропускаем SEO-проверку");
         return { skipped: true };
     }
+    logSeo(
+        `SEO secrets: client_bytes=${String(env.GSC_CLIENT_SECRET_JSON).length} accounts_bytes=${String(env.GSC_ACCOUNTS_JSON).length} tokens=${secrets.tokens.size}`,
+    );
 
     const sitesPath = options.sitesPath || SITES_PATH;
     const csvPath = options.csvPath || CSV_PATH;
@@ -699,7 +709,7 @@ async function runSeo(options = {}) {
                     error: `нет refresh token для ${account || host}`,
                 });
             }
-            const sc = getClient(account, token);
+            const { sc } = getClient(account, token);
             return inspectOnceWithRetry(sc, inspectionUrl, siteUrl);
         };
     }
@@ -758,62 +768,46 @@ async function runSeo(options = {}) {
         `SEO start: hosts=${hosts.length} eligible=${eligible.length} inner=${innerQueue.length} skipped=${skipped} concurrency=${concurrency}`,
     );
 
-    async function abortUnreachable(reason) {
-        logSeo(`SEO abort: ${reason}`);
-        const failIndex = skipIndex(reason, checkedAt);
-        for (const item of eligible) {
-            indexByHost.set(item.host, failIndex);
-        }
-        const nextData = applyIndexToStatusData(
-            prevStatus.data && prevStatus.data.length
-                ? prevStatus.data
-                : sites.map((site) => ({ url: site.url })),
-            indexByHost,
-        );
-        const statusData = {
-            ...prevStatus,
-            index_last_update: checkedAt,
-            index_queue_cursor: prevStatus.index_queue_cursor ?? 0,
-            data: nextData,
-        };
-        fs.writeFileSync(statusPath, JSON.stringify(statusData, null, 2));
-        const stats = {
-            homesChecked: 0,
-            homesIndexed: 0,
-            pagesCheckedToday: 0,
-            pagesIndexed: 0,
-            skipped,
-            quotaUsed: 0,
+    async function abortUnreachable(detail) {
+        logSeo(`SEO abort: ${detail}`);
+        const message = formatAuthFailMessage({
             eligible: eligible.length,
-            stalled: true,
-            stalledReason: "auth",
-        };
-        const message = formatSeoMessage({
-            isBaseline: true,
-            diff: { dropped: [], recovered: [], errors: [] },
-            stats,
+            skipped,
+            detail,
         });
         const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
         const CHAT_ID = env.TELEGRAM_CHAT_ID;
-        if (BOT_TOKEN && CHAT_ID && message) {
+        if (BOT_TOKEN && CHAT_ID) {
             await sendTelegram({
                 token: BOT_TOKEN,
                 chatId: CHAT_ID,
                 text: message,
             });
         }
-        return { skipped: false, stats, isBaseline: true, stalled: true };
+        return {
+            skipped: false,
+            stats: {
+                homesChecked: 0,
+                skipped,
+                eligible: eligible.length,
+                stalled: true,
+                stalledReason: "auth",
+            },
+            isBaseline: false,
+            stalled: true,
+            wroteStatus: false,
+        };
     }
 
     if (!options.inspectFn) {
         const netOk = await probeGoogleIpv4();
         if (!netOk) {
-            return abortUnreachable("Google IPv4 probe failed from GitHub Actions");
+            logSeo("SEO network probe failed, всё равно пробуем OAuth");
         }
-        const authOk = await warmupAccounts(getClient, secrets);
-        logSeo(`SEO auth warmup: ${authOk}/${secrets.tokens.size}`);
-        if (authOk === 0) {
-            return abortUnreachable("GSC auth failed from GitHub Actions");
+        const auth = await warmupAccounts(getClient, secrets);
+        logSeo(`SEO auth warmup: ${auth.ok}/${auth.total}`);
+        if (auth.ok === 0) {
+            return abortUnreachable(auth.sampleError || "все GSC-аккаунты отклонены");
         }
     }
 
@@ -1004,6 +998,7 @@ module.exports = {
     buildSeoDiff,
     hasPriorIndex,
     formatSeoMessage,
+    formatAuthFailMessage,
     applyIndexToStatusData,
     inspectUrlWithFallback,
     withTimeout,
