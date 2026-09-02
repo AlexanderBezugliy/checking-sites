@@ -55,8 +55,10 @@ jobs:
                   set -x
                   echo "ipv4 oauth2.googleapis.com:"
                   curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 https://oauth2.googleapis.com/ || echo "ipv4 oauth FAIL"
-                  echo "ipv4 oauth2 token endpoint:"
-                  curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 -X POST https://oauth2.googleapis.com/token || echo "ipv4 token FAIL"
+                  echo "ipv4 urlInspection inspect:"
+                  curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 \
+                    -X POST https://searchconsole.googleapis.com/v1/urlInspection/index:inspect \
+                    -H "Content-Type: application/json" -d '{}' || echo "ipv4 inspect FAIL"
                   echo "ipv6 oauth2 (often hangs on GHA):"
                   curl -6 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 8 https://oauth2.googleapis.com/ || echo "ipv6 FAIL/timeout"
 

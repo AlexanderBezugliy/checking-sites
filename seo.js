@@ -9,12 +9,14 @@ const SITES_PATH = "./sites.json";
 const CSV_PATH = "./sites.csv";
 const DAILY_QUOTA = 1800;
 const INSPECT_SLEEP_MS = 80;
-const INSPECT_TIMEOUT_MS = 45000;
+const INSPECT_TIMEOUT_MS = 20000;
 const AUTH_TIMEOUT_MS = 25000;
 const PROBE_TIMEOUT_MS = 15000;
 const INSPECT_CONCURRENCY = 2;
-const INSPECT_RETRIES = 3;
+const INSPECT_RETRIES = 2;
 const STALL_LIMIT = 40;
+const GSC_INSPECT_HOST = "searchconsole.googleapis.com";
+const GSC_INSPECT_PATH = "/v1/urlInspection/index:inspect";
 const META_ACCOUNT_KEYS = new Set(["description", "clientSecretsFile"]);
 const TG_LIST_CAP = 40;
 
@@ -493,36 +495,112 @@ function isTimeoutError(err) {
     );
 }
 
-async function inspectOnce(sc, inspectionUrl, siteUrl) {
-    try {
-        const res = await withTimeout(
-            sc.urlInspection.index.inspect({
-                requestBody: {
-                    inspectionUrl,
-                    siteUrl,
+function inspectHttpError(status, json, text) {
+    const err = json && json.error;
+    if (err && typeof err === "object") {
+        return [err.status, err.message].filter(Boolean).join(": ") || `HTTP ${status}`;
+    }
+    if (typeof err === "string" && err.trim()) return err.trim();
+    const slice = String(text || "").trim().slice(0, 180);
+    return slice || `HTTP ${status}`;
+}
+
+function httpsPostJson({ hostname, path, body, accessToken, timeoutMs }) {
+    const payload = JSON.stringify(body);
+    return new Promise((resolve, reject) => {
+        const req = https.request(
+            {
+                hostname,
+                path,
+                method: "POST",
+                family: 4,
+                timeout: timeoutMs,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    "Content-Length": Buffer.byteLength(payload),
                 },
-                timeout: INSPECT_TIMEOUT_MS,
+            },
+            (res) => {
+                const chunks = [];
+                res.on("data", (chunk) => chunks.push(chunk));
+                res.on("end", () => {
+                    const text = Buffer.concat(chunks).toString("utf8");
+                    let json = null;
+                    try {
+                        json = JSON.parse(text);
+                    } catch {
+                        json = null;
+                    }
+                    resolve({ status: res.statusCode, json, text });
+                });
+            },
+        );
+        req.on("timeout", () => {
+            req.destroy();
+            const err = new Error("GSC inspect timeout");
+            err.code = 408;
+            reject(err);
+        });
+        req.on("error", reject);
+        req.write(payload);
+        req.end();
+    });
+}
+
+async function inspectOnce(auth, inspectionUrl, siteUrl) {
+    const started = Date.now();
+    try {
+        const got = await withTimeout(
+            Promise.resolve(auth.getAccessToken()),
+            AUTH_TIMEOUT_MS,
+            "GSC auth timeout",
+        );
+        const access = typeof got === "string" ? got : got && got.token;
+        if (!access) throw new Error("empty access token");
+        const res = await withTimeout(
+            httpsPostJson({
+                hostname: GSC_INSPECT_HOST,
+                path: GSC_INSPECT_PATH,
+                body: { inspectionUrl, siteUrl },
+                accessToken: access,
+                timeoutMs: INSPECT_TIMEOUT_MS,
             }),
             INSPECT_TIMEOUT_MS + 2000,
             "GSC inspect timeout",
         );
-        return { ok: true, status: 200, json: res.data, error: null };
+        const ms = Date.now() - started;
+        if (res.status >= 200 && res.status < 300 && res.json) {
+            logSeo(`SEO inspect HTTP ${res.status} ${ms}ms ${inspectionUrl}`);
+            return { ok: true, status: res.status, json: res.json, error: null };
+        }
+        const error = inspectHttpError(res.status, res.json, res.text);
+        logSeo(`SEO inspect HTTP ${res.status} ${ms}ms ${inspectionUrl} ${error}`);
+        return {
+            ok: false,
+            status: res.status,
+            json: res.json,
+            error,
+        };
     } catch (err) {
+        const ms = Date.now() - started;
+        logSeo(`SEO inspect ERR ${ms}ms ${inspectionUrl}: ${authErrorText(err)}`);
         return {
             ok: false,
             status: isTimeoutError(err) ? 408 : gscErrorStatus(err),
             json: null,
             error: isTimeoutError(err)
-                ? "таймаут GSC (45с)"
+                ? `таймаут GSC (${INSPECT_TIMEOUT_MS / 1000}с)`
                 : gscErrorMessage(err),
         };
     }
 }
 
-async function inspectOnceWithRetry(sc, inspectionUrl, siteUrl) {
+async function inspectOnceWithRetry(auth, inspectionUrl, siteUrl) {
     let last = { ok: false, status: 0, json: null, error: "no attempt" };
     for (let attempt = 1; attempt <= INSPECT_RETRIES; attempt += 1) {
-        last = await inspectOnce(sc, inspectionUrl, siteUrl);
+        last = await inspectOnce(auth, inspectionUrl, siteUrl);
         if (last.ok || last.status !== 408) return last;
         logSeo(
             `SEO retry ${attempt}/${INSPECT_RETRIES} timeout ${inspectionUrl}`,
@@ -709,8 +787,8 @@ async function runSeo(options = {}) {
                     error: `нет refresh token для ${account || host}`,
                 });
             }
-            const { sc } = getClient(account, token);
-            return inspectOnceWithRetry(sc, inspectionUrl, siteUrl);
+            const { auth } = getClient(account, token);
+            return inspectOnceWithRetry(auth, inspectionUrl, siteUrl);
         };
     }
 
@@ -1001,6 +1079,7 @@ module.exports = {
     formatAuthFailMessage,
     applyIndexToStatusData,
     inspectUrlWithFallback,
+    inspectHttpError,
     withTimeout,
     runSeo,
 };

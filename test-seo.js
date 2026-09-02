@@ -22,6 +22,7 @@ const {
     formatAuthFailMessage,
     applyIndexToStatusData,
     inspectUrlWithFallback,
+    inspectHttpError,
     withTimeout,
     runSeo,
 } = require("./seo");
@@ -493,6 +494,15 @@ async function main() {
         }
         assert.equal(threw, true);
         assert.ok(Date.now() - start < 400);
+    });
+
+    await test("inspectHttpError читает message из JSON Google", () => {
+        assert.equal(
+            inspectHttpError(403, { error: { status: "PERMISSION_DENIED", message: "nope" } }, ""),
+            "PERMISSION_DENIED: nope",
+        );
+        assert.equal(inspectHttpError(401, null, "Unauthorized"), "Unauthorized");
+        assert.equal(inspectHttpError(500, null, ""), "HTTP 500");
     });
 
     await test("googleapis freeze'ит searchconsole: sc.oauth2 нельзя записать", () => {

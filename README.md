@@ -75,7 +75,7 @@ HTTP-проверку бот всегда делает с `/?view=d7Fm2Kp9Qx4Nw8
 
 В git их нет (локальный `.env` в `.gitignore`).
 
-После пуша: Actions → **Daily Index Monitor** → Run workflow. В логе сразу `SEO secrets`, `SEO start` и `SEO auth ok` по каждой почте. Клиент GSC у googleapis заморожен — OAuth берём отдельно, не через `sc.oauth2`.
+После пуша: Actions → **Daily Index Monitor** → Run workflow. OAuth уже проходит. Inspection идёт сырым HTTPS IPv4 (не gaxios). В логе должны быть `SEO auth ok` и `SEO inspect HTTP 200 …ms`.
 
 В `status.json` у каждой строки поле `index`: `indexed` — главная, `pages[]` — все проверенные URL. Аптайм это поле копирует и не затирает. Дашборд может рисовать ОК / не в индексе по `index.indexed`.
 
