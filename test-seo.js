@@ -243,9 +243,11 @@ async function main() {
                 pagesCheckedToday: 15,
                 pagesIndexed: 2,
                 skipped: 7,
+                eligible: 10,
             },
         });
         assert.ok(baseline.includes("база записана"));
+        assert.ok(baseline.includes("из 10"));
         const change = formatSeoMessage({
             isBaseline: false,
             diff,

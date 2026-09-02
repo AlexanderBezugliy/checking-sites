@@ -6,9 +6,10 @@ const SITES_PATH = "./sites.json";
 const CSV_PATH = "./sites.csv";
 const DAILY_QUOTA = 1800;
 const INSPECT_SLEEP_MS = 80;
-const INSPECT_TIMEOUT_MS = 15000;
-const INSPECT_CONCURRENCY = 4;
-const STALL_LIMIT = 12;
+const INSPECT_TIMEOUT_MS = 45000;
+const INSPECT_CONCURRENCY = 2;
+const INSPECT_RETRIES = 3;
+const STALL_LIMIT = 40;
 const META_ACCOUNT_KEYS = new Set(["description", "clientSecretsFile"]);
 const TG_LIST_CAP = 40;
 
@@ -369,15 +370,21 @@ function hasPriorIndex(status) {
 
 function formatSeoMessage({ isBaseline, diff, stats }) {
     if (isBaseline) {
-        return [
+        const lines = [
             "🔍 *Индексация: база записана*",
-            `Главных проверено: ${stats.homesChecked}`,
+            `Главных проверено: ${stats.homesChecked} из ${stats.eligible ?? stats.homesChecked}`,
             `В индексе (главные): ${stats.homesIndexed}`,
             `Страниц проверено сегодня: ${stats.pagesCheckedToday}`,
             `Страниц в индексе (накоплено): ${stats.pagesIndexed}`,
             `Нет в GSC / skip: ${stats.skipped}`,
-            "Дальше писать буду только если что-то изменится.",
-        ].join("\n");
+        ];
+        if (stats.stalled) {
+            lines.push(
+                "⚠️ Прогон оборван: Google с GitHub не отвечал (таймаут). Это не полный список.",
+            );
+        }
+        lines.push("Дальше писать буду только если что-то изменится.");
+        return lines.join("\n");
     }
 
     const { dropped, recovered, errors } = diff;
@@ -470,10 +477,42 @@ async function inspectOnce(sc, inspectionUrl, siteUrl) {
             status: isTimeoutError(err) ? 408 : gscErrorStatus(err),
             json: null,
             error: isTimeoutError(err)
-                ? "таймаут GSC (15с)"
+                ? "таймаут GSC (45с)"
                 : gscErrorMessage(err),
         };
     }
+}
+
+async function inspectOnceWithRetry(sc, inspectionUrl, siteUrl) {
+    let last = { ok: false, status: 0, json: null, error: "no attempt" };
+    for (let attempt = 1; attempt <= INSPECT_RETRIES; attempt += 1) {
+        last = await inspectOnce(sc, inspectionUrl, siteUrl);
+        if (last.ok || last.status !== 408) return last;
+        logSeo(
+            `SEO retry ${attempt}/${INSPECT_RETRIES} timeout ${inspectionUrl}`,
+        );
+        await sleep(1500 * attempt);
+    }
+    return last;
+}
+
+async function warmupAccounts(getClient, secrets) {
+    let ok = 0;
+    for (const [email, token] of secrets.tokens) {
+        try {
+            const sc = getClient(email, token);
+            await withTimeout(
+                Promise.resolve(sc.oauth2.getAccessToken()),
+                45000,
+                "GSC auth timeout",
+            );
+            ok += 1;
+            logSeo(`SEO auth ok ${email}`);
+        } catch (err) {
+            logSeo(`SEO auth FAIL ${email}: ${err.message || err}`);
+        }
+    }
+    return ok;
 }
 
 async function runPool(items, concurrency, worker) {
@@ -525,6 +564,7 @@ function clientCache(clientBlock) {
         );
         auth.setCredentials({ refresh_token: refreshToken });
         const sc = google.searchconsole({ version: "v1", auth });
+        sc.oauth2 = auth;
         cache.set(key, sc);
         return sc;
     };
@@ -554,8 +594,9 @@ async function runSeo(options = {}) {
     const checkedAt = new Date().toISOString();
     const quota = createQuota(options.quotaLimit || DAILY_QUOTA);
     let inspectFn = options.inspectFn;
+    let getClient = options.getClient;
     if (!inspectFn) {
-        const getClient = options.getClient || clientCache(secrets.client);
+        getClient = getClient || clientCache(secrets.client);
         inspectFn = (inspectionUrl, siteUrl) => {
             const host =
                 hostFromSiteUrl(inspectionUrl) ||
@@ -574,7 +615,7 @@ async function runSeo(options = {}) {
                 });
             }
             const sc = getClient(account, token);
-            return inspectOnce(sc, inspectionUrl, siteUrl);
+            return inspectOnceWithRetry(sc, inspectionUrl, siteUrl);
         };
     }
 
@@ -631,6 +672,59 @@ async function runSeo(options = {}) {
     logSeo(
         `SEO start: hosts=${hosts.length} eligible=${eligible.length} inner=${innerQueue.length} skipped=${skipped} concurrency=${concurrency}`,
     );
+
+    if (!options.inspectFn) {
+        const authOk = await warmupAccounts(getClient, secrets);
+        logSeo(`SEO auth warmup: ${authOk}/${secrets.tokens.size}`);
+        if (authOk === 0) {
+            logSeo("SEO abort: ни один GSC-аккаунт не авторизовался");
+            const failIndex = skipIndex(
+                "GSC auth failed from GitHub Actions",
+                checkedAt,
+            );
+            for (const item of eligible) {
+                indexByHost.set(item.host, failIndex);
+            }
+            const nextData = applyIndexToStatusData(
+                prevStatus.data && prevStatus.data.length
+                    ? prevStatus.data
+                    : sites.map((site) => ({ url: site.url })),
+                indexByHost,
+            );
+            const statusData = {
+                ...prevStatus,
+                index_last_update: checkedAt,
+                index_queue_cursor: prevStatus.index_queue_cursor ?? 0,
+                data: nextData,
+            };
+            fs.writeFileSync(statusPath, JSON.stringify(statusData, null, 2));
+            const stats = {
+                homesChecked: 0,
+                homesIndexed: 0,
+                pagesCheckedToday: 0,
+                pagesIndexed: 0,
+                skipped,
+                quotaUsed: 0,
+                eligible: eligible.length,
+                stalled: true,
+            };
+            const message = formatSeoMessage({
+                isBaseline: true,
+                diff: { dropped: [], recovered: [], errors: [] },
+                stats,
+            });
+            const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
+            const CHAT_ID = env.TELEGRAM_CHAT_ID;
+            if (BOT_TOKEN && CHAT_ID && message) {
+                await sendTelegram({
+                    token: BOT_TOKEN,
+                    chatId: CHAT_ID,
+                    text: message,
+                });
+            }
+            return { skipped: false, stats, isBaseline: true, stalled: true };
+        }
+    }
 
     let inspectLock = Promise.resolve();
     function withIndexLock(fn) {
@@ -760,6 +854,8 @@ async function runSeo(options = {}) {
         pagesIndexed,
         skipped,
         quotaUsed: quota.used,
+        eligible: eligible.length,
+        stalled,
     };
 
     const statusData = {
