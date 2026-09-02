@@ -690,6 +690,13 @@ async function runMonitor() {
         }
     }
 
+    for (let i = 0; i < results.length; i += 1) {
+        results[i] = {
+            ...results[i],
+            index: prevMap.get(results[i].url)?.index ?? null,
+        };
+    }
+
     logNsEtalon(results);
 
     const aliveCount = results.filter((r) => r.alive).length;
@@ -750,6 +757,8 @@ async function runMonitor() {
         last_digest_at: sentDigest
             ? new Date().toISOString()
             : prevStatus.last_digest_at || null,
+        index_last_update: prevStatus.index_last_update || null,
+        index_queue_cursor: prevStatus.index_queue_cursor ?? 0,
         total_sites: sites.length,
         alive_count: aliveCount,
         failed_count: failedCount,
@@ -758,7 +767,11 @@ async function runMonitor() {
     fs.writeFileSync(STATUS_PATH, JSON.stringify(statusData, null, 2));
 }
 
-runMonitor().catch((err) => {
-    console.error("Монитор упал:", err);
-    process.exit(1);
-});
+module.exports = { runMonitor, prevByUrl };
+
+if (require.main === module) {
+    runMonitor().catch((err) => {
+        console.error("Монитор упал:", err);
+        process.exit(1);
+    });
+}

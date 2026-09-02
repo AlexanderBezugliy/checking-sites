@@ -1,0 +1,16 @@
+{
+  "name": "checking-sites",
+  "private": true,
+  "description": "Telegram uptime + Google index monitor",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "monitor": "node monitor.js",
+    "seo": "node seo.js",
+    "test": "node test-seo.js"
+  },
+  "dependencies": {
+    "googleapis": "^148.0.0"
+  }
+}

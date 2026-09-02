@@ -1,0 +1,44 @@
+name: Daily Index Monitor
+
+on:
+    schedule:
+        - cron: "0 7 * * *" # 10:00 по Киеву — после утреннего аптайма (06:00 UTC)
+    workflow_dispatch:
+
+concurrency:
+    group: seo
+    cancel-in-progress: false
+
+jobs:
+    check-index:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run index inspection
+              env:
+                  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+                  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+                  GSC_CLIENT_SECRET_JSON: ${{ secrets.GSC_CLIENT_SECRET_JSON }}
+                  GSC_ACCOUNTS_JSON: ${{ secrets.GSC_ACCOUNTS_JSON }}
+              run: node seo.js
+
+            - name: Commit and push status
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                  commit_message: "chore: auto-update index status [skip ci]"
+                  file_pattern: "status.json"
+                  push_options: "--force-with-lease"

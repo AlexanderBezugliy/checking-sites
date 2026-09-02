@@ -1,9 +1,9 @@
 {
   "last_update": "2026-08-21T12:49:20.347Z",
   "last_digest_at": "2026-08-21T06:35:39.293Z",
-  "total_sites": 476,
-  "alive_count": 473,
-  "failed_count": 3,
+  "total_sites": 471,
+  "alive_count": 469,
+  "failed_count": 2,
   "data": [
     {
       "url": "https://winbeastcasino.gb.net",
@@ -32,36 +32,6 @@
       "ns_expected": [
         "nina.ns.cloudflare.com",
         "rodney.ns.cloudflare.com"
-      ],
-      "ns_match": true
-    },
-    {
-      "url": "https://slotlaircasino.gb.net",
-      "status": 503,
-      "ok": false,
-      "alive": true,
-      "duration": 1300,
-      "dns": {
-        "ns": [
-          "carter.ns.cloudflare.com",
-          "liberty.ns.cloudflare.com"
-        ],
-        "a": [
-          "104.21.33.193",
-          "172.67.191.247"
-        ],
-        "ok": true,
-        "error": null
-      },
-      "ssl": {
-        "daysLeft": 71,
-        "validTo": "2026-10-31T10:16:37.000Z",
-        "error": null
-      },
-      "redirect": null,
-      "ns_expected": [
-        "carter.ns.cloudflare.com",
-        "liberty.ns.cloudflare.com"
       ],
       "ns_match": true
     },
@@ -632,36 +602,6 @@
       "ns_expected": [
         "nina.ns.cloudflare.com",
         "rodney.ns.cloudflare.com"
-      ],
-      "ns_match": true
-    },
-    {
-      "url": "https://slotlair-casino.gb.net",
-      "status": 503,
-      "ok": false,
-      "alive": true,
-      "duration": 1462,
-      "dns": {
-        "ns": [
-          "carter.ns.cloudflare.com",
-          "liberty.ns.cloudflare.com"
-        ],
-        "a": [
-          "172.67.162.229",
-          "104.21.74.207"
-        ],
-        "ok": true,
-        "error": null
-      },
-      "ssl": {
-        "daysLeft": 73,
-        "validTo": "2026-11-01T13:56:01.000Z",
-        "error": null
-      },
-      "redirect": null,
-      "ns_expected": [
-        "carter.ns.cloudflare.com",
-        "liberty.ns.cloudflare.com"
       ],
       "ns_match": true
     },
@@ -6245,36 +6185,6 @@
       "ns_match": true
     },
     {
-      "url": "https://slotlaircasino.gb.net",
-      "status": 503,
-      "ok": false,
-      "alive": true,
-      "duration": 403,
-      "dns": {
-        "ns": [
-          "carter.ns.cloudflare.com",
-          "liberty.ns.cloudflare.com"
-        ],
-        "a": [
-          "172.67.191.247",
-          "104.21.33.193"
-        ],
-        "ok": true,
-        "error": null
-      },
-      "ssl": {
-        "daysLeft": 71,
-        "validTo": "2026-10-31T10:16:37.000Z",
-        "error": null
-      },
-      "redirect": null,
-      "ns_expected": [
-        "carter.ns.cloudflare.com",
-        "liberty.ns.cloudflare.com"
-      ],
-      "ns_match": true
-    },
-    {
       "url": "https://slotscharmcasino.org.uk",
       "status": 503,
       "ok": false,
@@ -6751,36 +6661,6 @@
       "ns_expected": [
         "nina.ns.cloudflare.com",
         "rodney.ns.cloudflare.com"
-      ],
-      "ns_match": true
-    },
-    {
-      "url": "https://slotlair-casino.gb.net",
-      "status": 503,
-      "ok": false,
-      "alive": true,
-      "duration": 615,
-      "dns": {
-        "ns": [
-          "carter.ns.cloudflare.com",
-          "liberty.ns.cloudflare.com"
-        ],
-        "a": [
-          "172.67.162.229",
-          "104.21.74.207"
-        ],
-        "ok": true,
-        "error": null
-      },
-      "ssl": {
-        "daysLeft": 73,
-        "validTo": "2026-11-01T13:56:01.000Z",
-        "error": null
-      },
-      "redirect": null,
-      "ns_expected": [
-        "carter.ns.cloudflare.com",
-        "liberty.ns.cloudflare.com"
       ],
       "ns_match": true
     },
@@ -13767,33 +13647,6 @@
         "diana.ns.cloudflare.com"
       ],
       "ns_match": true
-    },
-    {
-      "url": "https://smoothspinscasino.org.uk",
-      "status": "ERROR",
-      "ok": false,
-      "alive": false,
-      "duration": 10635,
-      "dns": {
-        "ns": [
-          "ina2.registrar.eu",
-          "ina1.registrar.eu",
-          "ina3.registrar.eu"
-        ],
-        "a": [
-          "185.53.179.136"
-        ],
-        "ok": true,
-        "error": null
-      },
-      "ssl": null,
-      "redirect": null,
-      "error": "The operation was aborted due to timeout",
-      "ns_expected": [
-        "imani.ns.cloudflare.com",
-        "mack.ns.cloudflare.com"
-      ],
-      "ns_match": false
     },
     {
       "url": "https://casiroom-uk.com",
