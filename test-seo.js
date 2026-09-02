@@ -21,6 +21,7 @@ const {
     formatSeoMessage,
     applyIndexToStatusData,
     inspectUrlWithFallback,
+    withTimeout,
     runSeo,
 } = require("./seo");
 
@@ -457,6 +458,19 @@ async function main() {
         const left = 1800 - homes;
         assert.ok(left > 1000, `остаток квоты ${left}`);
         assert.ok(inner / left < 3, `круг внутренних ${inner / left} дней`);
+    });
+
+    await test("withTimeout не висит бесконечно", async () => {
+        const start = Date.now();
+        let threw = false;
+        try {
+            await withTimeout(new Promise(() => {}), 40, "t");
+        } catch (err) {
+            threw = true;
+            assert.equal(err.code, 408);
+        }
+        assert.equal(threw, true);
+        assert.ok(Date.now() - start < 400);
     });
 
     await test("hostFromSiteUrl", () => {

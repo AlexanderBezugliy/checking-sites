@@ -34,7 +34,7 @@ jobs:
                   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
                   GSC_CLIENT_SECRET_JSON: ${{ secrets.GSC_CLIENT_SECRET_JSON }}
                   GSC_ACCOUNTS_JSON: ${{ secrets.GSC_ACCOUNTS_JSON }}
-              run: node seo.js
+              run: stdbuf -oL -eL node seo.js
 
             - name: Commit and push status
               uses: stefanzweifel/git-auto-commit-action@v5

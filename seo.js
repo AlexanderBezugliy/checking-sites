@@ -6,8 +6,25 @@ const SITES_PATH = "./sites.json";
 const CSV_PATH = "./sites.csv";
 const DAILY_QUOTA = 1800;
 const INSPECT_SLEEP_MS = 80;
+const INSPECT_TIMEOUT_MS = 15000;
+const INSPECT_CONCURRENCY = 4;
+const STALL_LIMIT = 12;
 const META_ACCOUNT_KEYS = new Set(["description", "clientSecretsFile"]);
 const TG_LIST_CAP = 40;
+
+function logSeo(message) {
+    const line = `${new Date().toISOString()} ${message}\n`;
+    try {
+        process.stderr.write(line);
+    } catch {
+        // ignore
+    }
+    try {
+        process.stdout.write(line);
+    } catch {
+        // ignore
+    }
+}
 
 function loadJson(path, fallback) {
     try {
@@ -404,23 +421,75 @@ function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function withTimeout(promise, ms, label) {
+    let timer;
+    try {
+        return await Promise.race([
+            promise,
+            new Promise((_, reject) => {
+                timer = setTimeout(() => {
+                    const err = new Error(label);
+                    err.code = 408;
+                    reject(err);
+                }, ms);
+            }),
+        ]);
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+function isTimeoutError(err) {
+    const code = String(err?.code || "").toUpperCase();
+    const msg = String(err?.message || "").toLowerCase();
+    return (
+        code === "408" ||
+        code === "ETIMEOUT" ||
+        code === "ETIMEDOUT" ||
+        msg.includes("timeout")
+    );
+}
+
 async function inspectOnce(sc, inspectionUrl, siteUrl) {
     try {
-        const res = await sc.urlInspection.index.inspect({
-            requestBody: {
-                inspectionUrl,
-                siteUrl,
-            },
-        });
+        const res = await withTimeout(
+            sc.urlInspection.index.inspect({
+                requestBody: {
+                    inspectionUrl,
+                    siteUrl,
+                },
+                timeout: INSPECT_TIMEOUT_MS,
+            }),
+            INSPECT_TIMEOUT_MS + 2000,
+            "GSC inspect timeout",
+        );
         return { ok: true, status: 200, json: res.data, error: null };
     } catch (err) {
         return {
             ok: false,
-            status: gscErrorStatus(err),
+            status: isTimeoutError(err) ? 408 : gscErrorStatus(err),
             json: null,
-            error: gscErrorMessage(err),
+            error: isTimeoutError(err)
+                ? "таймаут GSC (15с)"
+                : gscErrorMessage(err),
         };
     }
+}
+
+async function runPool(items, concurrency, worker) {
+    let next = 0;
+    const n = Math.max(1, Math.min(concurrency, items.length || 1));
+    await Promise.all(
+        Array.from({ length: n }, async () => {
+            while (true) {
+                const i = next;
+                next += 1;
+                if (i >= items.length) return;
+                const stop = await worker(items[i], i);
+                if (stop) return;
+            }
+        }),
+    );
 }
 
 async function inspectUrlWithFallback(inspectFn, inspectionUrl, domain, quota) {
@@ -556,6 +625,26 @@ async function runSeo(options = {}) {
         }
     }
 
+    const concurrency = options.inspectFn
+        ? 1
+        : options.concurrency || INSPECT_CONCURRENCY;
+    logSeo(
+        `SEO start: hosts=${hosts.length} eligible=${eligible.length} inner=${innerQueue.length} skipped=${skipped} concurrency=${concurrency}`,
+    );
+
+    let inspectLock = Promise.resolve();
+    function withIndexLock(fn) {
+        const prev = inspectLock;
+        let release;
+        inspectLock = new Promise((resolve) => {
+            release = resolve;
+        });
+        return prev.then(fn).finally(() => release());
+    }
+
+    let consecutiveTimeouts = 0;
+    let stalled = false;
+
     async function inspectAndRecord(target, host, catalogRow) {
         const result = await inspectUrlWithFallback(
             inspectFn,
@@ -564,6 +653,14 @@ async function runSeo(options = {}) {
             quota,
         );
         if (result.skipped) return null;
+        const timedOut = result.status === 408;
+        consecutiveTimeouts = timedOut ? consecutiveTimeouts + 1 : 0;
+        if (consecutiveTimeouts >= STALL_LIMIT) {
+            stalled = true;
+            logSeo(
+                `SEO abort: ${STALL_LIMIT} таймаутов подряд, дальше Google не отвечает`,
+            );
+        }
         const rec = pageRecord({
             url: target.url,
             slot: target.slot,
@@ -571,45 +668,72 @@ async function runSeo(options = {}) {
             error: result.ok ? null : result.error || `HTTP ${result.status}`,
             checkedAt,
         });
-        const prev = indexByHost.get(host);
-        indexByHost.set(
-            host,
-            buildHostIndex({
+        await withIndexLock(async () => {
+            const prev = indexByHost.get(host);
+            indexByHost.set(
                 host,
-                catalogRow,
-                prevIndex: prev,
-                updates: [rec],
-                siteUrl: result.siteUrl,
-                checkedAt,
-            }),
-        );
+                buildHostIndex({
+                    host,
+                    catalogRow,
+                    prevIndex: prev,
+                    updates: [rec],
+                    siteUrl: result.siteUrl,
+                    checkedAt,
+                }),
+            );
+        });
         return rec;
     }
 
     let homesChecked = 0;
     let pagesCheckedToday = 0;
 
-    for (const item of eligible) {
-        if (quota.remaining() <= 0) break;
+    await runPool(eligible, concurrency, async (item) => {
+        if (stalled || quota.remaining() <= 0) return true;
         await inspectAndRecord(item.home, item.host, item.catalogRow);
         homesChecked += 1;
         pagesCheckedToday += 1;
+        if (pagesCheckedToday === 1 || pagesCheckedToday % 10 === 0) {
+            logSeo(
+                `SEO progress: ${pagesCheckedToday} ok, homes=${homesChecked}, quota=${quota.used}, last=${item.host}`,
+            );
+        }
         if (INSPECT_SLEEP_MS && !options.inspectFn) await sleep(INSPECT_SLEEP_MS);
-    }
+        return stalled;
+    });
+
+    logSeo(`SEO homes done: ${homesChecked}, quota=${quota.used}`);
 
     let cursor = Number(prevStatus.index_queue_cursor) || 0;
-    if (innerQueue.length) {
+    if (innerQueue.length && !stalled && quota.remaining() > 0) {
         cursor %= innerQueue.length;
         let n = 0;
-        while (quota.remaining() > 0 && n < innerQueue.length) {
-            const item = innerQueue[cursor];
-            const catalogRow = catalog.get(item.host);
-            await inspectAndRecord(item, item.host, catalogRow);
-            pagesCheckedToday += 1;
+        const innerItems = [];
+        while (n < innerQueue.length) {
+            innerItems.push(innerQueue[cursor]);
             cursor = (cursor + 1) % innerQueue.length;
             n += 1;
-            if (INSPECT_SLEEP_MS && !options.inspectFn) await sleep(INSPECT_SLEEP_MS);
         }
+        let innerDone = 0;
+        await runPool(innerItems, concurrency, async (item) => {
+            if (stalled || quota.remaining() <= 0) return true;
+            const catalogRow = catalog.get(item.host);
+            await inspectAndRecord(item, item.host, catalogRow);
+            innerDone += 1;
+            pagesCheckedToday += 1;
+            if (pagesCheckedToday % 10 === 0) {
+                logSeo(
+                    `SEO progress: ${pagesCheckedToday} ok, inner=${innerDone}, quota=${quota.used}, last=${item.url}`,
+                );
+            }
+            if (INSPECT_SLEEP_MS && !options.inspectFn) await sleep(INSPECT_SLEEP_MS);
+            return stalled;
+        });
+        const consumed = Math.min(innerDone, innerItems.length);
+        const startCursor = Number(prevStatus.index_queue_cursor) || 0;
+        cursor = innerQueue.length
+            ? (startCursor + consumed) % innerQueue.length
+            : 0;
     }
 
     const nextData = applyIndexToStatusData(
@@ -646,8 +770,8 @@ async function runSeo(options = {}) {
     };
     fs.writeFileSync(statusPath, JSON.stringify(statusData, null, 2));
 
-    console.log(
-        `SEO: homes=${homesChecked} pages_today=${pagesCheckedToday} indexed_pages=${pagesIndexed} skipped=${skipped} quota=${quota.used}/${DAILY_QUOTA} cursor=${cursor}`,
+    logSeo(
+        `SEO: homes=${homesChecked} pages_today=${pagesCheckedToday} indexed_pages=${pagesIndexed} skipped=${skipped} quota=${quota.used}/${DAILY_QUOTA} cursor=${cursor}${stalled ? " STALLED" : ""}`,
     );
 
     const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
@@ -694,6 +818,7 @@ module.exports = {
     formatSeoMessage,
     applyIndexToStatusData,
     inspectUrlWithFallback,
+    withTimeout,
     runSeo,
 };
 
