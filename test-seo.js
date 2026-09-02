@@ -248,6 +248,21 @@ async function main() {
         });
         assert.ok(baseline.includes("база записана"));
         assert.ok(baseline.includes("из 10"));
+        const stalledAuth = formatSeoMessage({
+            isBaseline: true,
+            diff,
+            stats: {
+                homesChecked: 0,
+                homesIndexed: 0,
+                pagesCheckedToday: 0,
+                pagesIndexed: 0,
+                skipped: 7,
+                eligible: 433,
+                stalled: true,
+                stalledReason: "auth",
+            },
+        });
+        assert.ok(stalledAuth.includes("авторизоваться"));
         const change = formatSeoMessage({
             isBaseline: false,
             diff,

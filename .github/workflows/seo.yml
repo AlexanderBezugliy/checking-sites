@@ -28,8 +28,18 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Probe Google IPv4
+              run: |
+                  echo "ipv4 oauth2.googleapis.com:"
+                  curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 https://oauth2.googleapis.com/ || echo "ipv4 oauth FAIL"
+                  echo "ipv4 searchconsole.googleapis.com:"
+                  curl -4 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 15 https://searchconsole.googleapis.com/ || echo "ipv4 gsc FAIL"
+                  echo "ipv6 oauth2 (often hangs on GHA):"
+                  curl -6 -sS -o /dev/null -w "http=%{http_code} time=%{time_total}\n" --max-time 8 https://oauth2.googleapis.com/ || echo "ipv6 FAIL/timeout"
+
             - name: Run index inspection
               env:
+                  NODE_OPTIONS: --dns-result-order=ipv4first
                   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
                   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
                   GSC_CLIENT_SECRET_JSON: ${{ secrets.GSC_CLIENT_SECRET_JSON }}
