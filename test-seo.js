@@ -9,6 +9,12 @@ const {
     hostFromSiteUrl,
     pageUrlForSlot,
     pageTargetsForRow,
+    parseSitemapXml,
+    sitemapTargets,
+    slotFromUrl,
+    mergePageRecord,
+    hasSitemapIndex,
+    upsertPages,
     uniqueMonitoredHosts,
     parseClientSecretJson,
     parseAccountsJson,
@@ -412,7 +418,8 @@ async function main() {
         const calls = [];
         const inspectFn = async (inspectionUrl, siteUrl) => {
             calls.push({ inspectionUrl, siteUrl });
-            const indexed = inspectionUrl.endsWith("/") || inspectionUrl.endsWith("/login");
+            const indexed =
+                new URL(inspectionUrl).pathname === "/" || inspectionUrl.includes("/login/");
             return {
                 ok: true,
                 status: 200,
@@ -420,6 +427,10 @@ async function main() {
                 error: null,
             };
         };
+        const sitemapFn = async (host) => ({
+            urls: [`https://${host}/`, `https://${host}/login/`, `https://${host}/bonus/`],
+            error: null,
+        });
         const env = {
             GSC_CLIENT_SECRET_JSON: JSON.stringify({
                 web: { client_id: "id", client_secret: "secret" },
@@ -432,6 +443,7 @@ async function main() {
         const day1 = await runSeo({
             env,
             inspectFn,
+            sitemapFn,
             quotaLimit: 3,
             sitesPath,
             csvPath,
@@ -441,6 +453,8 @@ async function main() {
         assert.equal(day1.isBaseline, true);
         assert.equal(day1.stats.homesChecked, 2);
         assert.equal(day1.stats.pagesCheckedToday, 3);
+        assert.equal(day1.stats.sitemapLive, 2);
+        assert.equal(day1.stats.innerTotal, 4);
         assert.equal(calls.length, 3);
         assert.ok(calls.every((c) => c.siteUrl.startsWith("sc-domain:")));
 
@@ -450,10 +464,16 @@ async function main() {
         assert.equal(after1.data[0].status, 503);
         assert.equal(after1.data[0].index.indexed, true);
         assert.ok(after1.data[0].index.pages.some((p) => p.slot === "home"));
+        assert.equal(after1.data[0].index.sitemap.source, "live");
+        assert.deepEqual(after1.data[0].index.sitemap.urls, [
+            "https://alpha.test/login/",
+            "https://alpha.test/bonus/",
+        ]);
 
         const day2 = await runSeo({
             env,
             inspectFn,
+            sitemapFn,
             quotaLimit: 3,
             sitesPath,
             csvPath,
@@ -470,8 +490,197 @@ async function main() {
             [...slots].some((s) => s.endsWith(":login") || s.endsWith(":bonus")),
             "внутренние страницы должны появиться за 2 дня",
         );
+        assert.ok(
+            pages.every((p) => p.slot === "home" || p.url.endsWith("/")),
+            "URL внутренних берутся из sitemap как есть",
+        );
+
+        // День 3: sitemap недоступен — берём список из кэша status.json
+        const day3 = await runSeo({
+            env,
+            inspectFn,
+            sitemapFn: async () => ({ urls: [], error: "sitemap timeout" }),
+            quotaLimit: 3,
+            sitesPath,
+            csvPath,
+            statusPath,
+        });
+        assert.equal(day3.stats.sitemapCached, 2);
+        assert.equal(day3.stats.innerTotal, 4);
+        const after3 = JSON.parse(fs.readFileSync(statusPath, "utf8"));
+        assert.equal(after3.data[0].index.sitemap.source, "cache");
+        assert.equal(after3.data[0].index.sitemap.urls.length, 2);
 
         fs.rmSync(dir, { recursive: true, force: true });
+    });
+
+    await test("runSeo: старая база без sitemap → сводка один раз, мусорные URL вычищаются", async () => {
+        const dir = fs.mkdtempSync(path.join(os.tmpdir(), "seo-test-"));
+        const sitesPath = path.join(dir, "sites.json");
+        const csvPath = path.join(dir, "sites.csv");
+        const statusPath = path.join(dir, "status.json");
+        fs.writeFileSync(sitesPath, JSON.stringify([{ url: "https://alpha.test" }]));
+        fs.writeFileSync(
+            csvPath,
+            ["enabled,group,domain,pages,account", "false,g,alpha.test,home|login,one@gmail.com"].join(
+                "\n",
+            ),
+        );
+        fs.writeFileSync(
+            statusPath,
+            JSON.stringify({
+                data: [
+                    {
+                        url: "https://alpha.test",
+                        index: {
+                            indexed: true,
+                            pages: [
+                                { url: "https://alpha.test/", slot: "home", indexed: true, error: null },
+                                { url: "https://alpha.test/login", slot: "login", indexed: null, error: "INTERNAL" },
+                            ],
+                        },
+                    },
+                ],
+            }),
+        );
+        const env = {
+            GSC_CLIENT_SECRET_JSON: JSON.stringify({ web: { client_id: "id", client_secret: "s" } }),
+            GSC_ACCOUNTS_JSON: JSON.stringify({ "one@gmail.com": { refreshToken: "1//x" } }),
+        };
+        const result = await runSeo({
+            env,
+            inspectFn: async () => ({ ok: true, status: 200, json: passJson(), error: null }),
+            sitemapFn: async () => ({ urls: ["https://alpha.test/accedi/"], error: null }),
+            quotaLimit: 10,
+            sitesPath,
+            csvPath,
+            statusPath,
+        });
+        assert.equal(result.isBaseline, true, "после перехода на sitemap сводка шлётся снова");
+        const after = JSON.parse(fs.readFileSync(statusPath, "utf8"));
+        const urls = after.data[0].index.pages.map((p) => p.url).sort();
+        assert.deepEqual(urls, ["https://alpha.test/", "https://alpha.test/accedi/"]);
+        assert.equal(after.data[0].index.pages_total, 2);
+        fs.rmSync(dir, { recursive: true, force: true });
+    });
+
+    await test("parseSitemapXml: urlset, sitemapindex, CDATA, entities", () => {
+        const urlset = `<?xml version="1.0"?><urlset><url><loc>https://a.com/</loc></url>
+            <url><loc><![CDATA[https://a.com/x/]]></loc></url>
+            <url><loc>https://a.com/q?a=1&amp;b=2</loc></url></urlset>`;
+        assert.deepEqual(parseSitemapXml(urlset), {
+            urls: ["https://a.com/", "https://a.com/x/", "https://a.com/q?a=1&b=2"],
+            sitemaps: [],
+        });
+        const index = `<sitemapindex><sitemap><loc>https://a.com/s1.xml</loc></sitemap></sitemapindex>`;
+        assert.deepEqual(parseSitemapXml(index), { urls: [], sitemaps: ["https://a.com/s1.xml"] });
+        assert.deepEqual(parseSitemapXml("<html>not a sitemap</html>"), { urls: [], sitemaps: [] });
+    });
+
+    await test("sitemapTargets: главная всегда первая, чужие хосты/visit/файлы отбрасываются", () => {
+        const targets = sitemapTargets("a.com", [
+            "https://www.a.com/",
+            "https://a.com/login/",
+            "https://a.com/login/",
+            "https://other.com/login/",
+            "https://a.com/visit/",
+            "https://a.com/visit/bonus",
+            "https://a.com/sitemap-2.xml",
+            "https://a.com/img/logo.png",
+            "http://a.com/bonus",
+            "garbage",
+        ]);
+        assert.deepEqual(targets, [
+            { slot: "home", url: "https://a.com/" },
+            { slot: "login", url: "https://a.com/login/" },
+            { slot: "bonus", url: "https://a.com/bonus" },
+        ]);
+        const many = sitemapTargets(
+            "a.com",
+            Array.from({ length: 100 }, (_, i) => `https://a.com/p${i}/`),
+            5,
+        );
+        assert.equal(many.length, 6);
+        assert.equal(slotFromUrl("https://a.com/metodi-di-pagamento/"), "metodi-di-pagamento");
+        assert.equal(slotFromUrl("https://a.com/"), "home");
+    });
+
+    await test("ошибка Google не затирает прошлый статус страницы", () => {
+        const prev = {
+            url: "https://a.com/",
+            slot: "home",
+            indexed: true,
+            coverageState: "Submitted and indexed",
+            checked_at: "t1",
+            error: null,
+        };
+        const errored = {
+            url: "https://a.com/",
+            slot: "home",
+            indexed: null,
+            coverageState: null,
+            checked_at: "t2",
+            error: "INTERNAL: boom",
+        };
+        const merged = mergePageRecord(prev, errored);
+        assert.equal(merged.indexed, true);
+        assert.equal(merged.coverageState, "Submitted and indexed");
+        assert.equal(merged.error, "INTERNAL: boom");
+        assert.equal(merged.stale, true);
+        assert.equal(merged.status_from, "t1");
+        assert.equal(merged.checked_at, "t2");
+
+        // ошибка поверх ошибки — статуса не было, ничего не выдумываем
+        assert.equal(mergePageRecord(errored, { ...errored, checked_at: "t3" }).indexed, null);
+        // нормальный ответ поверх ошибки — берём новое
+        const fresh = { ...prev, indexed: false, checked_at: "t3" };
+        assert.equal(mergePageRecord(errored, fresh).indexed, false);
+        assert.equal(mergePageRecord(errored, fresh).stale, undefined);
+
+        const pages = upsertPages([prev], [errored]);
+        assert.equal(pages.length, 1);
+        assert.equal(pages[0].indexed, true);
+
+        // диф: день 1 indexed, день 2 ошибка (статус сохранён), день 3 реально выпала → dropped
+        const day2 = new Map([["a.com", { pages }]]);
+        const prevStatus = { data: [{ url: "https://a.com", index: { pages } }] };
+        const day3 = new Map([
+            ["a.com", { pages: [{ ...prev, indexed: false, coverageState: "Crawled - currently not indexed", checked_at: "t3" }] }],
+        ]);
+        const diff2 = buildSeoDiff({ data: [{ url: "https://a.com", index: { pages: [prev] } }] }, day2);
+        assert.deepEqual(diff2.dropped, []);
+        assert.deepEqual(diff2.errors, ["https://a.com/"]);
+        const diff3 = buildSeoDiff(prevStatus, day3);
+        assert.deepEqual(diff3.dropped, ["https://a.com/"]);
+        assert.equal(diff3.reasons["https://a.com/"], "Crawled - currently not indexed");
+    });
+
+    await test("hasSitemapIndex + noindex в сводке", () => {
+        assert.equal(hasSitemapIndex({ data: [{ index: { pages: [] } }] }), false);
+        assert.equal(hasSitemapIndex({ data: [{ index: { sitemap: { urls: [] } } }] }), true);
+        const msg = formatSeoMessage({
+            isBaseline: true,
+            diff: { dropped: ["https://a.com/"], recovered: [], errors: [], reasons: { "https://a.com/": "Excluded by 'noindex' tag" } },
+            stats: {
+                homesChecked: 10,
+                eligible: 10,
+                homesIndexed: 7,
+                homesNotIndexed: 3,
+                homesNoindex: 2,
+                homesErrors: 1,
+                innerChecked: 5,
+                innerIndexed: 4,
+                innerNotIndexed: 1,
+                innerTotal: 12,
+                sitemapMissing: 1,
+                skipped: 0,
+            },
+        });
+        assert.ok(msg.includes("noindex (сайт сам запрещает): 2"));
+        assert.ok(msg.includes("остальные (7) — в следующие дни"));
+        assert.ok(msg.includes("без sitemap.xml (только главная): 1"));
+        assert.ok(msg.includes("Выпали из индекса (1)"));
+        assert.ok(msg.includes("a.com/ — главная (Excluded by 'noindex' tag)"));
     });
 
     await test("runSeo без секретов — skip, status.json не трогает", async () => {
@@ -492,13 +701,12 @@ async function main() {
         assert.ok(proc.stdout.includes("GSC не настроен"));
     });
 
-    await test("объём: ~436 главных в день, внутренние за ~2 дня в квоту 1800", () => {
+    await test("объём: ~436 главных в день, внутренние из sitemap (≈5.9k) за ~4–5 дней", () => {
         const sites = JSON.parse(fs.readFileSync("./sites.json", "utf8"));
         const catalog = loadCatalogByDomain(fs.readFileSync("./sites.csv", "utf8"));
         const hosts = uniqueMonitoredHosts(sites);
         let skip = 0;
         let homes = 0;
-        let inner = 0;
         for (const h of hosts) {
             const row = catalog.get(h.host);
             const account = String(row?.account || "").trim();
@@ -506,15 +714,15 @@ async function main() {
                 skip += 1;
                 continue;
             }
-            const pages = pageTargetsForRow(h.host, row);
             homes += 1;
-            inner += Math.max(0, pages.length - 1);
         }
         assert.equal(skip, 7);
         assert.ok(homes >= 400 && homes <= 450, `homes=${homes}`);
         const left = 1800 - homes;
         assert.ok(left > 1000, `остаток квоты ${left}`);
-        assert.ok(inner / left < 3, `круг внутренних ${inner / left} дней`);
+        // Замер 2026-09-03: все 433 сайта отдают sitemap.xml, в сумме 5885 внутренних URL.
+        const innerMeasured = 5885;
+        assert.ok(innerMeasured / left < 5, `круг внутренних ${innerMeasured / left} дней`);
     });
 
     await test("withTimeout не висит бесконечно", async () => {

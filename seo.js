@@ -165,6 +165,158 @@ function pageTargetsForRow(domain, catalogRow) {
     return pages;
 }
 
+const SITEMAP_TIMEOUT_MS = 15000;
+const SITEMAP_MAX_URLS = 30;
+const SITEMAP_CONCURRENCY = 8;
+const SITEMAP_MAX_CHILDREN = 5;
+
+function decodeXmlEntities(text) {
+    return String(text || "")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;|&apos;/g, "'")
+        .trim();
+}
+
+function parseSitemapXml(xml) {
+    const text = String(xml || "");
+    const locs = [];
+    const re = /<loc>\s*(?:<!\[CDATA\[)?([^<\]]+?)(?:\]\]>)?\s*<\/loc>/gi;
+    let m;
+    while ((m = re.exec(text))) {
+        const loc = decodeXmlEntities(m[1]);
+        if (loc) locs.push(loc);
+    }
+    const isIndex = /<sitemapindex[\s>]/i.test(text);
+    return isIndex ? { urls: [], sitemaps: locs } : { urls: locs, sitemaps: [] };
+}
+
+function slotFromUrl(url) {
+    try {
+        const path = new URL(url).pathname || "/";
+        if (path === "/" || path === "") return "home";
+        return path.replace(/^\/+|\/+$/g, "").toLowerCase() || "home";
+    } catch {
+        return String(url);
+    }
+}
+
+function sitemapTargets(host, urls, cap = SITEMAP_MAX_URLS) {
+    const home = { slot: "home", url: `https://${host}/` };
+    const seen = new Set([home.url]);
+    const inner = [];
+    for (const raw of urls || []) {
+        let parsed;
+        try {
+            parsed = new URL(String(raw).trim());
+        } catch {
+            continue;
+        }
+        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") continue;
+        if (hostFromSiteUrl(parsed.href) !== host) continue;
+        const path = parsed.pathname || "/";
+        if (path === "/" || path === "") continue;
+        if (/^\/visit(\/|$)/i.test(path)) continue;
+        if (/\.(xml|txt|jpg|jpeg|png|gif|webp|svg|pdf|css|js)$/i.test(path)) continue;
+        const clean = `https://${host}${path}`;
+        if (seen.has(clean)) continue;
+        seen.add(clean);
+        inner.push({ slot: slotFromUrl(clean), url: clean });
+        if (inner.length >= cap) break;
+    }
+    return [home, ...inner];
+}
+
+function httpsGetText(url, { timeoutMs = SITEMAP_TIMEOUT_MS, redirects = 3 } = {}) {
+    return new Promise((resolve, reject) => {
+        let target;
+        try {
+            target = new URL(url);
+        } catch (err) {
+            reject(err);
+            return;
+        }
+        const lib = target.protocol === "http:" ? http : https;
+        const req = lib.get(
+            target,
+            {
+                family: 4,
+                timeout: timeoutMs,
+                headers: {
+                    "User-Agent":
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+                    Accept: "application/xml,text/xml;q=0.9,*/*;q=0.8",
+                },
+            },
+            (res) => {
+                const status = res.statusCode || 0;
+                if (status >= 300 && status < 400 && res.headers.location) {
+                    res.resume();
+                    if (redirects <= 0) {
+                        reject(new Error("too many redirects"));
+                        return;
+                    }
+                    const next = new URL(res.headers.location, target).href;
+                    httpsGetText(next, { timeoutMs, redirects: redirects - 1 })
+                        .then(resolve)
+                        .catch(reject);
+                    return;
+                }
+                const chunks = [];
+                let size = 0;
+                res.on("data", (chunk) => {
+                    size += chunk.length;
+                    if (size > 2_000_000) {
+                        req.destroy();
+                        reject(new Error("sitemap too large"));
+                        return;
+                    }
+                    chunks.push(chunk);
+                });
+                res.on("end", () => {
+                    resolve({ status, text: Buffer.concat(chunks).toString("utf8") });
+                });
+            },
+        );
+        req.on("timeout", () => {
+            req.destroy();
+            reject(new Error("sitemap timeout"));
+        });
+        req.on("error", reject);
+    });
+}
+
+async function fetchSitemapUrls(host) {
+    const started = Date.now();
+    try {
+        const first = await httpsGetText(`https://${host}/sitemap.xml`);
+        if (first.status !== 200) {
+            return { urls: [], error: `sitemap HTTP ${first.status}`, ms: Date.now() - started };
+        }
+        const parsed = parseSitemapXml(first.text);
+        let urls = parsed.urls;
+        if (!urls.length && parsed.sitemaps.length) {
+            for (const child of parsed.sitemaps.slice(0, SITEMAP_MAX_CHILDREN)) {
+                try {
+                    const res = await httpsGetText(child);
+                    if (res.status === 200) urls = urls.concat(parseSitemapXml(res.text).urls);
+                } catch {
+                    // один битый дочерний sitemap не валит остальные
+                }
+                if (urls.length >= SITEMAP_MAX_URLS * 2) break;
+            }
+        }
+        if (!urls.length) {
+            return { urls: [], error: "sitemap пустой", ms: Date.now() - started };
+        }
+        return { urls, error: null, ms: Date.now() - started };
+    } catch (err) {
+        return { urls: [], error: String(err?.message || err), ms: Date.now() - started };
+    }
+}
+
 function uniqueMonitoredHosts(sites) {
     const seen = new Set();
     const out = [];
@@ -311,30 +463,57 @@ function skipIndex(error, checkedAt = new Date().toISOString()) {
     };
 }
 
+function mergePageRecord(prev, next) {
+    if (!next) return prev;
+    if (!next.error || !prev) return next;
+    const hadStatus = prev.indexed === true || prev.indexed === false;
+    if (!hadStatus) return next;
+    // Google сегодня не ответил — оставляем вчерашний статус, ошибку помечаем отдельно.
+    return {
+        ...next,
+        indexed: prev.indexed,
+        coverageState: prev.coverageState ?? null,
+        verdict: prev.verdict ?? null,
+        lastCrawlTime: prev.lastCrawlTime ?? null,
+        pageFetchState: prev.pageFetchState ?? null,
+        status_from: prev.status_from || prev.checked_at || null,
+        stale: true,
+    };
+}
+
 function upsertPages(prevPages, updates) {
     const map = new Map();
     for (const page of prevPages || []) {
         if (page?.url) map.set(page.url, page);
     }
     for (const page of updates || []) {
-        if (page?.url) map.set(page.url, page);
+        if (page?.url) map.set(page.url, mergePageRecord(map.get(page.url), page));
     }
     return [...map.values()];
+}
+
+function isNoindexCoverage(coverageState) {
+    return String(coverageState || "").toLowerCase().includes("noindex");
 }
 
 function buildHostIndex({
     host,
     catalogRow,
+    targets,
+    sitemap,
     prevIndex,
     updates,
     siteUrl,
     checkedAt,
 }) {
-    const expected = pageTargetsForRow(host, catalogRow);
+    const expected = targets || pageTargetsForRow(host, catalogRow);
     const order = new Map(expected.map((page, i) => [page.url, i]));
-    const pages = upsertPages(prevIndex?.pages, updates).sort(
-        (a, b) => (order.get(a.url) ?? 999) - (order.get(b.url) ?? 999),
-    );
+    let pages = upsertPages(prevIndex?.pages, updates);
+    if (targets) {
+        // Источник URL — sitemap: чужие / устаревшие адреса из старой базы убираем.
+        pages = pages.filter((page) => order.has(page.url));
+    }
+    pages.sort((a, b) => (order.get(a.url) ?? 999) - (order.get(b.url) ?? 999));
     const home = pages.find((page) => page.slot === "home") || null;
     const decided = pages.filter((page) => page.indexed === true || page.indexed === false);
     return {
@@ -345,9 +524,11 @@ function buildHostIndex({
         siteUrl: siteUrl || prevIndex?.siteUrl || `sc-domain:${host}`,
         checked_at: home?.checked_at || checkedAt,
         error: home?.error ?? null,
+        noindex: home ? isNoindexCoverage(home.coverageState) : false,
         pages_total: expected.length,
         pages_indexed: pages.filter((page) => page.indexed === true).length,
         pages_checked: decided.length,
+        sitemap: sitemap ?? prevIndex?.sitemap ?? null,
         pages,
     };
 }
@@ -367,6 +548,7 @@ function buildSeoDiff(prevStatus, nextByHost) {
     const dropped = [];
     const recovered = [];
     const errors = [];
+    const reasons = {};
 
     for (const index of nextByHost.values()) {
         for (const page of index?.pages || []) {
@@ -374,9 +556,11 @@ function buildSeoDiff(prevStatus, nextByHost) {
             const was = prev.get(page.url);
             if (page.error && !was?.error) {
                 errors.push(page.url);
+                reasons[page.url] = String(page.error).split(":")[0].trim();
             }
             if (was?.indexed === true && page.indexed === false) {
                 dropped.push(page.url);
+                if (page.coverageState) reasons[page.url] = page.coverageState;
             }
             if (was?.indexed === false && page.indexed === true) {
                 recovered.push(page.url);
@@ -384,7 +568,7 @@ function buildSeoDiff(prevStatus, nextByHost) {
         }
     }
 
-    return { dropped, recovered, errors };
+    return { dropped, recovered, errors, reasons };
 }
 
 function hasPriorIndex(status) {
@@ -393,6 +577,10 @@ function hasPriorIndex(status) {
             (page) => page && (page.indexed === true || page.indexed === false),
         ),
     );
+}
+
+function hasSitemapIndex(status) {
+    return (status?.data || []).some((row) => row?.index?.sitemap);
 }
 
 function formatIndexedUrl(url) {
@@ -407,12 +595,41 @@ function formatIndexedUrl(url) {
     }
 }
 
-function formatUrlBulletList(urls) {
-    const shown = urls.slice(0, TG_LIST_CAP).map((url) => `   • ${formatIndexedUrl(url)}`);
+function formatUrlBulletList(urls, reasons = {}) {
+    const shown = urls.slice(0, TG_LIST_CAP).map((url) => {
+        const reason = reasons[url];
+        return reason
+            ? `   • ${formatIndexedUrl(url)} (${reason})`
+            : `   • ${formatIndexedUrl(url)}`;
+    });
     if (urls.length > TG_LIST_CAP) {
         shown.push(`   … и ещё ${urls.length - TG_LIST_CAP}`);
     }
     return shown;
+}
+
+function formatChangeBlocks(diff) {
+    const { dropped = [], recovered = [], errors = [], reasons = {} } = diff || {};
+    const blocks = [];
+    if (dropped.length) {
+        blocks.push(
+            `\n📉 *Выпали из индекса (${dropped.length}):*`,
+            ...formatUrlBulletList(dropped, reasons),
+        );
+    }
+    if (recovered.length) {
+        blocks.push(
+            `\n✅ *Появились в индексе (${recovered.length}):*`,
+            ...formatUrlBulletList(recovered),
+        );
+    }
+    if (errors.length) {
+        blocks.push(
+            `\n⚠️ *Google не ответил (${errors.length}), прежний статус не сброшен:*`,
+            ...formatUrlBulletList(errors, reasons),
+        );
+    }
+    return blocks;
 }
 
 function formatSeoMessage({ isBaseline, diff, stats }) {
@@ -432,14 +649,25 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
             `• проверено: ${stats.homesChecked} из ${eligible}`,
             `• в индексе: ${stats.homesIndexed}`,
             `• не в индексе: ${stats.homesNotIndexed ?? 0}`,
-            `• Google не ответил: ${stats.homesErrors ?? 0}`,
+        ];
+        if (stats.homesNoindex) {
+            lines.push(`   из них noindex (сайт сам запрещает): ${stats.homesNoindex}`);
+        }
+        lines.push(`• Google не ответил: ${stats.homesErrors ?? 0}`);
+        lines.push(
             "",
-            "*Внутренние* (`/login`, `/bonus`…)",
+            "*Внутренние* (адреса из sitemap сайта)",
             `• проверено сегодня: ${innerChecked}`,
             `• в индексе: ${innerIndexed}`,
-        ];
+        );
+        if (stats.innerNotIndexed != null) {
+            lines.push(`• не в индексе: ${stats.innerNotIndexed}`);
+        }
         if (innerTotal != null && innerTotal > innerChecked) {
-            lines.push("• остальные внутренние — в следующие дни");
+            lines.push(`• остальные (${innerTotal - innerChecked}) — в следующие дни`);
+        }
+        if (stats.sitemapMissing) {
+            lines.push(`• без sitemap.xml (только главная): ${stats.sitemapMissing}`);
         }
         lines.push("", `Не проверялись (нет кабинета Google): ${stats.skipped}`);
         if (stats.stalled) {
@@ -447,7 +675,15 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
                 "",
                 "⚠️ Проверка неполная: Google с GitHub не отвечал. Цифры только по тому, что успели спросить.",
             );
-        } else {
+        }
+        const changes = formatChangeBlocks({
+            dropped: diff?.dropped || [],
+            recovered: diff?.recovered || [],
+            errors: [],
+            reasons: diff?.reasons || {},
+        });
+        if (changes.length) lines.push(...changes);
+        if (!stats.stalled) {
             lines.push(
                 "",
                 "Дальше напишу, только если страница выпадет или появится в индексе.",
@@ -456,31 +692,9 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
         return lines.join("\n");
     }
 
-    const { dropped, recovered, errors } = diff;
-    if (!dropped.length && !recovered.length && !errors.length) {
-        return null;
-    }
-
-    const blocks = ["🔍 *Индексация — изменения*"];
-    if (dropped.length) {
-        blocks.push(
-            `\n📉 *Выпали из индекса (${dropped.length}):*`,
-            ...formatUrlBulletList(dropped),
-        );
-    }
-    if (recovered.length) {
-        blocks.push(
-            `\n✅ *Появились в индексе (${recovered.length}):*`,
-            ...formatUrlBulletList(recovered),
-        );
-    }
-    if (errors.length) {
-        blocks.push(
-            `\n⚠️ *Google не ответил (${errors.length}):*`,
-            ...formatUrlBulletList(errors),
-        );
-    }
-    return blocks.join("\n");
+    const blocks = formatChangeBlocks(diff);
+    if (!blocks.length) return null;
+    return ["🔍 *Индексация — изменения*", ...blocks].join("\n");
 }
 
 function formatAuthFailMessage({ eligible, skipped, detail }) {
@@ -924,16 +1138,68 @@ async function runSeo(options = {}) {
             );
             continue;
         }
-        const targets = pageTargetsForRow(item.host, catalogRow);
-        eligible.push({
-            host: item.host,
-            account,
-            catalogRow,
-            home: targets[0],
-            inner: targets.slice(1),
+        eligible.push({ host: item.host, account, catalogRow });
+    }
+
+    // Внутренние страницы берём из sitemap.xml сайта: имена слотов в CSV
+    // (login/bonus…) не совпадают с реальными путями (/accedi/, /registration/…).
+    const sitemapFn =
+        options.sitemapFn === undefined ? fetchSitemapUrls : options.sitemapFn;
+    const targetsByHost = new Map();
+    const sitemapByHost = new Map();
+    let sitemapLive = 0;
+    let sitemapCached = 0;
+    let sitemapMissing = 0;
+
+    if (sitemapFn) {
+        await runPool(eligible, SITEMAP_CONCURRENCY, async (item) => {
+            const res = await sitemapFn(item.host);
+            const cached = indexByHost.get(item.host)?.sitemap;
+            if (res?.urls?.length) {
+                sitemapLive += 1;
+                const targets = sitemapTargets(item.host, res.urls);
+                targetsByHost.set(item.host, targets);
+                sitemapByHost.set(item.host, {
+                    urls: targets.slice(1).map((page) => page.url),
+                    fetched_at: checkedAt,
+                    error: null,
+                    source: "live",
+                });
+            } else if (cached?.urls?.length) {
+                sitemapCached += 1;
+                targetsByHost.set(item.host, sitemapTargets(item.host, cached.urls));
+                sitemapByHost.set(item.host, {
+                    ...cached,
+                    error: res?.error || "sitemap недоступен",
+                    source: "cache",
+                });
+            } else {
+                sitemapMissing += 1;
+                targetsByHost.set(item.host, sitemapTargets(item.host, []));
+                sitemapByHost.set(item.host, {
+                    urls: [],
+                    fetched_at: checkedAt,
+                    error: res?.error || "sitemap пустой",
+                    source: "none",
+                });
+            }
+            return false;
         });
-        for (const page of targets.slice(1)) {
-            innerQueue.push({ ...page, host: item.host, account });
+        logSeo(
+            `SEO sitemaps: live=${sitemapLive} cached=${sitemapCached} none=${sitemapMissing}`,
+        );
+    } else {
+        for (const item of eligible) {
+            targetsByHost.set(item.host, pageTargetsForRow(item.host, item.catalogRow));
+        }
+    }
+
+    for (const item of eligible) {
+        const targets = targetsByHost.get(item.host);
+        item.home = targets[0];
+        item.inner = targets.slice(1);
+        for (const page of item.inner) {
+            innerQueue.push({ ...page, host: item.host, account: item.account });
         }
     }
 
@@ -1035,6 +1301,8 @@ async function runSeo(options = {}) {
                 buildHostIndex({
                     host,
                     catalogRow,
+                    targets: sitemapFn ? targetsByHost.get(host) : undefined,
+                    sitemap: sitemapByHost.get(host),
                     prevIndex: prev,
                     updates: [rec],
                     siteUrl: result.siteUrl,
@@ -1103,26 +1371,35 @@ async function runSeo(options = {}) {
         indexByHost,
     );
 
-    const isBaseline = !hasPriorIndex(prevStatus);
+    // Сводку шлём в первый прогон и один раз после перехода на sitemap-адреса,
+    // дальше — только изменения.
+    const isBaseline =
+        !hasPriorIndex(prevStatus) || (Boolean(sitemapFn) && !hasSitemapIndex(prevStatus));
     const diff = buildSeoDiff(prevStatus, indexByHost);
 
     let homesIndexed = 0;
     let homesNotIndexed = 0;
+    let homesNoindex = 0;
     let homesErrors = 0;
     let innerIndexed = 0;
+    let innerNotIndexed = 0;
     for (const item of eligible) {
         const idx = indexByHost.get(item.host);
         const home = (idx?.pages || []).find((page) => page.slot === "home");
         if (!home || home.checked_at !== checkedAt) continue;
+        if (home.error) homesErrors += 1;
         if (home.indexed === true) homesIndexed += 1;
-        else if (home.indexed === false) homesNotIndexed += 1;
-        else homesErrors += 1;
+        else if (home.indexed === false) {
+            homesNotIndexed += 1;
+            if (isNoindexCoverage(home.coverageState)) homesNoindex += 1;
+        }
     }
     for (const idx of indexByHost.values()) {
         for (const page of idx?.pages || []) {
             if (page.slot === "home") continue;
             if (page.checked_at !== checkedAt) continue;
             if (page.indexed === true) innerIndexed += 1;
+            else if (page.indexed === false) innerNotIndexed += 1;
         }
     }
     const innerChecked = Math.max(0, pagesCheckedToday - homesChecked);
@@ -1135,12 +1412,17 @@ async function runSeo(options = {}) {
         homesChecked,
         homesIndexed,
         homesNotIndexed,
+        homesNoindex,
         homesErrors,
         pagesCheckedToday,
         pagesIndexed,
         innerChecked,
         innerIndexed,
+        innerNotIndexed,
         innerTotal: innerQueue.length,
+        sitemapLive,
+        sitemapCached,
+        sitemapMissing,
         skipped,
         quotaUsed: quota.used,
         eligible: eligible.length,
@@ -1204,6 +1486,13 @@ module.exports = {
     parsePageSlots,
     pageUrlForSlot,
     pageTargetsForRow,
+    parseSitemapXml,
+    sitemapTargets,
+    slotFromUrl,
+    fetchSitemapUrls,
+    mergePageRecord,
+    hasSitemapIndex,
+    isNoindexCoverage,
     uniqueMonitoredHosts,
     parseClientSecretJson,
     parseAccountsJson,
