@@ -85,7 +85,7 @@ async function main() {
         const csv = fs.readFileSync("./sites.csv", "utf8");
         const rows = parseCsv(csv).filter((r) => String(r.domain || "").trim());
         const catalog = loadCatalogByDomain(csv);
-        assert.ok(catalog.size >= 440, `доменов ${catalog.size}`);
+        assert.ok(catalog.size >= 430, `доменов ${catalog.size}`);
         for (const [domain, row] of catalog) {
             assert.ok(
                 String(row.account || "").trim(),
@@ -701,7 +701,7 @@ async function main() {
         assert.ok(proc.stdout.includes("GSC не настроен"));
     });
 
-    await test("объём: ~436 главных в день, внутренние из sitemap (≈5.9k) за ~4–5 дней", () => {
+    await test("объём: ~426 главных в день, внутренние из sitemap (≈5.9k) за ~4–5 дней", () => {
         const sites = JSON.parse(fs.readFileSync("./sites.json", "utf8"));
         const catalog = loadCatalogByDomain(fs.readFileSync("./sites.csv", "utf8"));
         const hosts = uniqueMonitoredHosts(sites);
