@@ -15,6 +15,7 @@ const PROBE_TIMEOUT_MS = 15000;
 const INSPECT_CONCURRENCY = 2;
 const INSPECT_RETRIES = 2;
 const STALL_LIMIT = 40;
+const SEO_RETRY_WAIT_MS = 120000;
 const GSC_INSPECT_HOST = "searchconsole.googleapis.com";
 const GSC_INSPECT_PATH = "/v1/urlInspection/index:inspect";
 const META_ACCOUNT_KEYS = new Set(["description", "clientSecretsFile"]);
@@ -394,22 +395,64 @@ function hasPriorIndex(status) {
     );
 }
 
+function formatIndexedUrl(url) {
+    try {
+        const parsed = new URL(url);
+        const host = parsed.hostname.replace(/^www\./i, "");
+        const path = parsed.pathname || "/";
+        if (path === "/" || path === "") return `${host}/ — главная`;
+        return `${host}${path}`;
+    } catch {
+        return url;
+    }
+}
+
+function formatUrlBulletList(urls) {
+    const shown = urls.slice(0, TG_LIST_CAP).map((url) => `   • ${formatIndexedUrl(url)}`);
+    if (urls.length > TG_LIST_CAP) {
+        shown.push(`   … и ещё ${urls.length - TG_LIST_CAP}`);
+    }
+    return shown;
+}
+
 function formatSeoMessage({ isBaseline, diff, stats }) {
     if (isBaseline) {
+        const eligible = stats.eligible ?? stats.homesChecked ?? 0;
+        const innerChecked =
+            stats.innerChecked ??
+            Math.max(0, (stats.pagesCheckedToday || 0) - (stats.homesChecked || 0));
+        const innerIndexed =
+            stats.innerIndexed ??
+            Math.max(0, (stats.pagesIndexed || 0) - (stats.homesIndexed || 0));
+        const innerTotal = stats.innerTotal;
         const lines = [
-            "🔍 *Индексация: база записана*",
-            `Главных проверено: ${stats.homesChecked} из ${stats.eligible ?? stats.homesChecked}`,
-            `В индексе (главные): ${stats.homesIndexed}`,
-            `Страниц проверено сегодня: ${stats.pagesCheckedToday}`,
-            `Страниц в индексе (накоплено): ${stats.pagesIndexed}`,
-            `Нет в GSC / skip: ${stats.skipped}`,
+            "🔍 *Индексация Google*",
+            "",
+            "*Главные* (`https://сайт/`)",
+            `• проверено: ${stats.homesChecked} из ${eligible}`,
+            `• в индексе: ${stats.homesIndexed}`,
+            `• не в индексе: ${stats.homesNotIndexed ?? 0}`,
+            `• Google не ответил: ${stats.homesErrors ?? 0}`,
+            "",
+            "*Внутренние* (`/login`, `/bonus`…)",
+            `• проверено сегодня: ${innerChecked}`,
+            `• в индексе: ${innerIndexed}`,
         ];
+        if (innerTotal != null && innerTotal > innerChecked) {
+            lines.push("• остальные внутренние — в следующие дни");
+        }
+        lines.push("", `Не проверялись (нет кабинета Google): ${stats.skipped}`);
         if (stats.stalled) {
             lines.push(
-                "⚠️ Прогон оборван: Google с GitHub не отвечал (таймаут). Это не полный список.",
+                "",
+                "⚠️ Проверка неполная: Google с GitHub не отвечал. Цифры только по тому, что успели спросить.",
+            );
+        } else {
+            lines.push(
+                "",
+                "Дальше напишу, только если страница выпадет или появится в индексе.",
             );
         }
-        lines.push("Дальше писать буду только если что-то изменится.");
         return lines.join("\n");
     }
 
@@ -418,23 +461,23 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
         return null;
     }
 
-    const blocks = ["🔍 *Индексация: изменения*"];
+    const blocks = ["🔍 *Индексация — изменения*"];
     if (dropped.length) {
         blocks.push(
             `\n📉 *Выпали из индекса (${dropped.length}):*`,
-            ...dropped.slice(0, TG_LIST_CAP).map((url) => `   • ${url}`),
+            ...formatUrlBulletList(dropped),
         );
     }
     if (recovered.length) {
         blocks.push(
-            `\n✅ *Попали в индекс (${recovered.length}):*`,
-            ...recovered.slice(0, TG_LIST_CAP).map((url) => `   • ${url}`),
+            `\n✅ *Появились в индексе (${recovered.length}):*`,
+            ...formatUrlBulletList(recovered),
         );
     }
     if (errors.length) {
         blocks.push(
-            `\n⚠️ *GSC не ответил (${errors.length}):*`,
-            ...errors.slice(0, TG_LIST_CAP).map((url) => `   • ${url}`),
+            `\n⚠️ *Google не ответил (${errors.length}):*`,
+            ...formatUrlBulletList(errors),
         );
     }
     return blocks.join("\n");
@@ -442,14 +485,69 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
 
 function formatAuthFailMessage({ eligible, skipped, detail }) {
     return [
-        "🔍 *Индексация: прогон не начался*",
-        "GitHub не получил OAuth-токен Google. Это не база и не список сайтов.",
+        "🔍 *Индексация: проверка не началась*",
+        "Не удалось войти в Google. Это не список сайтов.",
         detail ? `Причина: ${detail}` : null,
-        `Сайтов к проверке: ${eligible}, skip: ${skipped}`,
-        "`status.json` не менял.",
+        `Сайтов в списке: ${eligible}, без кабинета: ${skipped}`,
     ]
         .filter(Boolean)
         .join("\n");
+}
+
+function formatRetryNotice() {
+    return [
+        "🔍 *Индексация: проверка оборвалась*",
+        "Через 2 минуты запускаю ещё раз (одна попытка).",
+    ].join("\n");
+}
+
+function isPermanentAuthError(detail) {
+    const text = String(detail || "").toLowerCase();
+    return (
+        text.includes("invalid_client") ||
+        text.includes("invalid_grant") ||
+        text.includes("unauthorized") ||
+        text.includes("permission_denied")
+    );
+}
+
+function shouldRetrySeo(result) {
+    if (!result || result.skipped) return false;
+    if (result.stats?.stalledReason === "auth") {
+        return !isPermanentAuthError(result.stats.authDetail);
+    }
+    return Boolean(result.stalled);
+}
+
+async function notifySeo(env, text) {
+    if (!text) {
+        console.log("Telegram: индексация без изменений");
+        return;
+    }
+    const token = env.TELEGRAM_BOT_TOKEN;
+    const chatId = env.TELEGRAM_CHAT_ID;
+    if (!token || !chatId) {
+        console.log("TELEGRAM не задан — SEO-отчёт только в status.json");
+        return;
+    }
+    await sendTelegram({ token, chatId, text });
+    console.log("Telegram: отправлен SEO-отчёт");
+}
+
+function telegramTextFromResult(result) {
+    if (!result || result.skipped) return null;
+    if (result.stats?.stalledReason === "auth") {
+        return formatAuthFailMessage({
+            eligible: result.stats.eligible,
+            skipped: result.stats.skipped,
+            detail: result.stats.authDetail,
+        });
+    }
+    return formatSeoMessage({
+        isBaseline: result.isBaseline,
+        diff: result.diff || { dropped: [], recovered: [], errors: [] },
+        stats: result.stats || {},
+    });
 }
 
 function applyIndexToStatusData(data, indexByHost) {
@@ -848,32 +946,37 @@ async function runSeo(options = {}) {
 
     async function abortUnreachable(detail) {
         logSeo(`SEO abort: ${detail}`);
+        const stats = {
+            homesChecked: 0,
+            skipped,
+            eligible: eligible.length,
+            stalled: true,
+            stalledReason: "auth",
+            authDetail: detail,
+        };
         const message = formatAuthFailMessage({
             eligible: eligible.length,
             skipped,
             detail,
         });
-        const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
-        const CHAT_ID = env.TELEGRAM_CHAT_ID;
-        if (BOT_TOKEN && CHAT_ID) {
-            await sendTelegram({
-                token: BOT_TOKEN,
-                chatId: CHAT_ID,
-                text: message,
-            });
+        if (options.notify !== false) {
+            const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
+            const CHAT_ID = env.TELEGRAM_CHAT_ID;
+            if (BOT_TOKEN && CHAT_ID) {
+                await sendTelegram({
+                    token: BOT_TOKEN,
+                    chatId: CHAT_ID,
+                    text: message,
+                });
+            }
         }
         return {
             skipped: false,
-            stats: {
-                homesChecked: 0,
-                skipped,
-                eligible: eligible.length,
-                stalled: true,
-                stalledReason: "auth",
-            },
+            stats,
             isBaseline: false,
             stalled: true,
             wroteStatus: false,
+            message,
         };
     }
 
@@ -1000,21 +1103,44 @@ async function runSeo(options = {}) {
         indexByHost,
     );
 
-    const homesIndexed = [...indexByHost.values()].filter(
-        (idx) => idx.indexed === true,
-    ).length;
+    const isBaseline = !hasPriorIndex(prevStatus);
+    const diff = buildSeoDiff(prevStatus, indexByHost);
+
+    let homesIndexed = 0;
+    let homesNotIndexed = 0;
+    let homesErrors = 0;
+    let innerIndexed = 0;
+    for (const item of eligible) {
+        const idx = indexByHost.get(item.host);
+        const home = (idx?.pages || []).find((page) => page.slot === "home");
+        if (!home || home.checked_at !== checkedAt) continue;
+        if (home.indexed === true) homesIndexed += 1;
+        else if (home.indexed === false) homesNotIndexed += 1;
+        else homesErrors += 1;
+    }
+    for (const idx of indexByHost.values()) {
+        for (const page of idx?.pages || []) {
+            if (page.slot === "home") continue;
+            if (page.checked_at !== checkedAt) continue;
+            if (page.indexed === true) innerIndexed += 1;
+        }
+    }
+    const innerChecked = Math.max(0, pagesCheckedToday - homesChecked);
     const pagesIndexed = [...indexByHost.values()].reduce(
         (sum, idx) => sum + (idx.pages_indexed || 0),
         0,
     );
 
-    const isBaseline = !hasPriorIndex(prevStatus);
-    const diff = buildSeoDiff(prevStatus, indexByHost);
     const stats = {
         homesChecked,
         homesIndexed,
+        homesNotIndexed,
+        homesErrors,
         pagesCheckedToday,
         pagesIndexed,
+        innerChecked,
+        innerIndexed,
+        innerTotal: innerQueue.length,
         skipped,
         quotaUsed: quota.used,
         eligible: eligible.length,
@@ -1022,35 +1148,51 @@ async function runSeo(options = {}) {
         stalledReason: stalled ? "inspect" : undefined,
     };
 
-    const statusData = {
-        ...prevStatus,
-        index_last_update: checkedAt,
-        index_queue_cursor: cursor,
-        data: nextData,
-    };
-    fs.writeFileSync(statusPath, JSON.stringify(statusData, null, 2));
+    const wroteStatus = !(options.skipStatusIfStalled && stalled);
+    if (wroteStatus) {
+        const statusData = {
+            ...prevStatus,
+            index_last_update: checkedAt,
+            index_queue_cursor: cursor,
+            data: nextData,
+        };
+        fs.writeFileSync(statusPath, JSON.stringify(statusData, null, 2));
+    } else {
+        logSeo("SEO skip status.json: прогон оборван, будет повтор");
+    }
 
     logSeo(
         `SEO: homes=${homesChecked} pages_today=${pagesCheckedToday} indexed_pages=${pagesIndexed} skipped=${skipped} quota=${quota.used}/${DAILY_QUOTA} cursor=${cursor}${stalled ? " STALLED" : ""}`,
     );
 
-    const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID = env.TELEGRAM_CHAT_ID;
     const message = formatSeoMessage({ isBaseline, diff, stats });
-    if (BOT_TOKEN && CHAT_ID && message) {
-        try {
-            await sendTelegram({ token: BOT_TOKEN, chatId: CHAT_ID, text: message });
-            console.log("Telegram: отправлен SEO-отчёт");
-        } catch (err) {
-            console.error("Ошибка Telegram в SEO:", err);
+    if (options.notify !== false) {
+        const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
+        const CHAT_ID = env.TELEGRAM_CHAT_ID;
+        if (BOT_TOKEN && CHAT_ID && message) {
+            try {
+                await sendTelegram({ token: BOT_TOKEN, chatId: CHAT_ID, text: message });
+                console.log("Telegram: отправлен SEO-отчёт");
+            } catch (err) {
+                console.error("Ошибка Telegram в SEO:", err);
+            }
+        } else if (!message) {
+            console.log("Telegram: индексация без изменений");
+        } else {
+            console.log("TELEGRAM не задан — SEO-отчёт только в status.json");
         }
-    } else if (!message) {
-        console.log("Telegram: индексация без изменений");
-    } else {
-        console.log("TELEGRAM не задан — SEO-отчёт только в status.json");
     }
 
-    return { skipped: false, stats, diff, isBaseline, cursor };
+    return {
+        skipped: false,
+        stats,
+        diff,
+        isBaseline,
+        cursor,
+        stalled,
+        wroteStatus,
+        message,
+    };
 }
 
 module.exports = {
@@ -1077,6 +1219,11 @@ module.exports = {
     hasPriorIndex,
     formatSeoMessage,
     formatAuthFailMessage,
+    formatRetryNotice,
+    formatIndexedUrl,
+    shouldRetrySeo,
+    isPermanentAuthError,
+    telegramTextFromResult,
     applyIndexToStatusData,
     inspectUrlWithFallback,
     inspectHttpError,
@@ -1086,12 +1233,34 @@ module.exports = {
 
 if (require.main === module) {
     loadLocalEnv();
-    runSeo()
-        .then((result) => {
-            if (result?.skipped) process.exit(0);
-        })
-        .catch((err) => {
-            console.error("SEO-монитор упал:", err);
-            process.exit(1);
-        });
+    (async () => {
+        const env = process.env;
+        const first = await runSeo({ notify: false, skipStatusIfStalled: true });
+        if (first?.skipped) return;
+        if (shouldRetrySeo(first)) {
+            logSeo("SEO will retry once after wait");
+            try {
+                await notifySeo(env, formatRetryNotice());
+            } catch (err) {
+                console.error("Ошибка Telegram (повтор):", err);
+            }
+            const waitMs = Number(env.SEO_RETRY_WAIT_MS || SEO_RETRY_WAIT_MS);
+            if (waitMs > 0) await sleep(waitMs);
+            const second = await runSeo({ notify: false });
+            try {
+                await notifySeo(env, telegramTextFromResult(second));
+            } catch (err) {
+                console.error("Ошибка Telegram в SEO:", err);
+            }
+            return;
+        }
+        try {
+            await notifySeo(env, telegramTextFromResult(first));
+        } catch (err) {
+            console.error("Ошибка Telegram в SEO:", err);
+        }
+    })().catch((err) => {
+        console.error("SEO-монитор упал:", err);
+        process.exit(1);
+    });
 }

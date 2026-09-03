@@ -20,6 +20,9 @@ const {
     hasPriorIndex,
     formatSeoMessage,
     formatAuthFailMessage,
+    formatRetryNotice,
+    formatIndexedUrl,
+    shouldRetrySeo,
     applyIndexToStatusData,
     inspectUrlWithFallback,
     inspectHttpError,
@@ -254,20 +257,30 @@ async function main() {
             stats: {
                 homesChecked: 10,
                 homesIndexed: 2,
+                homesNotIndexed: 7,
+                homesErrors: 1,
                 pagesCheckedToday: 15,
                 pagesIndexed: 2,
+                innerChecked: 5,
+                innerIndexed: 0,
+                innerTotal: 20,
                 skipped: 7,
                 eligible: 10,
             },
         });
-        assert.ok(baseline.includes("база записана"));
-        assert.ok(baseline.includes("из 10"));
+        assert.ok(baseline.includes("Индексация Google"));
+        assert.ok(baseline.includes("Главные"));
+        assert.ok(baseline.includes("Внутренние"));
+        assert.ok(baseline.includes("проверено: 10 из 10"));
+        assert.ok(baseline.includes("не в индексе: 7"));
+        assert.ok(!baseline.includes("накоплено"));
+        assert.ok(!baseline.includes("база записана"));
         const authFail = formatAuthFailMessage({
             eligible: 433,
             skipped: 7,
             detail: "invalid_client",
         });
-        assert.ok(authFail.includes("прогон не начался"));
+        assert.ok(authFail.includes("проверка не началась"));
         assert.ok(!authFail.includes("база записана"));
         const change = formatSeoMessage({
             isBaseline: false,
@@ -275,7 +288,9 @@ async function main() {
             stats: {},
         });
         assert.ok(change.includes("Выпали из индекса"));
-        assert.ok(change.includes("Попали в индекс"));
+        assert.ok(change.includes("Появились в индексе"));
+        assert.ok(change.includes("a.com/ — главная"));
+        assert.ok(change.includes("a.com/login"));
         assert.equal(
             formatSeoMessage({
                 isBaseline: false,
@@ -284,6 +299,25 @@ async function main() {
             }),
             null,
         );
+        assert.equal(formatIndexedUrl("https://a.com/"), "a.com/ — главная");
+        assert.equal(formatIndexedUrl("https://www.a.com/login"), "a.com/login");
+        assert.equal(shouldRetrySeo({ skipped: true }), false);
+        assert.equal(shouldRetrySeo({ stalled: true, stats: { stalledReason: "inspect" } }), true);
+        assert.equal(
+            shouldRetrySeo({
+                stalled: true,
+                stats: { stalledReason: "auth", authDetail: "invalid_client" },
+            }),
+            false,
+        );
+        assert.equal(
+            shouldRetrySeo({
+                stalled: true,
+                stats: { stalledReason: "auth", authDetail: "GSC auth timeout" },
+            }),
+            true,
+        );
+        assert.ok(formatRetryNotice().includes("ещё раз"));
     });
 
     await test("аптайм не затирает index: merge в status.data", () => {
