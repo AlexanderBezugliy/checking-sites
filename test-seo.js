@@ -10,6 +10,7 @@ const {
     pageUrlForSlot,
     pageTargetsForRow,
     parseSitemapXml,
+    sitemapPageUrls,
     sitemapTargets,
     slotFromUrl,
     mergePageRecord,
@@ -120,9 +121,9 @@ async function main() {
         );
     });
 
-    await test("URL слотов: home → /, login → /login, минус пропускается", () => {
+    await test("URL слотов: home → /, login → /login/, минус пропускается", () => {
         assert.equal(pageUrlForSlot("example.com", "home"), "https://example.com/");
-        assert.equal(pageUrlForSlot("example.com", "login"), "https://example.com/login");
+        assert.equal(pageUrlForSlot("example.com", "login"), "https://example.com/login/");
         const pages = pageTargetsForRow("example.com", {
             pages: "home|login|-bonus|register",
         });
@@ -131,7 +132,59 @@ async function main() {
             ["home", "login", "register"],
         );
         assert.equal(pages[0].url, "https://example.com/");
+        assert.equal(pages[2].url, "https://example.com/register/");
         assert.ok(!pages.some((p) => p.slot === "bonus"));
+    });
+
+    await test("очередь = CSV-слоты: sitemap только резолвит путь, legal-URL не попадают", () => {
+        const host = "new-vegas-casino.gb.net";
+        const catalogRow = {
+            pages: "home|login|app|register|games|bet|bonus|deposit",
+        };
+        const sitemap = [
+            "https://new-vegas-casino.gb.net/about-us/",
+            "https://new-vegas-casino.gb.net/mobile-application/",
+            "https://new-vegas-casino.gb.net/bet/",
+            "https://new-vegas-casino.gb.net/bonuses/",
+            "https://new-vegas-casino.gb.net/contact-us/",
+            "https://new-vegas-casino.gb.net/deposit/",
+            "https://new-vegas-casino.gb.net/slots-games/",
+            "https://new-vegas-casino.gb.net/login/",
+            "https://new-vegas-casino.gb.net/privacy-policy/",
+            "https://new-vegas-casino.gb.net/registration/",
+            "https://new-vegas-casino.gb.net/safe-gambling/",
+            "https://new-vegas-casino.gb.net/terms-of-service/",
+            "https://new-vegas-casino.gb.net/en-gb/bonuses/",
+        ];
+        const pages = pageTargetsForRow(host, catalogRow, sitemap);
+        assert.deepEqual(
+            pages.map((p) => p.slot),
+            ["home", "login", "app", "register", "games", "bet", "bonus", "deposit"],
+        );
+        const bySlot = Object.fromEntries(pages.map((p) => [p.slot, p.url]));
+        assert.equal(bySlot.home, "https://new-vegas-casino.gb.net/");
+        assert.equal(bySlot.login, "https://new-vegas-casino.gb.net/login/");
+        assert.equal(bySlot.app, "https://new-vegas-casino.gb.net/mobile-application/");
+        assert.equal(bySlot.register, "https://new-vegas-casino.gb.net/registration/");
+        assert.equal(bySlot.games, "https://new-vegas-casino.gb.net/slots-games/");
+        assert.equal(bySlot.bet, "https://new-vegas-casino.gb.net/bet/");
+        assert.equal(bySlot.bonus, "https://new-vegas-casino.gb.net/bonuses/");
+        assert.equal(bySlot.deposit, "https://new-vegas-casino.gb.net/deposit/");
+        assert.ok(
+            !pages.some((p) =>
+                /contact-us|privacy-policy|terms-of-service|about-us/.test(p.url),
+            ),
+        );
+        assert.ok(!pages.some((p) => p.slot === "bonuses" || p.slot === "slots-games"));
+        assert.equal(
+            pageTargetsForRow(host, catalogRow, [
+                "https://new-vegas-casino.gb.net/accedi/",
+            ]).find((p) => p.slot === "login").url,
+            "https://new-vegas-casino.gb.net/accedi/",
+        );
+        const stored = sitemapPageUrls(host, sitemap);
+        assert.ok(stored.includes("https://new-vegas-casino.gb.net/contact-us/"));
+        assert.ok(stored.length > pages.length - 1);
     });
 
     await test("уникальные хосты из sites.json и skip без CSV", () => {
@@ -277,6 +330,8 @@ async function main() {
         assert.ok(baseline.includes("Индексация Google"));
         assert.ok(baseline.includes("Главные"));
         assert.ok(baseline.includes("Внутренние"));
+        assert.ok(baseline.includes("страницы из sites.csv"));
+        assert.ok(!baseline.includes("адреса из sitemap"));
         assert.ok(baseline.includes("проверено: 10 из 10"));
         assert.ok(baseline.includes("не в индексе: 7"));
         assert.ok(!baseline.includes("накоплено"));
@@ -368,7 +423,7 @@ async function main() {
             prevIndex: day1,
             updates: [
                 {
-                    url: "https://a.com/login",
+                    url: "https://a.com/login/",
                     slot: "login",
                     indexed: false,
                     checked_at: "t2",
@@ -382,6 +437,75 @@ async function main() {
         assert.equal(day2.pages_checked, 2);
         assert.ok(day2.pages.some((p) => p.slot === "home" && p.indexed === true));
         assert.ok(day2.pages.some((p) => p.slot === "login" && p.indexed === false));
+    });
+
+    await test("buildHostIndex: CSV-слоты, slot=bonus не bonuses, legal-URL вычищаются", () => {
+        const host = "new-vegas-casino.gb.net";
+        const catalogRow = {
+            pages: "home|login|app|register|games|bet|bonus|deposit",
+        };
+        const sitemap = [
+            "https://new-vegas-casino.gb.net/mobile-application/",
+            "https://new-vegas-casino.gb.net/bet/",
+            "https://new-vegas-casino.gb.net/bonuses/",
+            "https://new-vegas-casino.gb.net/contact-us/",
+            "https://new-vegas-casino.gb.net/deposit/",
+            "https://new-vegas-casino.gb.net/slots-games/",
+            "https://new-vegas-casino.gb.net/login/",
+            "https://new-vegas-casino.gb.net/privacy-policy/",
+            "https://new-vegas-casino.gb.net/registration/",
+        ];
+        const targets = pageTargetsForRow(host, catalogRow, sitemap);
+        const prevIndex = {
+            pages: [
+                {
+                    url: "https://new-vegas-casino.gb.net/",
+                    slot: "home",
+                    indexed: true,
+                    checked_at: "t1",
+                    error: null,
+                },
+                {
+                    url: "https://new-vegas-casino.gb.net/bonuses/",
+                    slot: "bonuses",
+                    indexed: true,
+                    checked_at: "t1",
+                    error: null,
+                },
+                {
+                    url: "https://new-vegas-casino.gb.net/contact-us/",
+                    slot: "contact-us",
+                    indexed: false,
+                    checked_at: "t1",
+                    error: null,
+                },
+                {
+                    url: "https://new-vegas-casino.gb.net/privacy-policy/",
+                    slot: "privacy-policy",
+                    indexed: false,
+                    checked_at: "t1",
+                    error: null,
+                },
+            ],
+        };
+        const next = buildHostIndex({
+            host,
+            catalogRow,
+            targets,
+            prevIndex,
+            updates: [],
+            siteUrl: `sc-domain:${host}`,
+            checkedAt: "t2",
+        });
+        assert.equal(next.pages_total, 8);
+        assert.ok(!next.pages.some((p) => p.slot === "contact-us" || p.slot === "privacy-policy"));
+        assert.ok(!next.pages.some((p) => p.slot === "bonuses"));
+        const bonus = next.pages.find((p) => p.slot === "bonus");
+        assert.ok(bonus);
+        assert.equal(bonus.url, "https://new-vegas-casino.gb.net/bonuses/");
+        assert.equal(bonus.indexed, true);
+        assert.equal(next.pages_checked, 2);
+        assert.equal(next.pages_indexed, 2);
     });
 
     await test("runSeo mock: главные каждый день, внутренние по квоте", async () => {
@@ -428,7 +552,13 @@ async function main() {
             };
         };
         const sitemapFn = async (host) => ({
-            urls: [`https://${host}/`, `https://${host}/login/`, `https://${host}/bonus/`],
+            urls: [
+                `https://${host}/`,
+                `https://${host}/login/`,
+                `https://${host}/bonuses/`,
+                `https://${host}/contact-us/`,
+                `https://${host}/privacy-policy/`,
+            ],
             error: null,
         });
         const env = {
@@ -467,8 +597,16 @@ async function main() {
         assert.equal(after1.data[0].index.sitemap.source, "live");
         assert.deepEqual(after1.data[0].index.sitemap.urls, [
             "https://alpha.test/login/",
-            "https://alpha.test/bonus/",
+            "https://alpha.test/bonuses/",
+            "https://alpha.test/contact-us/",
+            "https://alpha.test/privacy-policy/",
         ]);
+        assert.ok(
+            !after1.data[0].index.pages.some((p) =>
+                /contact-us|privacy-policy/.test(p.url || p.slot),
+            ),
+        );
+        assert.equal(after1.data[0].index.pages_total, 3);
 
         const day2 = await runSeo({
             env,
@@ -494,6 +632,11 @@ async function main() {
             pages.every((p) => p.slot === "home" || p.url.endsWith("/")),
             "URL внутренних берутся из sitemap как есть",
         );
+        assert.ok(
+            pages.every((p) => p.slot !== "bonuses" && p.slot !== "contact-us"),
+            "slot — имя из CSV, не путь sitemap",
+        );
+        assert.ok(!calls.some((c) => /contact-us|privacy-policy/.test(c.inspectionUrl)));
 
         // День 3: sitemap недоступен — берём список из кэша status.json
         const day3 = await runSeo({
@@ -509,7 +652,7 @@ async function main() {
         assert.equal(day3.stats.innerTotal, 4);
         const after3 = JSON.parse(fs.readFileSync(statusPath, "utf8"));
         assert.equal(after3.data[0].index.sitemap.source, "cache");
-        assert.equal(after3.data[0].index.sitemap.urls.length, 2);
+        assert.equal(after3.data[0].index.sitemap.urls.length, 4);
 
         fs.rmSync(dir, { recursive: true, force: true });
     });
@@ -558,8 +701,19 @@ async function main() {
         });
         assert.equal(result.isBaseline, true, "после перехода на sitemap сводка шлётся снова");
         const after = JSON.parse(fs.readFileSync(statusPath, "utf8"));
-        const urls = after.data[0].index.pages.map((p) => p.url).sort();
-        assert.deepEqual(urls, ["https://alpha.test/", "https://alpha.test/accedi/"]);
+        const pageRows = after.data[0].index.pages;
+        assert.deepEqual(
+            pageRows.map((p) => p.slot).sort(),
+            ["home", "login"],
+        );
+        assert.deepEqual(
+            pageRows.map((p) => p.url).sort(),
+            ["https://alpha.test/", "https://alpha.test/accedi/"],
+        );
+        assert.equal(
+            pageRows.find((p) => p.slot === "login").url,
+            "https://alpha.test/accedi/",
+        );
         assert.equal(after.data[0].index.pages_total, 2);
         fs.rmSync(dir, { recursive: true, force: true });
     });
@@ -678,7 +832,7 @@ async function main() {
         });
         assert.ok(msg.includes("noindex (сайт сам запрещает): 2"));
         assert.ok(msg.includes("остальные (7) — в следующие дни"));
-        assert.ok(msg.includes("без sitemap.xml (только главная): 1"));
+        assert.ok(msg.includes("без sitemap.xml (пути по имени слота): 1"));
         assert.ok(msg.includes("Выпали из индекса (1)"));
         assert.ok(msg.includes("a.com/ — главная (Excluded by 'noindex' tag)"));
     });
@@ -701,12 +855,13 @@ async function main() {
         assert.ok(proc.stdout.includes("GSC не настроен"));
     });
 
-    await test("объём: ~426 главных в день, внутренние из sitemap (≈5.9k) за ~4–5 дней", () => {
+    await test("объём: ~426 главных в день, внутренние из CSV (~3k) за ~2 дня", () => {
         const sites = JSON.parse(fs.readFileSync("./sites.json", "utf8"));
         const catalog = loadCatalogByDomain(fs.readFileSync("./sites.csv", "utf8"));
         const hosts = uniqueMonitoredHosts(sites);
         let skip = 0;
         let homes = 0;
+        let inner = 0;
         for (const h of hosts) {
             const row = catalog.get(h.host);
             const account = String(row?.account || "").trim();
@@ -715,14 +870,14 @@ async function main() {
                 continue;
             }
             homes += 1;
+            inner += Math.max(0, pageTargetsForRow(h.host, row).length - 1);
         }
         assert.equal(skip, 7);
         assert.ok(homes >= 400 && homes <= 450, `homes=${homes}`);
         const left = 1800 - homes;
         assert.ok(left > 1000, `остаток квоты ${left}`);
-        // Замер 2026-09-03: все 433 сайта отдают sitemap.xml, в сумме 5885 внутренних URL.
-        const innerMeasured = 5885;
-        assert.ok(innerMeasured / left < 5, `круг внутренних ${innerMeasured / left} дней`);
+        assert.ok(inner >= 2500 && inner <= 3500, `inner=${inner}`);
+        assert.ok(inner / left < 3, `круг внутренних ${inner / left} дней`);
     });
 
     await test("withTimeout не висит бесконечно", async () => {

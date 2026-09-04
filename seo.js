@@ -148,27 +148,189 @@ function parsePageSlots(pagesField) {
 function pageUrlForSlot(domain, slot) {
     const s = String(slot || "").toLowerCase();
     if (!s || s === "home") return `https://${domain}/`;
-    return `https://${domain}/${s}`;
-}
-
-function pageTargetsForRow(domain, catalogRow) {
-    const slots = parsePageSlots(catalogRow?.pages);
-    const seen = new Set();
-    const pages = [];
-    const add = (slot) => {
-        if (seen.has(slot)) return;
-        seen.add(slot);
-        pages.push({ slot, url: pageUrlForSlot(domain, slot) });
-    };
-    add("home");
-    for (const slot of slots) add(slot);
-    return pages;
+    return `https://${domain}/${s}/`;
 }
 
 const SITEMAP_TIMEOUT_MS = 15000;
 const SITEMAP_MAX_URLS = 30;
 const SITEMAP_CONCURRENCY = 8;
 const SITEMAP_MAX_CHILDREN = 5;
+
+const PAGE_LOCALE_PREFIX = /^(en-gb|en|it-it|it|bn)$/;
+
+// CSV-имя слота → последние сегменты пути в живых sitemap.xml
+const SLOT_ALIASES = {
+    app: [
+        "app",
+        "mobile-app",
+        "mobile-application",
+        "application",
+        "app-mobile",
+        "applicazione-mobile",
+        "applicazione",
+        "download-app",
+        "get-app",
+    ],
+    bonus: ["bonus", "bonuses", "offers", "promo", "promotions", "bonus-program"],
+    bonuses: ["bonuses", "bonus", "offers", "promo", "promotions", "bonus-program"],
+    register: [
+        "register",
+        "registration",
+        "how-to-register",
+        "registrati",
+        "registrazione",
+        "come-registrarsi",
+        "sign-up",
+    ],
+    registration: [
+        "registration",
+        "register",
+        "how-to-register",
+        "registrati",
+        "registrazione",
+        "come-registrarsi",
+        "sign-up",
+    ],
+    games: [
+        "games",
+        "all-games",
+        "slots",
+        "slots-games",
+        "slot",
+        "slot-e-giochi",
+        "tutti-i-giochi",
+        "giochi",
+        "game-catalog",
+        "game-list",
+        "catalog",
+    ],
+    login: ["login", "accedi", "sign-in", "log-in"],
+    bet: [
+        "bet",
+        "betting",
+        "scommesse",
+        "scommesse-sportive",
+        "live-betting",
+        "sports",
+        "sportsbook",
+    ],
+    deposit: ["deposit", "how-to-deposit", "deposito", "come-depositare"],
+    withdrawal: ["withdrawal", "prelievo"],
+    payments: ["payments", "payment-methods", "metodi-di-pagamento", "pagamenti"],
+    faq: ["faq", "assistenza"],
+    casino: ["casino"],
+};
+
+function slotAliases(slot) {
+    const s = String(slot || "").toLowerCase();
+    const out = [];
+    const add = (name) => {
+        const n = String(name || "").toLowerCase();
+        if (n && !out.includes(n)) out.push(n);
+    };
+    add(s);
+    for (const alias of SLOT_ALIASES[s] || []) add(alias);
+    return out;
+}
+
+function sitemapPathInfo(url) {
+    try {
+        const segs = (new URL(url).pathname || "/")
+            .replace(/^\/+|\/+$/g, "")
+            .toLowerCase()
+            .split("/")
+            .filter(Boolean);
+        const hasLocale = segs.length > 0 && PAGE_LOCALE_PREFIX.test(segs[0]);
+        const meaningful = hasLocale ? segs.slice(1) : segs;
+        return {
+            hasLocale,
+            depth: meaningful.length,
+            last: meaningful[meaningful.length - 1] || "",
+        };
+    } catch {
+        return null;
+    }
+}
+
+function isSitemapAssetPath(path) {
+    return /\.(xml|txt|jpg|jpeg|png|gif|webp|svg|pdf|css|js)$/i.test(path);
+}
+
+function walkSitemapUrls(host, urls, onUrl) {
+    const seen = new Set();
+    for (const raw of urls || []) {
+        let parsed;
+        try {
+            parsed = new URL(String(raw).trim());
+        } catch {
+            continue;
+        }
+        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") continue;
+        if (hostFromSiteUrl(parsed.href) !== host) continue;
+        const path = parsed.pathname || "/";
+        if (/^\/visit(\/|$)/i.test(path)) continue;
+        if (isSitemapAssetPath(path)) continue;
+        const clean = `https://${host}${path}`;
+        if (seen.has(clean)) continue;
+        seen.add(clean);
+        const isHome = path === "/" || path === "";
+        if (onUrl(clean, isHome) === false) break;
+    }
+}
+
+function sitemapPageUrls(host, urls, cap = SITEMAP_MAX_URLS) {
+    const inner = [];
+    walkSitemapUrls(host, urls, (clean, isHome) => {
+        if (isHome) return;
+        inner.push(clean);
+        if (inner.length >= cap) return false;
+    });
+    return inner;
+}
+
+function matchSitemapUrlForSlot(slot, candidates, used) {
+    const aliases = slotAliases(slot);
+    let best = null;
+    let bestScore = Infinity;
+    for (const url of candidates) {
+        if (used.has(url)) continue;
+        const info = sitemapPathInfo(url);
+        if (!info || !info.last) continue;
+        const aliasIndex = aliases.indexOf(info.last);
+        if (aliasIndex < 0) continue;
+        const score = (info.hasLocale ? 1000 : 0) + info.depth * 10 + aliasIndex;
+        if (score < bestScore) {
+            bestScore = score;
+            best = url;
+        }
+    }
+    return best;
+}
+
+function pageTargetsForRow(domain, catalogRow, sitemapUrls = []) {
+    const slots = parsePageSlots(catalogRow?.pages);
+    const seen = new Set();
+    const pages = [];
+    const add = (slot, url) => {
+        if (seen.has(slot)) return;
+        seen.add(slot);
+        pages.push({ slot, url });
+    };
+    add("home", pageUrlForSlot(domain, "home"));
+    const candidates = sitemapPageUrls(domain, sitemapUrls, Number.MAX_SAFE_INTEGER);
+    const used = new Set();
+    for (const slot of slots) {
+        if (slot === "home") continue;
+        const matched = matchSitemapUrlForSlot(slot, candidates, used);
+        if (matched) {
+            used.add(matched);
+            add(slot, matched);
+        } else {
+            add(slot, pageUrlForSlot(domain, slot));
+        }
+    }
+    return pages;
+}
 
 function decodeXmlEntities(text) {
     return String(text || "")
@@ -204,29 +366,10 @@ function slotFromUrl(url) {
 }
 
 function sitemapTargets(host, urls, cap = SITEMAP_MAX_URLS) {
-    const home = { slot: "home", url: `https://${host}/` };
-    const seen = new Set([home.url]);
-    const inner = [];
-    for (const raw of urls || []) {
-        let parsed;
-        try {
-            parsed = new URL(String(raw).trim());
-        } catch {
-            continue;
-        }
-        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") continue;
-        if (hostFromSiteUrl(parsed.href) !== host) continue;
-        const path = parsed.pathname || "/";
-        if (path === "/" || path === "") continue;
-        if (/^\/visit(\/|$)/i.test(path)) continue;
-        if (/\.(xml|txt|jpg|jpeg|png|gif|webp|svg|pdf|css|js)$/i.test(path)) continue;
-        const clean = `https://${host}${path}`;
-        if (seen.has(clean)) continue;
-        seen.add(clean);
-        inner.push({ slot: slotFromUrl(clean), url: clean });
-        if (inner.length >= cap) break;
-    }
-    return [home, ...inner];
+    return [
+        { slot: "home", url: `https://${host}/` },
+        ...sitemapPageUrls(host, urls, cap).map((url) => ({ slot: slotFromUrl(url), url })),
+    ];
 }
 
 function httpsGetText(url, { timeoutMs = SITEMAP_TIMEOUT_MS, redirects = 3 } = {}) {
@@ -508,11 +651,16 @@ function buildHostIndex({
 }) {
     const expected = targets || pageTargetsForRow(host, catalogRow);
     const order = new Map(expected.map((page, i) => [page.url, i]));
+    const expectedByUrl = new Map(expected.map((page) => [page.url, page]));
     let pages = upsertPages(prevIndex?.pages, updates);
-    if (targets) {
-        // Источник URL — sitemap: чужие / устаревшие адреса из старой базы убираем.
-        pages = pages.filter((page) => order.has(page.url));
-    }
+    // Только слоты из CSV: юридические URL из sitemap (contact-us, privacy-policy…) выкидываем.
+    // slot всегда CSV-имя (bonus), даже если вчера записали путь (bonuses).
+    pages = pages
+        .filter((page) => expectedByUrl.has(page.url))
+        .map((page) => {
+            const exp = expectedByUrl.get(page.url);
+            return exp && page.slot !== exp.slot ? { ...page, slot: exp.slot } : page;
+        });
     pages.sort((a, b) => (order.get(a.url) ?? 999) - (order.get(b.url) ?? 999));
     const home = pages.find((page) => page.slot === "home") || null;
     const decided = pages.filter((page) => page.indexed === true || page.indexed === false);
@@ -656,7 +804,7 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
         lines.push(`• Google не ответил: ${stats.homesErrors ?? 0}`);
         lines.push(
             "",
-            "*Внутренние* (адреса из sitemap сайта)",
+            "*Внутренние* (страницы из sites.csv)",
             `• проверено сегодня: ${innerChecked}`,
             `• в индексе: ${innerIndexed}`,
         );
@@ -667,7 +815,7 @@ function formatSeoMessage({ isBaseline, diff, stats }) {
             lines.push(`• остальные (${innerTotal - innerChecked}) — в следующие дни`);
         }
         if (stats.sitemapMissing) {
-            lines.push(`• без sitemap.xml (только главная): ${stats.sitemapMissing}`);
+            lines.push(`• без sitemap.xml (пути по имени слота): ${stats.sitemapMissing}`);
         }
         lines.push("", `Не проверялись (нет кабинета Google): ${stats.skipped}`);
         if (stats.stalled) {
@@ -1141,8 +1289,8 @@ async function runSeo(options = {}) {
         eligible.push({ host: item.host, account, catalogRow });
     }
 
-    // Внутренние страницы берём из sitemap.xml сайта: имена слотов в CSV
-    // (login/bonus…) не совпадают с реальными путями (/accedi/, /registration/…).
+    // Очередь inspect — слоты из CSV. sitemap.xml только подсказывает реальный путь
+    // (bonus → /bonuses/, login → /accedi/). Чужие URL из sitemap в очередь не идут.
     const sitemapFn =
         options.sitemapFn === undefined ? fetchSitemapUrls : options.sitemapFn;
     const targetsByHost = new Map();
@@ -1157,17 +1305,23 @@ async function runSeo(options = {}) {
             const cached = indexByHost.get(item.host)?.sitemap;
             if (res?.urls?.length) {
                 sitemapLive += 1;
-                const targets = sitemapTargets(item.host, res.urls);
-                targetsByHost.set(item.host, targets);
+                const urls = res.urls;
+                targetsByHost.set(
+                    item.host,
+                    pageTargetsForRow(item.host, item.catalogRow, urls),
+                );
                 sitemapByHost.set(item.host, {
-                    urls: targets.slice(1).map((page) => page.url),
+                    urls: sitemapPageUrls(item.host, urls),
                     fetched_at: checkedAt,
                     error: null,
                     source: "live",
                 });
             } else if (cached?.urls?.length) {
                 sitemapCached += 1;
-                targetsByHost.set(item.host, sitemapTargets(item.host, cached.urls));
+                targetsByHost.set(
+                    item.host,
+                    pageTargetsForRow(item.host, item.catalogRow, cached.urls),
+                );
                 sitemapByHost.set(item.host, {
                     ...cached,
                     error: res?.error || "sitemap недоступен",
@@ -1175,7 +1329,10 @@ async function runSeo(options = {}) {
                 });
             } else {
                 sitemapMissing += 1;
-                targetsByHost.set(item.host, sitemapTargets(item.host, []));
+                targetsByHost.set(
+                    item.host,
+                    pageTargetsForRow(item.host, item.catalogRow, []),
+                );
                 sitemapByHost.set(item.host, {
                     urls: [],
                     fetched_at: checkedAt,
@@ -1301,7 +1458,7 @@ async function runSeo(options = {}) {
                 buildHostIndex({
                     host,
                     catalogRow,
-                    targets: sitemapFn ? targetsByHost.get(host) : undefined,
+                    targets: targetsByHost.get(host),
                     sitemap: sitemapByHost.get(host),
                     prevIndex: prev,
                     updates: [rec],
@@ -1486,7 +1643,9 @@ module.exports = {
     parsePageSlots,
     pageUrlForSlot,
     pageTargetsForRow,
+    slotAliases,
     parseSitemapXml,
+    sitemapPageUrls,
     sitemapTargets,
     slotFromUrl,
     fetchSitemapUrls,
