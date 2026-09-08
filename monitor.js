@@ -15,7 +15,6 @@ const {
     checkCloak,
     cloakForUnreachable,
     logCloak,
-    rootUrl,
 } = require("./cloak");
 
 const DNS_SERVERS = ["1.1.1.1", "8.8.8.8"];
@@ -600,21 +599,6 @@ async function checkSite(site, catalog) {
     }
 
     try {
-        const aUrl = rootUrl(site.url);
-        const aStarted = Date.now();
-        let aResult;
-        try {
-            const responseA = await fetch(aUrl, {
-                method: "GET",
-                redirect: "manual",
-                signal: AbortSignal.timeout(HTTP_TIMEOUT_MS),
-            });
-            aResult = { ok: true, response: responseA, url: aUrl };
-        } catch (error) {
-            aResult = { ok: false, error };
-        }
-        const aElapsed = Date.now() - aStarted;
-
         const requestUrl = withCloakView(site.url);
         const response = await fetch(requestUrl, {
             method: "GET",
@@ -622,7 +606,7 @@ async function checkSite(site, catalog) {
             signal: AbortSignal.timeout(HTTP_TIMEOUT_MS),
         });
 
-        const duration = Math.max(0, Date.now() - startTime - aElapsed);
+        const duration = Date.now() - startTime;
         const location = response.headers.get("location");
         const redirect = REDIRECT_STATUSES.has(response.status)
             ? {
@@ -651,9 +635,6 @@ async function checkSite(site, catalog) {
         }
 
         const hopB = hopFromResponse(requestUrl, response);
-        const hops = aResult.ok
-            ? { hopA: hopFromResponse(aResult.url, aResult.response), hopB }
-            : { hopAError: aResult.error, hopB };
 
         return attachDashboardFields(
             attachEtalon(
@@ -671,7 +652,7 @@ async function checkSite(site, catalog) {
             ),
             site,
             catalog,
-            hops,
+            { hopB },
         );
     } catch (error) {
         const errContext =

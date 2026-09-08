@@ -4,6 +4,7 @@ const {
     checkCloak,
     cloakForUnreachable,
     cloakPayload,
+    CHROME_UA,
 } = require("./cloak");
 
 let failed = 0;
@@ -70,6 +71,31 @@ async function main() {
         assert.equal(b.pathname, "/");
     });
 
+    await test("A шлёт Chrome UA, B без этих заголовков", async () => {
+        const seen = [];
+        const fetchFn = async (url, opts) => {
+            seen.push({
+                view: new URL(url).searchParams.has("view"),
+                ua: opts && opts.headers && opts.headers["User-Agent"],
+                accept: opts && opts.headers && opts.headers.Accept,
+                lang: opts && opts.headers && opts.headers["Accept-Language"],
+            });
+            const u = new URL(url);
+            if (u.searchParams.get("view") === "d7Fm2Kp9Qx4Nw8Rz") {
+                return fakeResponse({ status: 200, body: "ok" });
+            }
+            return fakeResponse({ status: 503, body: "stub" });
+        };
+        await checkCloak(site, { fetchFn });
+        const a = seen.find((s) => !s.view);
+        const b = seen.find((s) => s.view);
+        assert.ok(a && b);
+        assert.equal(a.ua, CHROME_UA);
+        assert.ok(String(a.accept).includes("text/html"));
+        assert.equal(a.lang, "en-GB,en;q=0.9");
+        assert.equal(b.ua, undefined);
+    });
+
     await test("A=503 + B=200 → present true, status 503", async () => {
         const out = await checkCloak(site, {
             fetchFn: makeFetch({
@@ -83,15 +109,32 @@ async function main() {
     });
 
     await test("A=200 + B=200 → present false", async () => {
+        const casino = `<!doctype html><html><head><title>TopBet24 Casino</title></head><body>${"welcome ".repeat(400)}</body></html>`;
         const out = await checkCloak(site, {
             fetchFn: makeFetch({
-                bare: { "/": { status: 200, body: "ok" } },
-                withView: { "/": { status: 200, body: "ok" } },
+                bare: { "/": { status: 200, body: casino } },
+                withView: { "/": { status: 200, body: casino } },
             }),
         });
         assert.equal(out.present, false);
         assert.equal(out.status, null);
         assert.equal(out.error, null);
+        assert.equal(out.http, 200);
+    });
+
+    await test("A=200, title 503 Service Unavailable → present true", async () => {
+        const stub =
+            "<html><head><title>503 Service Unavailable</title></head><body>unavailable</body></html>";
+        const out = await checkCloak(site, {
+            fetchFn: makeFetch({
+                bare: { "/": { status: 200, body: stub } },
+                withView: { "/": { status: 200, body: "ok" } },
+            }),
+        });
+        assert.equal(out.present, true);
+        assert.equal(out.status, 503);
+        assert.equal(out.http, 200);
+        assert.notEqual(out.status, 302);
     });
 
     await test("A=503 + B=302 Location / тот же хост → true", async () => {
@@ -128,13 +171,15 @@ async function main() {
             present: null,
             status: null,
             error: "домен не резолвится",
+            http: null,
         });
     });
 
     await test("payload никогда не пишет status 302", () => {
-        const out = cloakPayload({ present: true, status: 302 });
+        const out = cloakPayload({ present: true, status: 302, http: 302 });
         assert.equal(out.status, null);
         assert.equal(out.present, true);
+        assert.equal(out.http, 302);
     });
 
     await test("A=403 → present null, probe blocked", async () => {
@@ -172,6 +217,8 @@ async function main() {
         assert.equal(out.present, null);
         assert.equal(out.status, null);
         assert.equal(out.error, "A 302, not 200/503");
+        assert.equal(out.http, 302);
+        assert.notEqual(out.present, false);
     });
 
     await test("A same-path 302 затем 200 → present null, не false", async () => {
@@ -193,6 +240,7 @@ async function main() {
         assert.equal(out.present, null);
         assert.equal(out.status, null);
         assert.equal(out.error, "A 302, not 200/503");
+        assert.equal(out.http, 302);
     });
 
     await test("A same-path 302 затем 503 и B открылся → present true", async () => {
@@ -213,6 +261,27 @@ async function main() {
         });
         assert.equal(out.present, true);
         assert.equal(out.status, 503);
+    });
+
+    await test("аптайм hopB 302 не становится cloak.status", async () => {
+        const hopB = {
+            status: 302,
+            location: "/",
+            url: withCloakView(`${site}/`),
+            foreign: false,
+        };
+        const out = await checkCloak(site, {
+            hopB,
+            fetchFn: makeFetch({
+                bare: { "/": { status: 503, body: "stub" } },
+                withView: { "/": { status: 302, location: "/" } },
+            }),
+        });
+        assert.equal(out.present, true);
+        assert.equal(out.status, 503);
+        assert.equal(out.http, 503);
+        assert.equal(out.redirect, undefined);
+        assert.notEqual(out.status, 302);
     });
 
     if (failed) {
