@@ -487,7 +487,12 @@ function logSubfolder(results) {
 
 module.exports = {
     CLOAK_VIEW,
+    HTTP_TIMEOUT_MS,
+    REDIRECT_STATUSES,
     withCloakView,
+    isForeignRedirect,
+    isSamePathRedirect,
+    hopFromResponse,
     parseSubfolderField,
     parseCsv,
     loadSubfolderByHost,

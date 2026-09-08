@@ -9,7 +9,14 @@ const {
     subfolderForUnreachable,
     loadSubfolderCatalog,
     logSubfolder,
+    hopFromResponse,
 } = require("./subfolder");
+const {
+    checkCloak,
+    cloakForUnreachable,
+    logCloak,
+    rootUrl,
+} = require("./cloak");
 
 const DNS_SERVERS = ["1.1.1.1", "8.8.8.8"];
 const DNS_TIMEOUT_MS = 8000;
@@ -549,16 +556,18 @@ function isUnreachableStatus(status) {
     return status === "DNS_ERROR" || status === "SSL_ERROR" || status === "ERROR";
 }
 
-async function attachSubfolder(result, site, catalog) {
+async function attachDashboardFields(result, site, catalog, hops = {}) {
     const parsed = parsedSubfolderForUrl(catalog, site?.url);
     if (isUnreachableStatus(result.status)) {
         return {
             ...result,
+            cloak: cloakForUnreachable(result.error),
             subfolder: subfolderForUnreachable(parsed, result.error),
         };
     }
     return {
         ...result,
+        cloak: await checkCloak(site.url, hops),
         subfolder: await checkSubfolder(site.url, parsed),
     };
 }
@@ -571,7 +580,7 @@ async function checkSite(site, catalog) {
         : { ns: [], a: [], ok: false, error: "некорректный URL" };
 
     if (!dns.ok) {
-        return attachSubfolder(
+        return attachDashboardFields(
             attachEtalon(
                 {
                     url: site.url,
@@ -591,6 +600,21 @@ async function checkSite(site, catalog) {
     }
 
     try {
+        const aUrl = rootUrl(site.url);
+        const aStarted = Date.now();
+        let aResult;
+        try {
+            const responseA = await fetch(aUrl, {
+                method: "GET",
+                redirect: "manual",
+                signal: AbortSignal.timeout(HTTP_TIMEOUT_MS),
+            });
+            aResult = { ok: true, response: responseA, url: aUrl };
+        } catch (error) {
+            aResult = { ok: false, error };
+        }
+        const aElapsed = Date.now() - aStarted;
+
         const requestUrl = withCloakView(site.url);
         const response = await fetch(requestUrl, {
             method: "GET",
@@ -598,7 +622,7 @@ async function checkSite(site, catalog) {
             signal: AbortSignal.timeout(HTTP_TIMEOUT_MS),
         });
 
-        const duration = Date.now() - startTime;
+        const duration = Math.max(0, Date.now() - startTime - aElapsed);
         const location = response.headers.get("location");
         const redirect = REDIRECT_STATUSES.has(response.status)
             ? {
@@ -626,7 +650,12 @@ async function checkSite(site, catalog) {
             }
         }
 
-        return attachSubfolder(
+        const hopB = hopFromResponse(requestUrl, response);
+        const hops = aResult.ok
+            ? { hopA: hopFromResponse(aResult.url, aResult.response), hopB }
+            : { hopAError: aResult.error, hopB };
+
+        return attachDashboardFields(
             attachEtalon(
                 {
                     url: site.url,
@@ -642,6 +671,7 @@ async function checkSite(site, catalog) {
             ),
             site,
             catalog,
+            hops,
         );
     } catch (error) {
         const errContext =
@@ -651,7 +681,7 @@ async function checkSite(site, catalog) {
             errContext.includes("expired") ||
             errContext.includes("tls");
 
-        return attachSubfolder(
+        return attachDashboardFields(
             attachEtalon(
                 {
                     url: site.url,
@@ -695,7 +725,7 @@ async function runMonitor() {
                 results.push(item.value);
             } else {
                 results.push(
-                    await attachSubfolder(
+                    await attachDashboardFields(
                         attachEtalon(
                             {
                                 url: site?.url || "unknown",
@@ -731,6 +761,7 @@ async function runMonitor() {
 
     logNsEtalon(results);
     logSubfolder(results);
+    logCloak(results);
 
     const aliveCount = results.filter((r) => r.alive).length;
     const failedCount = results.filter((r) => !r.alive).length;

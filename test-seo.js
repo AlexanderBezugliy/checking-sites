@@ -392,18 +392,25 @@ async function main() {
             live_folder: null,
             error: null,
         };
+        const cloak = {
+            present: true,
+            status: 503,
+            error: null,
+        };
         const data = applyIndexToStatusData(
             [
-                { url: "https://a.com", status: 503, alive: true, subfolder },
+                { url: "https://a.com", status: 302, alive: true, subfolder, cloak },
                 { url: "https://skip.com", status: 200, alive: true, index: null },
             ],
             new Map([["a.com", index]]),
         );
-        assert.equal(data[0].status, 503);
+        assert.equal(data[0].status, 302);
         assert.equal(data[0].index.indexed, true);
         assert.deepEqual(data[0].subfolder, subfolder);
+        assert.deepEqual(data[0].cloak, cloak);
         assert.equal(data[1].index, null);
         assert.equal(data[1].subfolder, null);
+        assert.equal(data[1].cloak, null);
     });
 
     await test("buildHostIndex копит внутренние страницы между днями", () => {

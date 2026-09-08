@@ -916,10 +916,11 @@ function applyIndexToStatusData(data, indexByHost) {
     return (data || []).map((row) => {
         const host = hostFromSiteUrl(row.url);
         const subfolder = row.subfolder ?? null;
+        const cloak = row.cloak ?? null;
         if (host && indexByHost.has(host)) {
-            return { ...row, index: indexByHost.get(host), subfolder };
+            return { ...row, index: indexByHost.get(host), subfolder, cloak };
         }
-        return { ...row, index: row.index ?? null, subfolder };
+        return { ...row, index: row.index ?? null, subfolder, cloak };
     });
 }
 
