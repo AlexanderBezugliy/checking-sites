@@ -2,6 +2,14 @@ const fs = require("fs");
 const tls = require("node:tls");
 const { Resolver } = require("node:dns").promises;
 const { sendTelegram } = require("./telegram");
+const {
+    withCloakView,
+    checkSubfolder,
+    parsedSubfolderForUrl,
+    subfolderForUnreachable,
+    loadSubfolderCatalog,
+    logSubfolder,
+} = require("./subfolder");
 
 const DNS_SERVERS = ["1.1.1.1", "8.8.8.8"];
 const DNS_TIMEOUT_MS = 8000;
@@ -12,7 +20,6 @@ const SSL_WARN_DAYS = 7;
 const DIGEST_EVERY_MS = 12 * 60 * 60 * 1000;
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 const STATUS_PATH = "./status.json";
-const CLOAK_VIEW = "d7Fm2Kp9Qx4Nw8Rz";
 
 const TG_KEYBOARD = {
     inline_keyboard: [
@@ -38,18 +45,6 @@ function getHostname(url) {
         return new URL(url).hostname;
     } catch {
         return null;
-    }
-}
-
-function withCloakView(url) {
-    try {
-        const parsed = new URL(url);
-        if (!parsed.searchParams.has("view")) {
-            parsed.searchParams.set("view", CLOAK_VIEW);
-        }
-        return parsed.toString();
-    } catch {
-        return url;
     }
 }
 
@@ -550,7 +545,25 @@ async function notifyTelegram(token, chatId, text) {
     });
 }
 
-async function checkSite(site) {
+function isUnreachableStatus(status) {
+    return status === "DNS_ERROR" || status === "SSL_ERROR" || status === "ERROR";
+}
+
+async function attachSubfolder(result, site, catalog) {
+    const parsed = parsedSubfolderForUrl(catalog, site?.url);
+    if (isUnreachableStatus(result.status)) {
+        return {
+            ...result,
+            subfolder: subfolderForUnreachable(parsed, result.error),
+        };
+    }
+    return {
+        ...result,
+        subfolder: await checkSubfolder(site.url, parsed),
+    };
+}
+
+async function checkSite(site, catalog) {
     const startTime = Date.now();
     const hostname = getHostname(site.url);
     const dns = hostname
@@ -558,18 +571,22 @@ async function checkSite(site) {
         : { ns: [], a: [], ok: false, error: "некорректный URL" };
 
     if (!dns.ok) {
-        return attachEtalon(
-            {
-                url: site.url,
-                status: "DNS_ERROR",
-                ok: false,
-                alive: false,
-                dns,
-                error: dns.error,
-                ssl: null,
-                redirect: null,
-            },
+        return attachSubfolder(
+            attachEtalon(
+                {
+                    url: site.url,
+                    status: "DNS_ERROR",
+                    ok: false,
+                    alive: false,
+                    dns,
+                    error: dns.error,
+                    ssl: null,
+                    redirect: null,
+                },
+                site,
+            ),
             site,
+            catalog,
         );
     }
 
@@ -609,18 +626,22 @@ async function checkSite(site) {
             }
         }
 
-        return attachEtalon(
-            {
-                url: site.url,
-                status: response.status,
-                ok: response.ok,
-                alive,
-                duration,
-                dns,
-                ssl,
-                redirect,
-            },
+        return attachSubfolder(
+            attachEtalon(
+                {
+                    url: site.url,
+                    status: response.status,
+                    ok: response.ok,
+                    alive,
+                    duration,
+                    dns,
+                    ssl,
+                    redirect,
+                },
+                site,
+            ),
             site,
+            catalog,
         );
     } catch (error) {
         const errContext =
@@ -630,19 +651,23 @@ async function checkSite(site) {
             errContext.includes("expired") ||
             errContext.includes("tls");
 
-        return attachEtalon(
-            {
-                url: site.url,
-                status: isSslError ? "SSL_ERROR" : "ERROR",
-                ok: false,
-                alive: false,
-                duration: Date.now() - startTime,
-                dns,
-                ssl: null,
-                redirect: null,
-                error: error.message,
-            },
+        return attachSubfolder(
+            attachEtalon(
+                {
+                    url: site.url,
+                    status: isSslError ? "SSL_ERROR" : "ERROR",
+                    ok: false,
+                    alive: false,
+                    duration: Date.now() - startTime,
+                    dns,
+                    ssl: null,
+                    redirect: null,
+                    error: error.message,
+                },
+                site,
+            ),
             site,
+            catalog,
         );
     }
 }
@@ -651,6 +676,7 @@ async function runMonitor() {
     const sites = JSON.parse(fs.readFileSync("./sites.json", "utf8"));
     const prevStatus = loadJson(STATUS_PATH, { data: [] });
     const prevMap = prevByUrl(prevStatus);
+    const catalog = loadSubfolderCatalog();
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
     const isManual = process.env.GITHUB_EVENT_NAME === "workflow_dispatch";
@@ -659,7 +685,9 @@ async function runMonitor() {
 
     for (let i = 0; i < sites.length; i += BATCH_SIZE) {
         const batch = sites.slice(i, i + BATCH_SIZE);
-        const settled = await Promise.allSettled(batch.map(checkSite));
+        const settled = await Promise.allSettled(
+            batch.map((site) => checkSite(site, catalog)),
+        );
         for (let j = 0; j < settled.length; j++) {
             const item = settled[j];
             const site = batch[j];
@@ -667,23 +695,27 @@ async function runMonitor() {
                 results.push(item.value);
             } else {
                 results.push(
-                    attachEtalon(
-                        {
-                            url: site?.url || "unknown",
-                            status: "ERROR",
-                            ok: false,
-                            alive: false,
-                            dns: {
-                                ns: [],
-                                a: [],
+                    await attachSubfolder(
+                        attachEtalon(
+                            {
+                                url: site?.url || "unknown",
+                                status: "ERROR",
                                 ok: false,
+                                alive: false,
+                                dns: {
+                                    ns: [],
+                                    a: [],
+                                    ok: false,
+                                    error: String(item.reason),
+                                },
                                 error: String(item.reason),
+                                ssl: null,
+                                redirect: null,
                             },
-                            error: String(item.reason),
-                            ssl: null,
-                            redirect: null,
-                        },
+                            site,
+                        ),
                         site,
+                        catalog,
                     ),
                 );
             }
@@ -698,6 +730,7 @@ async function runMonitor() {
     }
 
     logNsEtalon(results);
+    logSubfolder(results);
 
     const aliveCount = results.filter((r) => r.alive).length;
     const failedCount = results.filter((r) => !r.alive).length;
@@ -767,7 +800,7 @@ async function runMonitor() {
     fs.writeFileSync(STATUS_PATH, JSON.stringify(statusData, null, 2));
 }
 
-module.exports = { runMonitor, prevByUrl };
+module.exports = { runMonitor, prevByUrl, checkSite };
 
 if (require.main === module) {
     runMonitor().catch((err) => {

@@ -8,7 +8,7 @@
   "scripts": {
     "monitor": "node monitor.js",
     "seo": "node seo.js",
-    "test": "node test-seo.js"
+    "test": "node test-seo.js && node test-monitor.js"
   },
   "dependencies": {
     "googleapis": "^148.0.0"

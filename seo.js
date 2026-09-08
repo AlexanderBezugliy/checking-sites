@@ -915,10 +915,11 @@ function telegramTextFromResult(result) {
 function applyIndexToStatusData(data, indexByHost) {
     return (data || []).map((row) => {
         const host = hostFromSiteUrl(row.url);
+        const subfolder = row.subfolder ?? null;
         if (host && indexByHost.has(host)) {
-            return { ...row, index: indexByHost.get(host) };
+            return { ...row, index: indexByHost.get(host), subfolder };
         }
-        return { ...row, index: row.index ?? null };
+        return { ...row, index: row.index ?? null, subfolder };
     });
 }
 

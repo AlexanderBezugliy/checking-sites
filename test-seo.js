@@ -383,16 +383,27 @@ async function main() {
 
     await test("аптайм не затирает index: merge в status.data", () => {
         const index = { indexed: true, pages: [{ url: "https://a.com/", indexed: true }] };
+        const subfolder = {
+            folder: "en-gb",
+            csv: "en-gb[home]",
+            mode: "home",
+            match: true,
+            glue: "canonical",
+            live_folder: null,
+            error: null,
+        };
         const data = applyIndexToStatusData(
             [
-                { url: "https://a.com", status: 503, alive: true },
+                { url: "https://a.com", status: 503, alive: true, subfolder },
                 { url: "https://skip.com", status: 200, alive: true, index: null },
             ],
             new Map([["a.com", index]]),
         );
         assert.equal(data[0].status, 503);
         assert.equal(data[0].index.indexed, true);
+        assert.deepEqual(data[0].subfolder, subfolder);
         assert.equal(data[1].index, null);
+        assert.equal(data[1].subfolder, null);
     });
 
     await test("buildHostIndex копит внутренние страницы между днями", () => {

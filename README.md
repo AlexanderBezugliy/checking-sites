@@ -110,6 +110,34 @@ HTTP-проверку бот всегда делает с `/?view=d7Fm2Kp9Qx4Nw8
 
 Сравнение с **прошлой** проверкой («сменились NS») работает отдельно от эталона.
 
+## Подпапка (для дашборда)
+
+Отдельная проверка в аптайме, не `redirect` (клоака `?view=` / чужой домен). Дашборд читает только `status.json`. В Telegram это не уходит.
+
+Колонка `subfolder` в `sites.csv`: `en-gb[home]`, `en-gb[all]`, `it[home]:rewrite:root`. `:rewrite:…` — рерайт исходников, на HTTP не влияет. Список сайтов по-прежнему `sites.json`.
+
+В каждой строке `data[]`:
+
+```json
+"subfolder": {
+  "folder": "en-gb",
+  "csv": "en-gb[home]",
+  "mode": "home",
+  "match": true,
+  "glue": "canonical",
+  "live_folder": null,
+  "error": null
+}
+```
+
+| Поле | Смысл для UI |
+| --- | --- |
+| `folder` | `en-gb` / `it` / `it-it` / нет (`null` → «—») |
+| `match` | `true` зелёная точка, `false` красная, `null` точки нет |
+| `glue` | `canonical` → Canonical, `301` → 301, `null` → «—». **Никогда** `"302"` |
+
+`match: null` — проверку не смогли сделать (DNS/SSL/сеть/нет HTML). На мёртвом сайте `folder` из CSV всё равно заполняется. SEO-job копирует объект и не затирает.
+
 ## Как пользоваться
 
 1. Сидеть в группе **MONITOR** (вы и коллега).
