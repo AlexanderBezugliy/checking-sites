@@ -52,6 +52,11 @@ function siteOpened(hop) {
     return false;
 }
 
+function aNotClassifiedError(hopA) {
+    const code = hopA && hopA.status != null ? hopA.status : "empty";
+    return `A ${code}, not 200/503`;
+}
+
 async function fetchHop(url, fetchFn) {
     const response = await fetchFn(url, fetchOpts());
     return hopFromResponse(url, response);
@@ -67,28 +72,14 @@ async function followSamePathOnce(hop, fetchFn) {
     return fetchHop(dest.toString(), fetchFn);
 }
 
-function classifyPair(hopA, hopB, aEffective503) {
-    if (isBlocked(hopA) || isBlocked(hopB)) {
-        return cloakPayload({ error: "probe blocked" });
-    }
-    if (hopA.foreign) {
-        return cloakPayload({ error: "foreign redirect" });
-    }
-
-    const opened = siteOpened(hopB);
-    if ((hopA.status === 503 || aEffective503) && opened) {
+function cloakFrom503(hopB) {
+    if (siteOpened(hopB)) {
         return cloakPayload({ present: true, status: 503 });
     }
-    if (hopA.status === 200) {
-        return cloakPayload({ present: false });
+    if (hopB?.foreign) {
+        return cloakPayload({ error: "foreign redirect" });
     }
-    if (hopA.status === 503 && !opened) {
-        if (hopB?.foreign) {
-            return cloakPayload({ error: "foreign redirect" });
-        }
-        return cloakPayload({ error: "bypass not confirmed" });
-    }
-    return null;
+    return cloakPayload({ error: "bypass not confirmed" });
 }
 
 async function checkCloak(siteUrl, { hopA, hopAError, hopB, fetchFn = fetch } = {}) {
@@ -100,17 +91,27 @@ async function checkCloak(siteUrl, { hopA, hopAError, hopB, fetchFn = fetch } = 
 
     try {
         const aUrl = rootUrl(siteUrl);
-        const resolvedA =
-            hopA || (await fetchHop(aUrl, fetchFn));
-        const resolvedB =
-            hopB || (await fetchHop(withCloakView(aUrl), fetchFn));
+        const resolvedA = hopA || (await fetchHop(aUrl, fetchFn));
+        const resolvedB = hopB || (await fetchHop(withCloakView(aUrl), fetchFn));
 
-        const direct = classifyPair(resolvedA, resolvedB, false);
-        if (direct) return direct;
+        if (resolvedA.foreign) {
+            return cloakPayload({ error: "foreign redirect" });
+        }
+
+        if (resolvedA.status === 200) {
+            return cloakPayload({ present: false });
+        }
+
+        if (isBlocked(resolvedA) || isBlocked(resolvedB)) {
+            return cloakPayload({ error: "probe blocked" });
+        }
+
+        if (resolvedA.status === 503) {
+            return cloakFrom503(resolvedB);
+        }
 
         const samePathA =
             REDIRECT_STATUSES.has(resolvedA.status) &&
-            !resolvedA.foreign &&
             isSamePathRedirect(resolvedA.url, resolvedA.location);
         if (samePathA) {
             const followed = await followSamePathOnce(resolvedA, fetchFn);
@@ -120,16 +121,12 @@ async function checkCloak(siteUrl, { hopA, hopAError, hopB, fetchFn = fetch } = 
             if (followed.foreign) {
                 return cloakPayload({ error: "foreign redirect" });
             }
-            if (followed.status === 200) {
-                return cloakPayload({ present: false });
-            }
             if (followed.status === 503) {
-                const after503 = classifyPair(resolvedA, resolvedB, true);
-                if (after503) return after503;
+                return cloakFrom503(resolvedB);
             }
         }
 
-        return cloakPayload({ present: false });
+        return cloakPayload({ error: aNotClassifiedError(resolvedA) });
     } catch (err) {
         return cloakPayload({
             error: err.message || "cloak check failed",

@@ -162,16 +162,25 @@ async function main() {
         assert.equal(out.error, "foreign redirect");
     });
 
-    await test("A same-path 302 затем 200 → present false", async () => {
+    await test("A=302 same-path (как mrjames) → present null, не false", async () => {
+        const out = await checkCloak(site, {
+            fetchFn: makeFetch({
+                bare: { "/": { status: 302, location: "/" } },
+                withView: { "/": { status: 302, location: "/" } },
+            }),
+        });
+        assert.equal(out.present, null);
+        assert.equal(out.status, null);
+        assert.equal(out.error, "A 302, not 200/503");
+    });
+
+    await test("A same-path 302 затем 200 → present null, не false", async () => {
         let bareHits = 0;
         const out = await checkCloak(site, {
             fetchFn: makeFetch({
                 bare: {
-                    "/": (u) => {
+                    "/": () => {
                         bareHits += 1;
-                        if (u.searchParams.toString()) {
-                            return fakeResponse({ status: 302, location: "/" });
-                        }
                         if (bareHits === 1) {
                             return fakeResponse({ status: 302, location: "/" });
                         }
@@ -181,8 +190,29 @@ async function main() {
                 withView: { "/": { status: 200, body: "ok" } },
             }),
         });
-        assert.equal(out.present, false);
+        assert.equal(out.present, null);
         assert.equal(out.status, null);
+        assert.equal(out.error, "A 302, not 200/503");
+    });
+
+    await test("A same-path 302 затем 503 и B открылся → present true", async () => {
+        let bareHits = 0;
+        const out = await checkCloak(site, {
+            fetchFn: makeFetch({
+                bare: {
+                    "/": () => {
+                        bareHits += 1;
+                        if (bareHits === 1) {
+                            return fakeResponse({ status: 302, location: "/" });
+                        }
+                        return fakeResponse({ status: 503, body: "stub" });
+                    },
+                },
+                withView: { "/": { status: 200, body: "ok" } },
+            }),
+        });
+        assert.equal(out.present, true);
+        assert.equal(out.status, 503);
     });
 
     if (failed) {
