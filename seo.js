@@ -529,31 +529,29 @@ function loadSecretsFromEnv(env = process.env) {
     };
 }
 
-/** Хост + path без scheme, www, query и хвостового `/`. Корень `/` и `` — одно. */
-function indexPageKey(url) {
+/** Path без query и хвостового `/`. Корень `/` и `` — одно. Хост не входит. */
+function indexPathKey(url) {
     if (!url) return "";
     try {
         const parsed = new URL(String(url).trim());
-        const host = parsed.hostname.replace(/^www\./i, "").toLowerCase();
-        if (!host) return "";
         let path = parsed.pathname || "/";
         if (path.length > 1) path = path.replace(/\/+$/, "");
         if (!path) path = "/";
-        return `${host}${path}`;
+        return path;
     } catch {
         return "";
     }
 }
 
-function sameIndexPage(inspectUrl, canonicalUrl) {
-    const a = indexPageKey(inspectUrl);
-    const b = indexPageKey(canonicalUrl);
+function sameIndexPath(inspectUrl, canonicalUrl) {
+    const a = indexPathKey(inspectUrl);
+    const b = indexPathKey(canonicalUrl);
     return Boolean(a && b && a === b);
 }
 
 /**
  * Duplicate/canonical в GSC: контент в индексе, но под каноникалом.
- * «В индексе» только если googleCanonical — та же страница (не другой path).
+ * Хост каноникала не важен (PBN). Другой path — уже не эта страница.
  */
 function isCanonicalDuplicateCoverage(coverage) {
     const text = String(coverage || "").toLowerCase();
@@ -565,8 +563,8 @@ function isCanonicalDuplicateCoverage(coverage) {
 }
 
 /**
- * Есть ли страница в индексе Google, а не «этот точный URL — канонический».
- * inspectUrl — URL Inspection; googleCanonical берётся из indexStatusResult.
+ * Страница есть в индексе Google, даже если каноникал на другом хосте.
+ * Другой path (`/login/` → `/`) — не эта страница.
  */
 function isIndexed(indexStatus, inspectUrl) {
     if (!indexStatus) return false;
@@ -578,7 +576,9 @@ function isIndexed(indexStatus, inspectUrl) {
     if (coverage.includes("noindex")) return false;
     if (coverage.includes("indexed")) return true;
     if (isCanonicalDuplicateCoverage(coverage)) {
-        return sameIndexPage(inspectUrl, indexStatus.googleCanonical);
+        const canonical = indexStatus.googleCanonical;
+        if (!canonical) return true;
+        return sameIndexPath(inspectUrl, canonical);
     }
     return false;
 }

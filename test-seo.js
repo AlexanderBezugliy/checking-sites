@@ -331,6 +331,46 @@ async function main() {
             ),
             false,
         );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: "Duplicate, Google chose different canonical than user",
+                    googleCanonical: "https://tynemouth-priory-theatre.com/",
+                },
+                "https://winztercasino.gb.net/",
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: "Duplicate, Google chose different canonical than user",
+                    googleCanonical: "https://investorsincarers.com/how-to-register/",
+                },
+                "https://bet-ninja-casino.org/how-to-register/",
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: alternate,
+                    googleCanonical: "https://unheardadventures.com/",
+                },
+                "https://vegas-hero.gb.net/how-to-register/",
+            ),
+            false,
+        );
+        assert.equal(
+            isIndexed(
+                { verdict: "NEUTRAL", coverageState: alternate },
+                "https://vegas-hero.gb.net/how-to-register/",
+            ),
+            true,
+        );
 
         const rec = pageRecord({
             url: inspectHome,
