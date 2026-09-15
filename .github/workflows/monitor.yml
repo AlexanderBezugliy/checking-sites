@@ -31,9 +31,21 @@ jobs:
                   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
               run: node monitor.js
 
-            - name: Commit and push changes
-              uses: stefanzweifel/git-auto-commit-action@v5
-              with:
-                  commit_message: "chore: auto-update status [skip ci]"
-                  file_pattern: "status.json"
-                  push_options: "--force-with-lease"
+            - name: Commit and push status.json
+              run: |
+                  set -euo pipefail
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  if git diff --quiet -- status.json && git diff --cached --quiet -- status.json; then
+                    echo "status.json unchanged"
+                    exit 0
+                  fi
+                  git add status.json
+                  git commit -m "chore: auto-update status [skip ci]"
+                  git fetch origin main
+                  if ! git pull --rebase origin main; then
+                    git checkout --theirs -- status.json
+                    git add status.json
+                    GIT_EDITOR=true git rebase --continue
+                  fi
+                  git push origin HEAD:main
