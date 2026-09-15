@@ -8,6 +8,7 @@ const {
     loadCatalogByDomain,
     hostFromSiteUrl,
     pageUrlForSlot,
+    subfolderForSlot,
     pageTargetsForRow,
     parseSitemapXml,
     sitemapPageUrls,
@@ -188,6 +189,88 @@ async function main() {
         assert.ok(stored.length > pages.length - 1);
     });
 
+    await test("subfolder [all]: внутренние проверяем в /en-gb/, главная остаётся /", () => {
+        const host = "freshbet-uk.org";
+        const sitemap = [
+            `https://${host}/login/`,
+            `https://${host}/bonuses/`,
+            `https://${host}/slots-games/`,
+            `https://${host}/betting/`,
+            `https://${host}/privacy/`,
+            `https://${host}/en-gb/`,
+            `https://${host}/en-gb/login/`,
+            `https://${host}/en-gb/bonuses/`,
+            `https://${host}/en-gb/slots-games/`,
+            `https://${host}/en-gb/privacy/`,
+        ];
+        const row = { pages: "home|login|bonus|games|bet|register", subfolder: "en-gb[all]" };
+        assert.equal(subfolderForSlot(row, "login"), "en-gb");
+        assert.equal(subfolderForSlot(row, "home"), null);
+        assert.equal(subfolderForSlot({ ...row, subfolder: "en-gb[home]" }, "login"), null);
+        assert.equal(subfolderForSlot({ ...row, subfolder: "en-gb[faq]" }, "faq"), "en-gb");
+        assert.equal(subfolderForSlot({ ...row, subfolder: "en-gb[faq]" }, "login"), null);
+        assert.equal(subfolderForSlot({ ...row, subfolder: "" }, "login"), null);
+        assert.equal(pageUrlForSlot(host, "bet", "en-gb"), `https://${host}/en-gb/bet/`);
+        assert.equal(pageUrlForSlot(host, "home", "en-gb"), `https://${host}/`);
+
+        const all = Object.fromEntries(
+            pageTargetsForRow(host, row, sitemap).map((p) => [p.slot, p.url]),
+        );
+        assert.equal(all.home, `https://${host}/`);
+        assert.equal(all.login, `https://${host}/en-gb/login/`);
+        assert.equal(all.bonus, `https://${host}/en-gb/bonuses/`);
+        assert.equal(all.games, `https://${host}/en-gb/slots-games/`);
+        // в sitemap только корневой вариант — берём его, а не выдумываем
+        assert.equal(all.bet, `https://${host}/betting/`);
+        // слота нет в sitemap — угадываем уже в подпапке
+        assert.equal(all.register, `https://${host}/en-gb/register/`);
+        assert.equal(Object.keys(all).length, 6);
+
+        // [home]: подпапка только у главной, внутренние как раньше — корень
+        const home = Object.fromEntries(
+            pageTargetsForRow(host, { ...row, subfolder: "en-gb[home]" }, sitemap).map((p) => [
+                p.slot,
+                p.url,
+            ]),
+        );
+        assert.equal(home.login, `https://${host}/login/`);
+        assert.equal(home.bonus, `https://${host}/bonuses/`);
+        assert.equal(home.register, `https://${host}/register/`);
+
+        // :rewrite:root и it-it — тот же разбор
+        const it = Object.fromEntries(
+            pageTargetsForRow(
+                host,
+                { pages: "home|login", subfolder: "it-it[all]:rewrite:root" },
+                [`https://${host}/login/`, `https://${host}/it-it/login/`],
+            ).map((p) => [p.slot, p.url]),
+        );
+        assert.equal(it.login, `https://${host}/it-it/login/`);
+
+        // смена целей: старые корневые записи [all] вычищаются, а не висят «не в индексе»
+        const targets = pageTargetsForRow(host, row, sitemap);
+        const built = buildHostIndex({
+            host,
+            catalogRow: row,
+            targets,
+            prevIndex: {
+                pages: [
+                    { url: `https://${host}/`, slot: "home", indexed: true },
+                    { url: `https://${host}/login/`, slot: "login", indexed: false },
+                    { url: `https://${host}/bonuses/`, slot: "bonus", indexed: false },
+                ],
+            },
+            updates: [],
+            checkedAt: "2026-09-15T00:00:00Z",
+        });
+        assert.deepEqual(
+            built.pages.map((p) => p.url),
+            [`https://${host}/`],
+        );
+        assert.equal(built.pages_total, 6);
+        assert.equal(built.pages_checked, 1);
+    });
+
     await test("уникальные хосты из sites.json и skip без CSV", () => {
         const sites = JSON.parse(fs.readFileSync("./sites.json", "utf8"));
         const hosts = uniqueMonitoredHosts(sites);
@@ -353,6 +436,111 @@ async function main() {
             ),
             true,
         );
+    });
+
+    await test("isIndexed: подпапка — /login/ и /en-gb/login/ одна страница, /login/ → / нет", () => {
+        const alternate = "Alternate page with proper canonical tag";
+        const status = (googleCanonical) => ({
+            verdict: "NEUTRAL",
+            coverageState: alternate,
+            googleCanonical,
+        });
+        // корень → подпапка (как сейчас в status.json у [all])
+        assert.equal(
+            isIndexed(
+                status("https://freshbet-uk.org/en-gb/login/"),
+                "https://freshbet-uk.org/login/",
+                "en-gb",
+            ),
+            true,
+        );
+        // без подпапки в CSV — прежнее правило: другой path
+        assert.equal(
+            isIndexed(status("https://freshbet-uk.org/en-gb/login/"), "https://freshbet-uk.org/login/"),
+            false,
+        );
+        // подпапка → корень (Google выбрал корневую сторону)
+        assert.equal(
+            isIndexed(
+                status("https://freshbet-uk.org/login/"),
+                "https://freshbet-uk.org/en-gb/login/",
+                "en-gb",
+            ),
+            true,
+        );
+        // главная: / ↔ /en-gb/
+        assert.equal(
+            isIndexed(status("https://freshbet-uk.org/en-gb/"), "https://freshbet-uk.org/", "en-gb"),
+            true,
+        );
+        assert.equal(
+            isIndexed(status("https://freshbet-uk.org/"), "https://freshbet-uk.org/en-gb/", "en-gb"),
+            true,
+        );
+        // склейка в главную — по-прежнему «нет»
+        assert.equal(
+            isIndexed(
+                status("https://freshbet-uk.org/en-gb/"),
+                "https://freshbet-uk.org/en-gb/login/",
+                "en-gb",
+            ),
+            false,
+        );
+        assert.equal(
+            isIndexed(status("https://freshbet-uk.org/"), "https://freshbet-uk.org/login/", "en-gb"),
+            false,
+        );
+        // другая подпапка — не наша пара
+        assert.equal(
+            isIndexed(
+                status("https://freshbet-uk.org/it/login/"),
+                "https://freshbet-uk.org/login/",
+                "en-gb",
+            ),
+            false,
+        );
+        // noindex / unknown не зависят от подпапки
+        assert.equal(
+            isIndexed(
+                { coverageState: "Excluded by ‘noindex’ tag" },
+                "https://freshbet-uk.org/en-gb/login/",
+                "en-gb",
+            ),
+            false,
+        );
+
+        // pageRecord берёт подпапку из строки CSV как есть
+        const rec = pageRecord({
+            url: "https://freshbet-uk.org/login/",
+            slot: "login",
+            inspectJson: {
+                inspectionResult: {
+                    indexStatusResult: status("https://freshbet-uk.org/en-gb/login/"),
+                },
+            },
+            error: null,
+            checkedAt: "2026-09-15T00:00:00Z",
+            subfolder: "en-gb[all]:rewrite:root",
+        });
+        assert.equal(rec.indexed, true);
+        assert.equal(rec.googleCanonical, "https://freshbet-uk.org/en-gb/login/");
+        const recNoSub = pageRecord({
+            url: "https://freshbet-uk.org/login/",
+            slot: "login",
+            inspectJson: {
+                inspectionResult: {
+                    indexStatusResult: status("https://freshbet-uk.org/en-gb/login/"),
+                },
+            },
+            error: null,
+            checkedAt: "2026-09-15T00:00:00Z",
+        });
+        assert.equal(recNoSub.indexed, false);
+    });
+
+    await test("isIndexed: Alternate/canonical — хвост (чужой path, без canonical, pageRecord)", () => {
+        const alternate = "Alternate page with proper canonical tag";
+        const inspectHome = "https://vibro-bet.gb.net/";
         assert.equal(
             isIndexed(
                 {

@@ -3,6 +3,7 @@ const dns = require("dns");
 const http = require("http");
 const https = require("https");
 const { sendTelegram } = require("./telegram");
+const { parseSubfolderField } = require("./subfolder");
 
 const STATUS_PATH = "./status.json";
 const SITES_PATH = "./sites.json";
@@ -145,10 +146,25 @@ function parsePageSlots(pagesField) {
         .map((s) => s.toLowerCase());
 }
 
-function pageUrlForSlot(domain, slot) {
+function pageUrlForSlot(domain, slot, folder = null) {
     const s = String(slot || "").toLowerCase();
     if (!s || s === "home") return `https://${domain}/`;
-    return `https://${domain}/${s}/`;
+    const prefix = folder ? `${String(folder).toLowerCase()}/` : "";
+    return `https://${domain}/${prefix}${s}/`;
+}
+
+/**
+ * Подпапка, в которой живёт каноничная версия слота: `en-gb[all]` — все внутренние,
+ * `en-gb[faq]` — только faq. Главная всегда `/` (Google держит её каноникалом).
+ * Без этого для `[all]` проверялся `/login/`, а в индексе — `/en-gb/login/`.
+ */
+function subfolderForSlot(catalogRow, slot) {
+    const sub = parseSubfolderField(catalogRow?.subfolder);
+    const s = String(slot || "").toLowerCase();
+    if (!sub.folder || !s || s === "home") return null;
+    if (sub.mode === "all") return sub.folder;
+    if (sub.mode === "page" && sub.page === s) return sub.folder;
+    return null;
 }
 
 const SITEMAP_TIMEOUT_MS = 15000;
@@ -233,17 +249,20 @@ function slotAliases(slot) {
     return out;
 }
 
-function sitemapPathInfo(url) {
+function sitemapPathInfo(url, folder = null) {
     try {
         const segs = (new URL(url).pathname || "/")
             .replace(/^\/+|\/+$/g, "")
             .toLowerCase()
             .split("/")
             .filter(Boolean);
-        const hasLocale = segs.length > 0 && PAGE_LOCALE_PREFIX.test(segs[0]);
+        const first = segs[0] || "";
+        const inFolder = Boolean(folder && first === String(folder).toLowerCase());
+        const hasLocale = segs.length > 0 && (PAGE_LOCALE_PREFIX.test(first) || inFolder);
         const meaningful = hasLocale ? segs.slice(1) : segs;
         return {
             hasLocale,
+            inFolder,
             depth: meaningful.length,
             last: meaningful[meaningful.length - 1] || "",
         };
@@ -288,17 +307,25 @@ function sitemapPageUrls(host, urls, cap = SITEMAP_MAX_URLS) {
     return inner;
 }
 
-function matchSitemapUrlForSlot(slot, candidates, used) {
+function matchSitemapUrlForSlot(slot, candidates, used, folder = null) {
     const aliases = slotAliases(slot);
     let best = null;
     let bestScore = Infinity;
     for (const url of candidates) {
         if (used.has(url)) continue;
-        const info = sitemapPathInfo(url);
+        const info = sitemapPathInfo(url, folder);
         if (!info || !info.last) continue;
         const aliasIndex = aliases.indexOf(info.last);
         if (aliasIndex < 0) continue;
-        const score = (info.hasLocale ? 1000 : 0) + info.depth * 10 + aliasIndex;
+        // Обычно берём корневой путь; для слота из подпапки — наоборот, `/en-gb/…`.
+        const localePenalty = folder
+            ? info.inFolder
+                ? 0
+                : 1000
+            : info.hasLocale
+              ? 1000
+              : 0;
+        const score = localePenalty + info.depth * 10 + aliasIndex;
         if (score < bestScore) {
             bestScore = score;
             best = url;
@@ -321,12 +348,13 @@ function pageTargetsForRow(domain, catalogRow, sitemapUrls = []) {
     const used = new Set();
     for (const slot of slots) {
         if (slot === "home") continue;
-        const matched = matchSitemapUrlForSlot(slot, candidates, used);
+        const folder = subfolderForSlot(catalogRow, slot);
+        const matched = matchSitemapUrlForSlot(slot, candidates, used, folder);
         if (matched) {
             used.add(matched);
             add(slot, matched);
         } else {
-            add(slot, pageUrlForSlot(domain, slot));
+            add(slot, pageUrlForSlot(domain, slot, folder));
         }
     }
     return pages;
@@ -529,13 +557,22 @@ function loadSecretsFromEnv(env = process.env) {
     };
 }
 
-/** Path без query и хвостового `/`. Корень `/` и `` — одно. Хост не входит. */
-function indexPathKey(url) {
+/**
+ * Path без query и хвостового `/`. Корень `/` и `` — одно. Хост не входит.
+ * С `folder` (подпапка из CSV) `/en-gb/login/` и `/login/` — одна страница:
+ * конвейер ставит canonical/hreflang между ними, Google выбирает любую сторону.
+ */
+function indexPathKey(url, folder = null) {
     if (!url) return "";
     try {
         const parsed = new URL(String(url).trim());
         let path = parsed.pathname || "/";
         if (path.length > 1) path = path.replace(/\/+$/, "");
+        if (folder) {
+            const prefix = `/${String(folder).toLowerCase()}`;
+            if (path.toLowerCase() === prefix) path = "/";
+            else if (path.toLowerCase().startsWith(`${prefix}/`)) path = path.slice(prefix.length);
+        }
         if (!path) path = "/";
         return path;
     } catch {
@@ -543,9 +580,9 @@ function indexPathKey(url) {
     }
 }
 
-function sameIndexPath(inspectUrl, canonicalUrl) {
-    const a = indexPathKey(inspectUrl);
-    const b = indexPathKey(canonicalUrl);
+function sameIndexPath(inspectUrl, canonicalUrl, folder = null) {
+    const a = indexPathKey(inspectUrl, folder);
+    const b = indexPathKey(canonicalUrl, folder);
     return Boolean(a && b && a === b);
 }
 
@@ -565,8 +602,9 @@ function isCanonicalDuplicateCoverage(coverage) {
 /**
  * Страница есть в индексе Google, даже если каноникал на другом хосте.
  * Другой path (`/login/` → `/`) — не эта страница.
+ * `folder` — подпапка сайта из CSV: `/login/` ↔ `/en-gb/login/` считаем одной страницей.
  */
-function isIndexed(indexStatus, inspectUrl) {
+function isIndexed(indexStatus, inspectUrl, folder = null) {
     if (!indexStatus) return false;
     if (indexStatus.verdict === "PASS") return true;
     const coverage = String(indexStatus.coverageState || "").toLowerCase();
@@ -578,7 +616,7 @@ function isIndexed(indexStatus, inspectUrl) {
     if (isCanonicalDuplicateCoverage(coverage)) {
         const canonical = indexStatus.googleCanonical;
         if (!canonical) return true;
-        return sameIndexPath(inspectUrl, canonical);
+        return sameIndexPath(inspectUrl, canonical, folder);
     }
     return false;
 }
@@ -619,13 +657,14 @@ function createQuota(limit) {
     };
 }
 
-function pageRecord({ url, slot, inspectJson, error, checkedAt }) {
+function pageRecord({ url, slot, inspectJson, error, checkedAt, subfolder = null }) {
     const indexStatus = inspectJson?.inspectionResult?.indexStatusResult || {};
     const failed = Boolean(error) || !inspectJson;
+    const folder = parseSubfolderField(subfolder).folder;
     return {
         url,
         slot,
-        indexed: failed ? null : isIndexed(indexStatus, url),
+        indexed: failed ? null : isIndexed(indexStatus, url, folder),
         coverageState: indexStatus.coverageState || null,
         verdict: indexStatus.verdict || null,
         lastCrawlTime: indexStatus.lastCrawlTime || null,
@@ -1501,6 +1540,7 @@ async function runSeo(options = {}) {
             inspectJson: result.ok ? result.json : null,
             error: result.ok ? null : result.error || `HTTP ${result.status}`,
             checkedAt,
+            subfolder: catalogRow?.subfolder,
         });
         await withIndexLock(async () => {
             const prev = indexByHost.get(host);
@@ -1693,6 +1733,7 @@ module.exports = {
     hostFromSiteUrl,
     parsePageSlots,
     pageUrlForSlot,
+    subfolderForSlot,
     pageTargetsForRow,
     slotAliases,
     parseSitemapXml,
