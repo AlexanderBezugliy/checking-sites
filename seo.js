@@ -529,13 +529,58 @@ function loadSecretsFromEnv(env = process.env) {
     };
 }
 
-function isIndexed(indexStatus) {
+/** Хост + path без scheme, www, query и хвостового `/`. Корень `/` и `` — одно. */
+function indexPageKey(url) {
+    if (!url) return "";
+    try {
+        const parsed = new URL(String(url).trim());
+        const host = parsed.hostname.replace(/^www\./i, "").toLowerCase();
+        if (!host) return "";
+        let path = parsed.pathname || "/";
+        if (path.length > 1) path = path.replace(/\/+$/, "");
+        if (!path) path = "/";
+        return `${host}${path}`;
+    } catch {
+        return "";
+    }
+}
+
+function sameIndexPage(inspectUrl, canonicalUrl) {
+    const a = indexPageKey(inspectUrl);
+    const b = indexPageKey(canonicalUrl);
+    return Boolean(a && b && a === b);
+}
+
+/**
+ * Duplicate/canonical в GSC: контент в индексе, но под каноникалом.
+ * «В индексе» только если googleCanonical — та же страница (не другой path).
+ */
+function isCanonicalDuplicateCoverage(coverage) {
+    const text = String(coverage || "").toLowerCase();
+    if (text.includes("alternate page with proper canonical")) return true;
+    if (text.includes("duplicate without user-selected canonical")) return true;
+    if (text.includes("duplicate, google chose different canonical")) return true;
+    if (text.includes("duplicate, submitted url not selected as canonical")) return true;
+    return false;
+}
+
+/**
+ * Есть ли страница в индексе Google, а не «этот точный URL — канонический».
+ * inspectUrl — URL Inspection; googleCanonical берётся из indexStatusResult.
+ */
+function isIndexed(indexStatus, inspectUrl) {
     if (!indexStatus) return false;
     if (indexStatus.verdict === "PASS") return true;
     const coverage = String(indexStatus.coverageState || "").toLowerCase();
     if (!coverage) return false;
     if (coverage.includes("not indexed")) return false;
-    return coverage.includes("indexed");
+    if (coverage.includes("unknown to google")) return false;
+    if (coverage.includes("noindex")) return false;
+    if (coverage.includes("indexed")) return true;
+    if (isCanonicalDuplicateCoverage(coverage)) {
+        return sameIndexPage(inspectUrl, indexStatus.googleCanonical);
+    }
+    return false;
 }
 
 function gscErrorStatus(err) {
@@ -580,11 +625,13 @@ function pageRecord({ url, slot, inspectJson, error, checkedAt }) {
     return {
         url,
         slot,
-        indexed: failed ? null : isIndexed(indexStatus),
+        indexed: failed ? null : isIndexed(indexStatus, url),
         coverageState: indexStatus.coverageState || null,
         verdict: indexStatus.verdict || null,
         lastCrawlTime: indexStatus.lastCrawlTime || null,
         pageFetchState: indexStatus.pageFetchState || null,
+        googleCanonical: indexStatus.googleCanonical || null,
+        userCanonical: indexStatus.userCanonical || null,
         checked_at: checkedAt,
         error: error || null,
     };
@@ -619,6 +666,8 @@ function mergePageRecord(prev, next) {
         verdict: prev.verdict ?? null,
         lastCrawlTime: prev.lastCrawlTime ?? null,
         pageFetchState: prev.pageFetchState ?? null,
+        googleCanonical: prev.googleCanonical ?? next.googleCanonical ?? null,
+        userCanonical: prev.userCanonical ?? next.userCanonical ?? null,
         status_from: prev.status_from || prev.checked_at || null,
         stale: true,
     };

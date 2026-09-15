@@ -21,6 +21,7 @@ const {
     parseAccountsJson,
     loadSecretsFromEnv,
     isIndexed,
+    pageRecord,
     createQuota,
     buildHostIndex,
     buildSeoDiff,
@@ -235,6 +236,122 @@ async function main() {
             true,
         );
         assert.equal(isIndexed(null), false);
+    });
+
+    await test("isIndexed: Alternate/canonical — та же страница, не другой path", () => {
+        const alternate = "Alternate page with proper canonical tag";
+        const inspectHome = "https://vibro-bet.gb.net/";
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: alternate,
+                    googleCanonical: "https://vibro-bet.gb.net",
+                },
+                inspectHome,
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: alternate,
+                    googleCanonical: "https://www.vibro-bet.gb.net/",
+                },
+                "https://vibro-bet.gb.net/",
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: alternate,
+                    googleCanonical: "http://vibro-bet.gb.net/login",
+                },
+                "https://www.vibro-bet.gb.net/login/",
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: alternate,
+                    googleCanonical: "https://vibro-bet.gb.net/",
+                },
+                "https://vibro-bet.gb.net/login/",
+            ),
+            false,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: "Duplicate without user-selected canonical",
+                    googleCanonical: "https://vibro-bet.gb.net/",
+                },
+                inspectHome,
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                {
+                    verdict: "NEUTRAL",
+                    coverageState: "Duplicate, Google chose different canonical than user",
+                    googleCanonical: "https://vibro-bet.gb.net/",
+                },
+                inspectHome,
+            ),
+            true,
+        );
+        assert.equal(
+            isIndexed(
+                { coverageState: "Discovered - currently not indexed" },
+                inspectHome,
+            ),
+            false,
+        );
+        assert.equal(
+            isIndexed({ coverageState: "URL is unknown to Google" }, inspectHome),
+            false,
+        );
+        assert.equal(
+            isIndexed(
+                { coverageState: "Excluded by ‘noindex’ tag" },
+                inspectHome,
+            ),
+            false,
+        );
+        assert.equal(
+            isIndexed(
+                { coverageState: alternate, googleCanonical: inspectHome },
+            ),
+            false,
+        );
+
+        const rec = pageRecord({
+            url: inspectHome,
+            slot: "home",
+            inspectJson: {
+                inspectionResult: {
+                    indexStatusResult: {
+                        verdict: "NEUTRAL",
+                        coverageState: alternate,
+                        googleCanonical: "https://vibro-bet.gb.net",
+                        userCanonical: inspectHome,
+                    },
+                },
+            },
+            error: null,
+            checkedAt: "t",
+        });
+        assert.equal(rec.indexed, true);
+        assert.equal(rec.googleCanonical, "https://vibro-bet.gb.net");
+        assert.equal(rec.userCanonical, inspectHome);
+        assert.equal(rec.coverageState, alternate);
     });
 
     await test("fallback siteUrl на 403", async () => {
