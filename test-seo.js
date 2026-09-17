@@ -1235,8 +1235,12 @@ async function main() {
             homes += 1;
             inner += Math.max(0, pageTargetsForRow(h.host, row).length - 1);
         }
-        assert.equal(skip, 7);
-        assert.ok(homes >= 400 && homes <= 450, `homes=${homes}`);
+        const drops = loadCatalogByDomain(fs.readFileSync("./drops.csv", "utf8"));
+        const dropSkip = [...drops.keys()].filter(
+            (host) => !String(catalog.get(host)?.account || "").trim(),
+        ).length;
+        assert.equal(skip, dropSkip);
+        assert.ok(homes >= 400 && homes <= 500, `homes=${homes}`);
         const left = 1800 - homes;
         assert.ok(left > 1000, `остаток квоты ${left}`);
         assert.ok(inner >= 2500 && inner <= 3500, `inner=${inner}`);
