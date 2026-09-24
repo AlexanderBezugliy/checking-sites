@@ -9,7 +9,8 @@
     "monitor": "node monitor.js",
     "seo": "node seo.js",
     "sync-sites": "node sync-sites.js",
-    "test": "node test-seo.js && node test-monitor.js && node test-cloak.js && node test-sync-sites.js"
+    "test": "node test-seo.js && node test-monitor.js && node test-cloak.js && node test-sync-sites.js && node test-gsc.js",
+    "gsc": "node gsc.js"
   },
   "dependencies": {
     "googleapis": "^148.0.0"

@@ -737,6 +737,7 @@ async function runMonitor() {
         results[i] = {
             ...results[i],
             index: prevMap.get(results[i].url)?.index ?? null,
+            gsc: prevMap.get(results[i].url)?.gsc ?? null,
         };
     }
 
@@ -804,6 +805,7 @@ async function runMonitor() {
             : prevStatus.last_digest_at || null,
         index_last_update: prevStatus.index_last_update || null,
         index_queue_cursor: prevStatus.index_queue_cursor ?? 0,
+        gsc_last_update: prevStatus.gsc_last_update || null,
         total_sites: sites.length,
         alive_count: aliveCount,
         failed_count: failedCount,
