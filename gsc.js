@@ -1,5 +1,5 @@
 /**
- * Динамика Google Search Console: последние 7 дней против предыдущих 7.
+ * Динамика Google Search Console: последние 14 дней против предыдущих 14.
  * Пишет `gsc` в каждую строку status.json. Квоту URL Inspection не трогает.
  */
 const fs = require("fs");
@@ -33,19 +33,23 @@ function addDays(ymd, days) {
     return utc.toISOString().slice(0, 10);
 }
 
-/** Вчера по времени Search Console и два окна по 7 дней. */
+/**
+ * 14 дней, как на seodrug. Конец — третий день назад по времени Search Console:
+ * свежие сутки там ещё не входят в итог.
+ */
 function gscWindows(now = new Date()) {
-    const end = addDays(ymdInPt(now), -1);
-    const start = addDays(end, -6);
+    const end = addDays(ymdInPt(now), -3);
+    const start = addDays(end, -13);
     const prevEnd = addDays(start, -1);
-    const prevStart = addDays(prevEnd, -6);
+    const prevStart = addDays(prevEnd, -13);
     return { start, end, prevStart, prevEnd };
 }
 
 function sumWindow(rows, start, end) {
     let clicks = 0;
     let impressions = 0;
-    let weighted = 0;
+    let posSum = 0;
+    let posDays = 0;
     for (const row of rows || []) {
         const day = row.keys && row.keys[0];
         if (!day || day < start || day > end) continue;
@@ -54,13 +58,16 @@ function sumWindow(rows, start, end) {
         const pos = Number(row.position);
         clicks += clk;
         impressions += imp;
-        if (imp && Number.isFinite(pos)) weighted += pos * imp;
+        if (Number.isFinite(pos)) {
+            posSum += pos;
+            posDays += 1;
+        }
     }
     return {
         clicks,
         impressions,
         ctr: impressions ? clicks / impressions : null,
-        position: impressions ? Math.round((weighted / impressions) * 100) / 100 : null,
+        position: posDays ? Math.round((posSum / posDays) * 100) / 100 : null,
     };
 }
 
@@ -117,7 +124,7 @@ async function queryDaily(sc, siteUrl, startDate, endDate) {
                 dimensions: ["date"],
                 type: "web",
                 dataState: "all",
-                rowLimit: 25,
+                rowLimit: 50,
             },
         }),
         QUERY_TIMEOUT_MS,
