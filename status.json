@@ -1,5 +1,5 @@
 {
-  "last_update": "2026-09-28T19:00:38.265Z",
+  "last_update": "2026-09-29T07:00:30.711Z",
   "last_digest_at": "2026-09-28T19:00:38.265Z",
   "index_last_update": "2026-09-28T08:00:01.570Z",
   "index_queue_cursor": 1460,
@@ -12,7 +12,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 643,
+      "duration": 732,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -199,15 +199,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 906,
+      "duration": 283,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -386,21 +386,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 809,
+      "duration": 231,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.86.41",
-          "172.67.214.128"
+          "172.67.214.128",
+          "104.21.86.41"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 34,
+        "daysLeft": 33,
         "validTo": "2026-10-31T19:25:17.000Z",
         "error": null
       },
@@ -573,21 +573,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 736,
+      "duration": 695,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.154.243",
-          "104.21.6.53"
+          "104.21.6.53",
+          "172.67.154.243"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 34,
+        "daysLeft": 33,
         "validTo": "2026-10-31T23:27:00.000Z",
         "error": null
       },
@@ -760,15 +760,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 856,
+      "duration": 352,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -961,7 +961,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 787,
+      "duration": 724,
       "dns": {
         "ns": [
           "darwin.ns.cloudflare.com",
@@ -1148,7 +1148,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 549,
+      "duration": 491,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -1335,15 +1335,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 698,
+      "duration": 802,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -1522,15 +1522,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 556,
+      "duration": 817,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -1551,10 +1551,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": null,
@@ -1709,15 +1709,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 751,
+      "duration": 306,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.51.156",
-          "172.67.182.25"
+          "172.67.182.25",
+          "104.21.51.156"
         ],
         "ok": true,
         "error": null
@@ -1925,7 +1925,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 576,
+      "duration": 399,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -2112,15 +2112,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 432,
+      "duration": 455,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.14.80",
-          "172.67.202.169"
+          "172.67.202.169",
+          "104.21.14.80"
         ],
         "ok": true,
         "error": null
@@ -2299,7 +2299,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 909,
+      "duration": 605,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -2515,7 +2515,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1005,
+      "duration": 227,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -2702,7 +2702,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 661,
+      "duration": 803,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
@@ -2889,7 +2889,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 287,
+      "duration": 641,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -3105,7 +3105,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 896,
+      "duration": 241,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -3292,7 +3292,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 671,
+      "duration": 785,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -3479,21 +3479,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 925,
+      "duration": 240,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.139.79",
-          "104.21.79.8"
+          "104.21.79.8",
+          "172.67.139.79"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 35,
+        "daysLeft": 34,
         "validTo": "2026-11-01T23:59:16.000Z",
         "error": null
       },
@@ -3695,15 +3695,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 736,
+      "duration": 664,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -3882,7 +3882,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 544,
+      "duration": 530,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -4069,15 +4069,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 625,
+      "duration": 630,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.193.67",
-          "104.21.20.174"
+          "104.21.20.174",
+          "172.67.193.67"
         ],
         "ok": true,
         "error": null
@@ -4256,15 +4256,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 309,
+      "duration": 678,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.207.210",
-          "104.21.37.113"
+          "104.21.37.113",
+          "172.67.207.210"
         ],
         "ok": true,
         "error": null
@@ -4443,15 +4443,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 780,
+      "duration": 873,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -4644,15 +4644,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 938,
+      "duration": 321,
       "dns": {
         "ns": [
           "darwin.ns.cloudflare.com",
           "shaz.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -4673,10 +4673,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": "en-gb",
@@ -4860,7 +4860,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 584,
+      "duration": 176,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -5047,7 +5047,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 457,
+      "duration": 509,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -5234,7 +5234,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 482,
+      "duration": 456,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -5421,7 +5421,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 404,
+      "duration": 527,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -5622,7 +5622,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 422,
+      "duration": 694,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -5823,7 +5823,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 456,
+      "duration": 621,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -6024,7 +6024,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 399,
+      "duration": 696,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -6211,7 +6211,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 629,
+      "duration": 349,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -6384,7 +6384,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 306,
+      "duration": 222,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -6585,7 +6585,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 648,
+      "duration": 198,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -6772,21 +6772,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1010,
+      "duration": 276,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 90,
+        "daysLeft": 89,
         "validTo": "2026-12-26T20:53:29.000Z",
         "error": null
       },
@@ -6973,21 +6973,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 193,
+      "duration": 393,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 42,
+        "daysLeft": 41,
         "validTo": "2026-11-08T23:30:13.000Z",
         "error": null
       },
@@ -7146,7 +7146,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 618,
+      "duration": 242,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -7160,7 +7160,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 42,
+        "daysLeft": 41,
         "validTo": "2026-11-08T22:25:04.000Z",
         "error": null
       },
@@ -7348,7 +7348,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 531,
+      "duration": 321,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -7362,7 +7362,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 42,
+        "daysLeft": 41,
         "validTo": "2026-11-08T21:15:53.000Z",
         "error": null
       },
@@ -7535,7 +7535,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 562,
+      "duration": 330,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -7722,7 +7722,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 550,
+      "duration": 296,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -7909,15 +7909,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1047,
+      "duration": 226,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -8111,15 +8111,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 507,
+      "duration": 366,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -8284,7 +8284,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 245,
+      "duration": 450,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -8486,21 +8486,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 272,
+      "duration": 463,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 44,
+        "daysLeft": 43,
         "validTo": "2026-11-10T20:00:30.000Z",
         "error": null
       },
@@ -8688,15 +8688,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 595,
+      "duration": 303,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.146.196",
-          "104.21.39.165"
+          "104.21.39.165",
+          "172.67.146.196"
         ],
         "ok": true,
         "error": null
@@ -8875,7 +8875,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 360,
+      "duration": 198,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -9062,21 +9062,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1006,
+      "duration": 240,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 44,
+        "daysLeft": 43,
         "validTo": "2026-11-11T01:17:11.000Z",
         "error": null
       },
@@ -9249,7 +9249,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 209,
+      "duration": 435,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -9263,7 +9263,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 44,
+        "daysLeft": 43,
         "validTo": "2026-11-10T19:31:01.000Z",
         "error": null
       },
@@ -9451,7 +9451,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 368,
+      "duration": 266,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -9639,21 +9639,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 648,
+      "duration": 191,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.178.145",
-          "104.21.43.117"
+          "104.21.43.117",
+          "172.67.178.145"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 44,
+        "daysLeft": 43,
         "validTo": "2026-11-11T00:48:06.000Z",
         "error": null
       },
@@ -9826,15 +9826,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 630,
+      "duration": 227,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -10013,15 +10013,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 556,
+      "duration": 212,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.211.100",
-          "104.21.83.40"
+          "104.21.83.40",
+          "172.67.211.100"
         ],
         "ok": true,
         "error": null
@@ -10215,7 +10215,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 370,
+      "duration": 642,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -10402,21 +10402,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 511,
+      "duration": 200,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.188.202",
-          "104.21.49.24"
+          "104.21.49.24",
+          "172.67.188.202"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T04:30:50.000Z",
         "error": null
       },
@@ -10604,7 +10604,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 407,
+      "duration": 483,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -10791,7 +10791,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 578,
+      "duration": 309,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -10993,21 +10993,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 207,
+      "duration": 167,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:29:59.000Z",
         "error": null
       },
@@ -11180,21 +11180,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 312,
+      "duration": 441,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:19:27.000Z",
         "error": null
       },
@@ -11382,7 +11382,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 239,
+      "duration": 440,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -11396,7 +11396,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T01:32:27.000Z",
         "error": null
       },
@@ -11569,21 +11569,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 612,
+      "duration": 362,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.21.148",
-          "172.67.199.35"
+          "172.67.199.35",
+          "104.21.21.148"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T23:30:34.000Z",
         "error": null
       },
@@ -11598,10 +11598,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": "en-gb",
@@ -11771,7 +11771,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 477,
+      "duration": 377,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -11785,7 +11785,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:13:43.000Z",
         "error": null
       },
@@ -11958,7 +11958,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 437,
+      "duration": 512,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -11972,7 +11972,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:27:18.000Z",
         "error": null
       },
@@ -12145,7 +12145,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 530,
+      "duration": 227,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -12159,7 +12159,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:20:41.000Z",
         "error": null
       },
@@ -12347,7 +12347,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 329,
+      "duration": 259,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -12361,7 +12361,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:59:07.000Z",
         "error": null
       },
@@ -12549,21 +12549,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 505,
+      "duration": 627,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T05:58:09.000Z",
         "error": null
       },
@@ -12736,7 +12736,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 446,
+      "duration": 518,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -12938,7 +12938,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 350,
+      "duration": 229,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -12952,7 +12952,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:40:58.000Z",
         "error": null
       },
@@ -13140,21 +13140,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 290,
+      "duration": 612,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.167.251",
-          "104.21.74.58"
+          "104.21.74.58",
+          "172.67.167.251"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:23:14.000Z",
         "error": null
       },
@@ -13342,21 +13342,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 659,
+      "duration": 309,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.28.137",
-          "172.67.170.215"
+          "172.67.170.215",
+          "104.21.28.137"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:56:13.000Z",
         "error": null
       },
@@ -13544,7 +13544,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 570,
+      "duration": 379,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -13558,7 +13558,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:12:31.000Z",
         "error": null
       },
@@ -13746,21 +13746,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 258,
+      "duration": 617,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:56:56.000Z",
         "error": null
       },
@@ -13948,21 +13948,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 463,
+      "duration": 462,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:03:17.000Z",
         "error": null
       },
@@ -14135,21 +14135,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 648,
+      "duration": 283,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T06:52:17.000Z",
         "error": null
       },
@@ -14337,21 +14337,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 427,
+      "duration": 271,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:50:54.000Z",
         "error": null
       },
@@ -14539,15 +14539,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 621,
+      "duration": 205,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.7.79",
-          "172.67.135.226"
+          "172.67.135.226",
+          "104.21.7.79"
         ],
         "ok": true,
         "error": null
@@ -14741,21 +14741,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 703,
+      "duration": 253,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.187.106",
-          "104.21.48.174"
+          "104.21.48.174",
+          "172.67.187.106"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:55:00.000Z",
         "error": null
       },
@@ -14928,7 +14928,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 446,
+      "duration": 337,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -14942,7 +14942,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:29:53.000Z",
         "error": null
       },
@@ -15130,7 +15130,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 426,
+      "duration": 203,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -15144,7 +15144,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T23:21:13.000Z",
         "error": null
       },
@@ -15332,7 +15332,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 542,
+      "duration": 505,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -15346,7 +15346,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:45:43.000Z",
         "error": null
       },
@@ -15519,7 +15519,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 381,
+      "duration": 550,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -15706,7 +15706,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 774,
+      "duration": 212,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -15894,7 +15894,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 334,
+      "duration": 179,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -15908,7 +15908,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T01:48:17.000Z",
         "error": null
       },
@@ -16081,21 +16081,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 588,
+      "duration": 646,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.212.218",
-          "104.21.45.94"
+          "104.21.45.94",
+          "172.67.212.218"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:08:41.000Z",
         "error": null
       },
@@ -16268,21 +16268,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 697,
+      "duration": 273,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.199.155",
-          "104.21.36.210"
+          "104.21.36.210",
+          "172.67.199.155"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:24:39.000Z",
         "error": null
       },
@@ -16470,21 +16470,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 301,
+      "duration": 472,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.51.56",
-          "172.67.221.168"
+          "172.67.221.168",
+          "104.21.51.56"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:39:13.000Z",
         "error": null
       },
@@ -16672,7 +16672,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 331,
+      "duration": 370,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -16859,7 +16859,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 487,
+      "duration": 545,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -17047,7 +17047,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 221,
+      "duration": 310,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -17235,7 +17235,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 611,
+      "duration": 648,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -17249,7 +17249,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:39:57.000Z",
         "error": null
       },
@@ -17422,7 +17422,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 708,
+      "duration": 337,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -17436,7 +17436,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:51:03.000Z",
         "error": null
       },
@@ -17624,15 +17624,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 720,
+      "duration": 706,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.3.133",
-          "172.67.130.187"
+          "172.67.130.187",
+          "104.21.3.133"
         ],
         "ok": true,
         "error": null
@@ -17826,7 +17826,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 277,
+      "duration": 396,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -17840,7 +17840,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T04:07:15.000Z",
         "error": null
       },
@@ -18042,15 +18042,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 471,
+      "duration": 662,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.32.131",
-          "172.67.152.53"
+          "172.67.152.53",
+          "104.21.32.131"
         ],
         "ok": true,
         "error": null
@@ -18258,21 +18258,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 488,
+      "duration": 260,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:02:11.000Z",
         "error": null
       },
@@ -18474,7 +18474,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 677,
+      "duration": 250,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -18488,7 +18488,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:57:17.000Z",
         "error": null
       },
@@ -18690,15 +18690,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 818,
+      "duration": 304,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -18906,21 +18906,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 533,
+      "duration": 640,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:40:36.000Z",
         "error": null
       },
@@ -19093,7 +19093,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 647,
+      "duration": 380,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -19122,10 +19122,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": "en-gb",
@@ -19309,21 +19309,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 189,
+      "duration": 513,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.36.238",
-          "172.67.201.48"
+          "172.67.201.48",
+          "104.21.36.238"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T01:43:54.000Z",
         "error": null
       },
@@ -19338,10 +19338,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": null,
@@ -19496,7 +19496,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 255,
+      "duration": 580,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -19510,7 +19510,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:22:09.000Z",
         "error": null
       },
@@ -19712,21 +19712,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 632,
+      "duration": 202,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.182.202",
-          "104.21.32.41"
+          "104.21.32.41",
+          "172.67.182.202"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T01:13:20.000Z",
         "error": null
       },
@@ -19928,7 +19928,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 574,
+      "duration": 182,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -19942,7 +19942,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:24:54.000Z",
         "error": null
       },
@@ -20144,7 +20144,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 374,
+      "duration": 436,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -20360,21 +20360,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 668,
+      "duration": 198,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:55:41.000Z",
         "error": null
       },
@@ -20547,7 +20547,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 404,
+      "duration": 513,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -20561,7 +20561,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T05:40:37.000Z",
         "error": null
       },
@@ -20763,7 +20763,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 386,
+      "duration": 296,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -20777,7 +20777,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T04:29:23.000Z",
         "error": null
       },
@@ -20979,21 +20979,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 507,
+      "duration": 571,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:24:33.000Z",
         "error": null
       },
@@ -21166,7 +21166,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 576,
+      "duration": 388,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -21382,21 +21382,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 630,
+      "duration": 234,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.76.219",
-          "172.67.201.119"
+          "172.67.201.119",
+          "104.21.76.219"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:28:19.000Z",
         "error": null
       },
@@ -21598,21 +21598,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 199,
+      "duration": 255,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.191.42",
-          "104.21.65.159"
+          "104.21.65.159",
+          "172.67.191.42"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:07:51.000Z",
         "error": null
       },
@@ -21785,7 +21785,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 456,
+      "duration": 479,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -21972,21 +21972,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 517,
+      "duration": 331,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:11:28.000Z",
         "error": null
       },
@@ -22159,7 +22159,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 517,
+      "duration": 312,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -22173,7 +22173,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T01:41:06.000Z",
         "error": null
       },
@@ -22346,7 +22346,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 442,
+      "duration": 662,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -22360,7 +22360,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:39:36.000Z",
         "error": null
       },
@@ -22533,21 +22533,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 717,
+      "duration": 356,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:41:25.000Z",
         "error": null
       },
@@ -22562,10 +22562,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": "en-gb",
@@ -22749,7 +22749,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 222,
+      "duration": 337,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -22763,7 +22763,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T01:26:09.000Z",
         "error": null
       },
@@ -22965,7 +22965,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 620,
+      "duration": 242,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -22979,7 +22979,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-25T22:38:19.000Z",
         "error": null
       },
@@ -23181,15 +23181,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 274,
+      "duration": 409,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.85.142",
-          "172.67.206.167"
+          "172.67.206.167",
+          "104.21.85.142"
         ],
         "ok": true,
         "error": null
@@ -23397,7 +23397,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 408,
+      "duration": 586,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -23598,7 +23598,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 576,
+      "duration": 167,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -23612,7 +23612,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T03:14:16.000Z",
         "error": null
       },
@@ -23799,21 +23799,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 371,
+      "duration": 571,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.3.150",
-          "172.67.130.226"
+          "172.67.130.226",
+          "104.21.3.150"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T00:46:42.000Z",
         "error": null
       },
@@ -24000,7 +24000,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 648,
+      "duration": 249,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -24216,21 +24216,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 489,
+      "duration": 346,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T02:22:33.000Z",
         "error": null
       },
@@ -24432,15 +24432,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 301,
+      "duration": 430,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -24648,21 +24648,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 600,
+      "duration": 547,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 59,
+        "daysLeft": 58,
         "validTo": "2026-11-26T05:27:00.000Z",
         "error": null
       },
@@ -24835,7 +24835,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 584,
+      "duration": 728,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -25022,15 +25022,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 670,
+      "duration": 611,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.178.129",
-          "104.21.67.170"
+          "104.21.67.170",
+          "172.67.178.129"
         ],
         "ok": true,
         "error": null
@@ -25209,21 +25209,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 766,
+      "duration": 226,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 72,
+        "daysLeft": 71,
         "validTo": "2026-12-09T06:58:36.000Z",
         "error": null
       },
@@ -25425,7 +25425,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 648,
+      "duration": 699,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -25626,21 +25626,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 935,
+      "duration": 317,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 90,
+        "daysLeft": 89,
         "validTo": "2026-12-26T22:44:19.000Z",
         "error": null
       },
@@ -25827,7 +25827,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 622,
+      "duration": 628,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -26043,21 +26043,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1027,
+      "duration": 289,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.84.2",
-          "172.67.184.6"
+          "172.67.184.6",
+          "104.21.84.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 90,
+        "daysLeft": 89,
         "validTo": "2026-12-27T01:07:58.000Z",
         "error": null
       },
@@ -26244,7 +26244,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 259,
+      "duration": 753,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -26445,7 +26445,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1026,
+      "duration": 323,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -26459,7 +26459,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-22T02:31:35.000Z",
         "error": null
       },
@@ -26646,15 +26646,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 893,
+      "duration": 263,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -26862,15 +26862,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 299,
+      "duration": 594,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.158.148",
-          "104.21.33.39"
+          "104.21.33.39",
+          "172.67.158.148"
         ],
         "ok": true,
         "error": null
@@ -27049,21 +27049,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 813,
+      "duration": 252,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T21:01:52.000Z",
         "error": null
       },
@@ -27236,15 +27236,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1025,
+      "duration": 377,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.170.173",
-          "104.21.63.124"
+          "104.21.63.124",
+          "172.67.170.173"
         ],
         "ok": true,
         "error": null
@@ -27423,7 +27423,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 185,
+      "duration": 169,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -27610,21 +27610,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 505,
+      "duration": 489,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T20:20:04.000Z",
         "error": null
       },
@@ -27826,7 +27826,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 456,
+      "duration": 186,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -28013,15 +28013,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 1089,
+      "duration": 165,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.28.116",
-          "172.67.145.229"
+          "172.67.145.229",
+          "104.21.28.116"
         ],
         "ok": true,
         "error": null
@@ -28214,7 +28214,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 351,
+      "duration": 526,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -28228,7 +28228,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T23:02:19.000Z",
         "error": null
       },
@@ -28415,7 +28415,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 751,
+      "duration": 697,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -28602,15 +28602,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 187,
+      "duration": 330,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.151.209",
-          "104.21.72.154"
+          "104.21.72.154",
+          "172.67.151.209"
         ],
         "ok": true,
         "error": null
@@ -28818,7 +28818,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 218,
+      "duration": 226,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -29005,15 +29005,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 905,
+      "duration": 404,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -29206,15 +29206,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 708,
+      "duration": 289,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.212.48",
-          "104.21.69.187"
+          "104.21.69.187",
+          "172.67.212.48"
         ],
         "ok": true,
         "error": null
@@ -29407,7 +29407,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 688,
+      "duration": 435,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -29608,7 +29608,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 530,
+      "duration": 583,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -29809,7 +29809,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 412,
+      "duration": 285,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -29996,21 +29996,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 519,
+      "duration": 728,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.148.180",
-          "104.21.29.89"
+          "104.21.29.89",
+          "172.67.148.180"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T21:58:30.000Z",
         "error": null
       },
@@ -30212,7 +30212,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 684,
+      "duration": 656,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -30414,15 +30414,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 561,
+      "duration": 658,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.186.162",
-          "104.21.60.3"
+          "104.21.60.3",
+          "172.67.186.162"
         ],
         "ok": true,
         "error": null
@@ -30601,15 +30601,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 211,
+      "duration": 190,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.74.235",
-          "172.67.164.160"
+          "172.67.164.160",
+          "104.21.74.235"
         ],
         "ok": true,
         "error": null
@@ -30817,7 +30817,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 467,
+      "duration": 442,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -31033,15 +31033,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 805,
+      "duration": 168,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -31220,15 +31220,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 247,
+      "duration": 274,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.168.123",
-          "104.21.38.210"
+          "104.21.38.210",
+          "172.67.168.123"
         ],
         "ok": true,
         "error": null
@@ -31249,10 +31249,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": null,
@@ -31407,15 +31407,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 605,
+      "duration": 491,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.58.158",
-          "172.67.161.139"
+          "172.67.161.139",
+          "104.21.58.158"
         ],
         "ok": true,
         "error": null
@@ -31594,21 +31594,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 637,
+      "duration": 489,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.198.171",
-          "104.21.68.213"
+          "104.21.68.213",
+          "172.67.198.171"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-22T00:06:26.000Z",
         "error": null
       },
@@ -31795,7 +31795,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 398,
+      "duration": 456,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -31996,7 +31996,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 334,
+      "duration": 585,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -32010,7 +32010,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T20:24:29.000Z",
         "error": null
       },
@@ -32197,15 +32197,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 486,
+      "duration": 517,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.62.142",
-          "172.67.136.167"
+          "172.67.136.167",
+          "104.21.62.142"
         ],
         "ok": true,
         "error": null
@@ -32384,21 +32384,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 485,
+      "duration": 654,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T22:43:44.000Z",
         "error": null
       },
@@ -32600,7 +32600,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 731,
+      "duration": 384,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -32787,21 +32787,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 896,
+      "duration": 214,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.174.219",
-          "104.21.47.252"
+          "104.21.47.252",
+          "172.67.174.219"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T23:34:32.000Z",
         "error": null
       },
@@ -32975,7 +32975,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 219,
+      "duration": 249,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -33191,7 +33191,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 785,
+      "duration": 328,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -33205,7 +33205,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T19:52:39.000Z",
         "error": null
       },
@@ -33407,21 +33407,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 334,
+      "duration": 574,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.221.191",
-          "104.21.86.162"
+          "104.21.86.162",
+          "172.67.221.191"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-22T01:40:13.000Z",
         "error": null
       },
@@ -33594,21 +33594,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 188,
+      "duration": 293,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.65.82",
-          "172.67.189.105"
+          "172.67.189.105",
+          "104.21.65.82"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-22T04:48:54.000Z",
         "error": null
       },
@@ -33781,21 +33781,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 466,
+      "duration": 407,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T21:27:20.000Z",
         "error": null
       },
@@ -33982,21 +33982,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 560,
+      "duration": 653,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T20:06:33.000Z",
         "error": null
       },
@@ -34169,21 +34169,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 784,
+      "duration": 324,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.194.143",
-          "104.21.84.154"
+          "104.21.84.154",
+          "172.67.194.143"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T19:55:48.000Z",
         "error": null
       },
@@ -34356,15 +34356,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 731,
+      "duration": 376,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -34543,21 +34543,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 501,
+      "duration": 455,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-22T04:19:02.000Z",
         "error": null
       },
@@ -34744,21 +34744,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 248,
+      "duration": 276,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.82.103",
-          "172.67.200.41"
+          "172.67.200.41",
+          "104.21.82.103"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T23:17:14.000Z",
         "error": null
       },
@@ -34931,15 +34931,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 629,
+      "duration": 230,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -35147,21 +35147,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 596,
+      "duration": 553,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T19:01:00.000Z",
         "error": null
       },
@@ -35363,7 +35363,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 555,
+      "duration": 499,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -35377,7 +35377,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T23:36:48.000Z",
         "error": null
       },
@@ -35564,7 +35564,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 651,
+      "duration": 188,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -35578,7 +35578,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T22:25:03.000Z",
         "error": null
       },
@@ -35780,7 +35780,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 562,
+      "duration": 383,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -35794,8 +35794,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T20:58:57.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T23:46:49.000Z",
         "error": null
       },
       "redirect": {
@@ -35809,10 +35809,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": true,
-        "status": 503,
+        "present": false,
+        "status": null,
         "error": null,
-        "http": 503
+        "http": 200
       },
       "subfolder": {
         "folder": null,
@@ -35967,22 +35967,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 619,
+      "duration": 267,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.94.43",
-          "172.67.219.83"
+          "172.67.219.83",
+          "104.21.94.43"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T20:54:00.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T23:52:47.000Z",
         "error": null
       },
       "redirect": {
@@ -36154,22 +36154,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 235,
+      "duration": 292,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T00:07:31.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T01:47:38.000Z",
         "error": null
       },
       "redirect": {
@@ -36341,22 +36341,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 364,
+      "duration": 625,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.135.95",
-          "104.21.26.44"
+          "104.21.26.44",
+          "172.67.135.95"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T23:19:10.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T02:28:27.000Z",
         "error": null
       },
       "redirect": {
@@ -36542,22 +36542,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 651,
+      "duration": 177,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T20:56:19.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T00:18:04.000Z",
         "error": null
       },
       "redirect": {
@@ -36743,22 +36743,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 325,
+      "duration": 680,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T03:05:45.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T06:41:27.000Z",
         "error": null
       },
       "redirect": {
@@ -36772,10 +36772,10 @@
       ],
       "ns_match": true,
       "cloak": {
-        "present": false,
-        "status": null,
+        "present": true,
+        "status": 503,
         "error": null,
-        "http": 200
+        "http": 503
       },
       "subfolder": {
         "folder": null,
@@ -36930,7 +36930,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 199,
+      "duration": 361,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -36944,8 +36944,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T01:18:19.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T05:59:44.000Z",
         "error": null
       },
       "redirect": {
@@ -37131,7 +37131,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 714,
+      "duration": 616,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -37145,8 +37145,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T00:34:08.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T05:26:20.000Z",
         "error": null
       },
       "redirect": {
@@ -37318,22 +37318,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 383,
+      "duration": 418,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T00:32:42.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T03:11:20.000Z",
         "error": null
       },
       "redirect": {
@@ -37519,7 +37519,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 509,
+      "duration": 235,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -37533,8 +37533,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T21:36:02.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T21:44:00.000Z",
         "error": null
       },
       "redirect": {
@@ -37720,22 +37720,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 326,
+      "duration": 316,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.35.221",
-          "172.67.180.60"
+          "172.67.180.60",
+          "104.21.35.221"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T21:42:03.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T22:14:26.000Z",
         "error": null
       },
       "redirect": {
@@ -37921,7 +37921,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 295,
+      "duration": 613,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -37935,8 +37935,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T21:33:00.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T01:20:54.000Z",
         "error": null
       },
       "redirect": {
@@ -38122,7 +38122,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 241,
+      "duration": 395,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -38136,8 +38136,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T22:34:47.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T22:57:12.000Z",
         "error": null
       },
       "redirect": {
@@ -38323,7 +38323,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 522,
+      "duration": 608,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -38337,8 +38337,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T23:21:10.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T01:53:59.000Z",
         "error": null
       },
       "redirect": {
@@ -38510,7 +38510,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 688,
+      "duration": 197,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -38524,8 +38524,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T21:37:56.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T22:15:02.000Z",
         "error": null
       },
       "redirect": {
@@ -38697,22 +38697,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 406,
+      "duration": 507,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.23.214",
-          "172.67.213.238"
+          "172.67.213.238",
+          "104.21.23.214"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T22:56:57.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T23:34:30.000Z",
         "error": null
       },
       "redirect": {
@@ -38898,22 +38898,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 434,
+      "duration": 612,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.21.39",
-          "172.67.196.95"
+          "172.67.196.95",
+          "104.21.21.39"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T23:13:01.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T02:28:20.000Z",
         "error": null
       },
       "redirect": {
@@ -39085,7 +39085,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 432,
+      "duration": 451,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -39099,8 +39099,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T02:20:23.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T05:56:42.000Z",
         "error": null
       },
       "redirect": {
@@ -39272,22 +39272,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 662,
+      "duration": 188,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.218.123",
-          "104.21.53.201"
+          "104.21.53.201",
+          "172.67.218.123"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T21:38:58.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T00:12:03.000Z",
         "error": null
       },
       "redirect": {
@@ -39459,7 +39459,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 531,
+      "duration": 308,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -39473,8 +39473,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T20:57:32.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T04:12:14.000Z",
         "error": null
       },
       "redirect": {
@@ -39646,22 +39646,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 613,
+      "duration": 658,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-30T00:32:07.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-28T04:04:54.000Z",
         "error": null
       },
       "redirect": {
@@ -39833,7 +39833,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 312,
+      "duration": 565,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -39847,8 +39847,8 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T21:00:25.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T23:46:39.000Z",
         "error": null
       },
       "redirect": {
@@ -40021,22 +40021,22 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 228,
+      "duration": 447,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.216.224",
-          "104.21.93.242"
+          "104.21.93.242",
+          "172.67.216.224"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 32,
-        "validTo": "2026-10-29T22:50:39.000Z",
+        "daysLeft": 90,
+        "validTo": "2026-12-27T23:11:28.000Z",
         "error": null
       },
       "redirect": {
@@ -40222,15 +40222,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 387,
+      "duration": 504,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -40405,7 +40405,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 420,
+      "duration": 559,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -40588,15 +40588,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 867,
+      "duration": 903,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -40771,15 +40771,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 153,
+      "duration": 175,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -40954,15 +40954,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 928,
+      "duration": 706,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -41137,7 +41137,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 495,
+      "duration": 397,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -41321,15 +41321,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 608,
+      "duration": 665,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -41504,7 +41504,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 814,
+      "duration": 725,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -41687,7 +41687,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 663,
+      "duration": 661,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -41870,7 +41870,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 464,
+      "duration": 198,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -42053,15 +42053,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 786,
+      "duration": 782,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -42236,7 +42236,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 162,
+      "duration": 247,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -42250,7 +42250,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 62,
+        "daysLeft": 61,
         "validTo": "2026-11-28T19:08:10.000Z",
         "error": null
       },
@@ -42419,7 +42419,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 548,
+      "duration": 566,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -42602,15 +42602,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 544,
+      "duration": 383,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.78.108",
-          "172.67.220.97"
+          "172.67.220.97",
+          "104.21.78.108"
         ],
         "ok": true,
         "error": null
@@ -42785,7 +42785,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 750,
+      "duration": 804,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -42799,7 +42799,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-29T19:05:47.000Z",
         "error": null
       },
@@ -42968,15 +42968,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 678,
+      "duration": 743,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -43180,15 +43180,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 751,
+      "duration": 699,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -43363,7 +43363,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 648,
+      "duration": 806,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -43546,7 +43546,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 681,
+      "duration": 786,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -43729,15 +43729,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 507,
+      "duration": 137,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -43912,15 +43912,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 617,
+      "duration": 590,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.161.48",
-          "104.21.81.132"
+          "104.21.81.132",
+          "172.67.161.48"
         ],
         "ok": true,
         "error": null
@@ -44095,7 +44095,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 247,
+      "duration": 267,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -44278,15 +44278,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 578,
+      "duration": 505,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.45.46",
-          "172.67.209.178"
+          "172.67.209.178",
+          "104.21.45.46"
         ],
         "ok": true,
         "error": null
@@ -44461,7 +44461,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 393,
+      "duration": 662,
       "dns": {
         "ns": [
           "darwin.ns.cloudflare.com",
@@ -44475,7 +44475,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 66,
+        "daysLeft": 65,
         "validTo": "2026-12-02T21:33:28.000Z",
         "error": null
       },
@@ -44644,15 +44644,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 296,
+      "duration": 216,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.170.3",
-          "104.21.54.253"
+          "104.21.54.253",
+          "172.67.170.3"
         ],
         "ok": true,
         "error": null
@@ -44828,7 +44828,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 465,
+      "duration": 540,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -45011,7 +45011,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 270,
+      "duration": 384,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -45025,7 +45025,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 66,
+        "daysLeft": 65,
         "validTo": "2026-12-02T19:55:14.000Z",
         "error": null
       },
@@ -45194,7 +45194,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 543,
+      "duration": 490,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -45208,7 +45208,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 66,
+        "daysLeft": 65,
         "validTo": "2026-12-02T19:10:06.000Z",
         "error": null
       },
@@ -45377,7 +45377,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 291,
+      "duration": 332,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -45560,15 +45560,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 350,
+      "duration": 584,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.166.233",
-          "104.21.16.76"
+          "104.21.16.76",
+          "172.67.166.233"
         ],
         "ok": true,
         "error": null
@@ -45743,15 +45743,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 229,
+      "duration": 436,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -45926,15 +45926,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 566,
+      "duration": 573,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.128.254",
-          "104.21.2.89"
+          "104.21.2.89",
+          "172.67.128.254"
         ],
         "ok": true,
         "error": null
@@ -46109,15 +46109,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 563,
+      "duration": 522,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.202.221",
-          "104.21.52.189"
+          "104.21.52.189",
+          "172.67.202.221"
         ],
         "ok": true,
         "error": null
@@ -46292,21 +46292,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 207,
+      "duration": 259,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 67,
+        "daysLeft": 66,
         "validTo": "2026-12-03T21:23:23.000Z",
         "error": null
       },
@@ -46475,15 +46475,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 473,
+      "duration": 658,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.191.213",
-          "104.21.20.63"
+          "104.21.20.63",
+          "172.67.191.213"
         ],
         "ok": true,
         "error": null
@@ -46658,15 +46658,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 165,
+      "duration": 145,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.51.38",
-          "172.67.220.178"
+          "172.67.220.178",
+          "104.21.51.38"
         ],
         "ok": true,
         "error": null
@@ -46841,15 +46841,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 156,
+      "duration": 311,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -47025,15 +47025,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 415,
+      "duration": 592,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.142.201",
-          "104.21.71.34"
+          "104.21.71.34",
+          "172.67.142.201"
         ],
         "ok": true,
         "error": null
@@ -47208,7 +47208,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 335,
+      "duration": 503,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -47391,15 +47391,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 605,
+      "duration": 458,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -47574,7 +47574,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 446,
+      "duration": 532,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -47757,7 +47757,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 222,
+      "duration": 454,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -47940,15 +47940,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 402,
+      "duration": 164,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.89.185",
-          "172.67.191.3"
+          "172.67.191.3",
+          "104.21.89.185"
         ],
         "ok": true,
         "error": null
@@ -48123,7 +48123,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 283,
+      "duration": 234,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -48306,7 +48306,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 502,
+      "duration": 681,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -48489,15 +48489,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 531,
+      "duration": 603,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.32.141",
-          "172.67.152.97"
+          "172.67.152.97",
+          "104.21.32.141"
         ],
         "ok": true,
         "error": null
@@ -48672,7 +48672,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 484,
+      "duration": 166,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -48855,7 +48855,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 573,
+      "duration": 429,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -49038,15 +49038,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 443,
+      "duration": 281,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -49221,15 +49221,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 466,
+      "duration": 214,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -49404,15 +49404,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 682,
+      "duration": 449,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.148.140",
-          "104.21.29.65"
+          "104.21.29.65",
+          "172.67.148.140"
         ],
         "ok": true,
         "error": null
@@ -49587,7 +49587,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 658,
+      "duration": 612,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -49770,15 +49770,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 203,
+      "duration": 217,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.167.13",
-          "104.21.57.218"
+          "104.21.57.218",
+          "172.67.167.13"
         ],
         "ok": true,
         "error": null
@@ -49953,7 +49953,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 551,
+      "duration": 479,
       "dns": {
         "ns": [
           "darwin.ns.cloudflare.com",
@@ -49967,7 +49967,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 69,
+        "daysLeft": 68,
         "validTo": "2026-12-05T19:07:45.000Z",
         "error": null
       },
@@ -50136,7 +50136,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 429,
+      "duration": 306,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -50320,7 +50320,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 345,
+      "duration": 363,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -50503,15 +50503,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 421,
+      "duration": 386,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -50686,15 +50686,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 511,
+      "duration": 417,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.194.16",
-          "104.21.20.186"
+          "104.21.20.186",
+          "172.67.194.16"
         ],
         "ok": true,
         "error": null
@@ -50869,7 +50869,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 541,
+      "duration": 544,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -51052,15 +51052,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 199,
+      "duration": 248,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -51235,15 +51235,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 512,
+      "duration": 533,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.15.126",
-          "172.67.162.158"
+          "172.67.162.158",
+          "104.21.15.126"
         ],
         "ok": true,
         "error": null
@@ -51418,7 +51418,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 260,
+      "duration": 281,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -51601,15 +51601,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 588,
+      "duration": 480,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -51784,7 +51784,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 381,
+      "duration": 194,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -51967,15 +51967,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 495,
+      "duration": 394,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
           "carl.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.187.102",
-          "104.21.48.170"
+          "104.21.48.170",
+          "172.67.187.102"
         ],
         "ok": true,
         "error": null
@@ -52150,7 +52150,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 553,
+      "duration": 584,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -52164,7 +52164,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 70,
+        "daysLeft": 69,
         "validTo": "2026-12-06T20:20:40.000Z",
         "error": null
       },
@@ -52333,15 +52333,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 312,
+      "duration": 365,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -52516,21 +52516,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 600,
+      "duration": 498,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 70,
+        "daysLeft": 69,
         "validTo": "2026-12-06T19:29:36.000Z",
         "error": null
       },
@@ -52699,7 +52699,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 693,
+      "duration": 389,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -52882,7 +52882,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 677,
+      "duration": 506,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -53069,7 +53069,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 280,
+      "duration": 168,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -53252,7 +53252,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 481,
+      "duration": 633,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
@@ -53435,15 +53435,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 504,
+      "duration": 617,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -53618,7 +53618,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 182,
+      "duration": 524,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -53801,7 +53801,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 227,
+      "duration": 389,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -53984,15 +53984,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 532,
+      "duration": 666,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -54167,21 +54167,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 279,
+      "duration": 194,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.217.132",
-          "104.21.67.74"
+          "104.21.67.74",
+          "172.67.217.132"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 73,
+        "daysLeft": 72,
         "validTo": "2026-12-09T22:06:55.000Z",
         "error": null
       },
@@ -54350,7 +54350,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 652,
+      "duration": 659,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -54533,7 +54533,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 529,
+      "duration": 727,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -54716,15 +54716,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 370,
+      "duration": 317,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -54899,7 +54899,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 524,
+      "duration": 751,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -55082,7 +55082,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 423,
+      "duration": 266,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -55265,7 +55265,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 317,
+      "duration": 580,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -55448,15 +55448,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 329,
+      "duration": 210,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -55631,7 +55631,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 609,
+      "duration": 697,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -55814,15 +55814,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 412,
+      "duration": 158,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -55998,7 +55998,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 207,
+      "duration": 334,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -56182,15 +56182,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 598,
+      "duration": 777,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.173.161",
-          "104.21.88.66"
+          "104.21.88.66",
+          "172.67.173.161"
         ],
         "ok": true,
         "error": null
@@ -56365,7 +56365,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 154,
+      "duration": 521,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -56548,7 +56548,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 399,
+      "duration": 284,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -56735,7 +56735,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 456,
+      "duration": 635,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -56918,15 +56918,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 300,
+      "duration": 244,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.186.65",
-          "104.21.76.33"
+          "104.21.76.33",
+          "172.67.186.65"
         ],
         "ok": true,
         "error": null
@@ -57101,7 +57101,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 558,
+      "duration": 753,
       "dns": {
         "ns": [
           "darwin.ns.cloudflare.com",
@@ -57284,15 +57284,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 224,
+      "duration": 403,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.39.25",
-          "172.67.142.59"
+          "172.67.142.59",
+          "104.21.39.25"
         ],
         "ok": true,
         "error": null
@@ -57467,7 +57467,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 480,
+      "duration": 159,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -57650,7 +57650,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 636,
+      "duration": 684,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -57833,7 +57833,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 399,
+      "duration": 370,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -58016,15 +58016,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 699,
+      "duration": 571,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -58199,7 +58199,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 201,
+      "duration": 291,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -58382,7 +58382,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 621,
+      "duration": 602,
       "dns": {
         "ns": [
           "darwin.ns.cloudflare.com",
@@ -58565,7 +58565,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 699,
+      "duration": 484,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -58748,15 +58748,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 489,
+      "duration": 320,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -58931,7 +58931,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 771,
+      "duration": 462,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -59114,7 +59114,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 649,
+      "duration": 516,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -59297,7 +59297,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 236,
+      "duration": 343,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -59480,15 +59480,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 784,
+      "duration": 575,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "mack.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -59663,15 +59663,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 687,
+      "duration": 491,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
           "stevie.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -59846,7 +59846,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 171,
+      "duration": 210,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -60029,15 +60029,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 548,
+      "duration": 457,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -60212,15 +60212,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 132,
+      "duration": 161,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.129.205",
-          "104.21.2.235"
+          "104.21.2.235",
+          "172.67.129.205"
         ],
         "ok": true,
         "error": null
@@ -60395,7 +60395,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 338,
+      "duration": 426,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -60578,7 +60578,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 684,
+      "duration": 524,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
@@ -60761,7 +60761,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 306,
+      "duration": 255,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -60944,7 +60944,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 773,
+      "duration": 567,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
@@ -61127,7 +61127,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 437,
+      "duration": 172,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -61310,7 +61310,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 765,
+      "duration": 597,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -61493,15 +61493,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 597,
+      "duration": 280,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.187.228",
-          "104.21.64.217"
+          "104.21.64.217",
+          "172.67.187.228"
         ],
         "ok": true,
         "error": null
@@ -61676,15 +61676,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 212,
+      "duration": 217,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.133.84",
-          "104.21.5.106"
+          "104.21.5.106",
+          "172.67.133.84"
         ],
         "ok": true,
         "error": null
@@ -61859,7 +61859,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 256,
+      "duration": 395,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -62042,7 +62042,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 648,
+      "duration": 401,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -62225,15 +62225,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 472,
+      "duration": 243,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -62408,15 +62408,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 300,
+      "duration": 1073,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -62591,15 +62591,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 573,
+      "duration": 806,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -62774,15 +62774,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 731,
+      "duration": 528,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.19.22",
-          "172.67.184.186"
+          "172.67.184.186",
+          "104.21.19.22"
         ],
         "ok": true,
         "error": null
@@ -62957,21 +62957,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 762,
+      "duration": 773,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 81,
+        "daysLeft": 80,
         "validTo": "2026-12-17T22:41:56.000Z",
         "error": null
       },
@@ -63140,7 +63140,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 326,
+      "duration": 234,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -63323,15 +63323,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 193,
+      "duration": 542,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -63506,15 +63506,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 477,
+      "duration": 948,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.165.5",
-          "104.21.41.137"
+          "104.21.41.137",
+          "172.67.165.5"
         ],
         "ok": true,
         "error": null
@@ -63689,7 +63689,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 197,
+      "duration": 596,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -63872,15 +63872,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 156,
+      "duration": 385,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.85.31",
-          "172.67.201.189"
+          "172.67.201.189",
+          "104.21.85.31"
         ],
         "ok": true,
         "error": null
@@ -64055,7 +64055,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 710,
+      "duration": 1077,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -64238,7 +64238,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 669,
+      "duration": 767,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -64421,7 +64421,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 257,
+      "duration": 162,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -64604,7 +64604,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 402,
+      "duration": 810,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -64787,7 +64787,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 444,
+      "duration": 1042,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -64970,7 +64970,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 186,
+      "duration": 210,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -65153,7 +65153,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 378,
+      "duration": 1110,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -65336,15 +65336,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 223,
+      "duration": 955,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -65519,15 +65519,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 148,
+      "duration": 1362,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -65702,15 +65702,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 379,
+      "duration": 729,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.187.119",
-          "104.21.32.205"
+          "104.21.32.205",
+          "172.67.187.119"
         ],
         "ok": true,
         "error": null
@@ -65885,7 +65885,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 667,
+      "duration": 574,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -66068,7 +66068,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 226,
+      "duration": 840,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -66251,15 +66251,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 673,
+      "duration": 677,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -66434,15 +66434,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 494,
+      "duration": 929,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.87.174",
-          "172.67.170.122"
+          "172.67.170.122",
+          "104.21.87.174"
         ],
         "ok": true,
         "error": null
@@ -66617,7 +66617,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 266,
+      "duration": 650,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -66800,15 +66800,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 321,
+      "duration": 500,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -66983,15 +66983,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 934,
+      "duration": 592,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.0.185",
-          "172.67.128.49"
+          "172.67.128.49",
+          "104.21.0.185"
         ],
         "ok": true,
         "error": null
@@ -67166,15 +67166,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 799,
+      "duration": 892,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.12.18",
-          "172.67.151.74"
+          "172.67.151.74",
+          "104.21.12.18"
         ],
         "ok": true,
         "error": null
@@ -67349,7 +67349,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 813,
+      "duration": 419,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -67532,7 +67532,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 608,
+      "duration": 149,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -67715,7 +67715,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 420,
+      "duration": 537,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -67898,7 +67898,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 141,
+      "duration": 398,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -68081,7 +68081,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 432,
+      "duration": 335,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -68264,15 +68264,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 376,
+      "duration": 467,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -68447,7 +68447,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 543,
+      "duration": 688,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -68630,15 +68630,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 711,
+      "duration": 187,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -68813,7 +68813,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 588,
+      "duration": 897,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -68996,7 +68996,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 512,
+      "duration": 314,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -69179,7 +69179,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 193,
+      "duration": 280,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -69362,15 +69362,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 774,
+      "duration": 717,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
           "candy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -69545,15 +69545,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 702,
+      "duration": 759,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.164.48",
-          "104.21.33.147"
+          "104.21.33.147",
+          "172.67.164.48"
         ],
         "ok": true,
         "error": null
@@ -69728,7 +69728,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 742,
+      "duration": 558,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -69911,7 +69911,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 884,
+      "duration": 635,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -70094,15 +70094,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 284,
+      "duration": 498,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -70277,7 +70277,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 949,
+      "duration": 230,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -70460,7 +70460,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 818,
+      "duration": 746,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -70643,15 +70643,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 757,
+      "duration": 800,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -70826,15 +70826,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 1021,
+      "duration": 888,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.8.161",
-          "172.67.139.181"
+          "172.67.139.181",
+          "104.21.8.161"
         ],
         "ok": true,
         "error": null
@@ -71009,15 +71009,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 943,
+      "duration": 738,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -71192,7 +71192,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 497,
+      "duration": 624,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -71375,21 +71375,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 548,
+      "duration": 607,
       "dns": {
         "ns": [
           "dolly.ns.cloudflare.com",
           "wilson.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.91.80",
-          "172.67.212.131"
+          "172.67.212.131",
+          "104.21.91.80"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 88,
+        "daysLeft": 87,
         "validTo": "2026-12-24T22:12:16.000Z",
         "error": null
       },
@@ -71546,7 +71546,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 823,
+      "duration": 690,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -71687,15 +71687,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 698,
+      "duration": 639,
       "dns": {
         "ns": [
           "cartman.ns.cloudflare.com",
           "hadlee.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.152.242",
-          "104.21.56.157"
+          "104.21.56.157",
+          "172.67.152.242"
         ],
         "ok": true,
         "error": null
@@ -71828,7 +71828,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 566,
+      "duration": 525,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -71842,7 +71842,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 39,
+        "daysLeft": 38,
         "validTo": "2026-11-06T01:28:10.000Z",
         "error": null
       },
@@ -71969,7 +71969,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 715,
+      "duration": 1085,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -71983,7 +71983,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 39,
+        "daysLeft": 38,
         "validTo": "2026-11-05T20:02:27.000Z",
         "error": null
       },
@@ -72110,15 +72110,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 788,
+      "duration": 576,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
           "zoe.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.82.130",
-          "172.67.202.123"
+          "172.67.202.123",
+          "104.21.82.130"
         ],
         "ok": true,
         "error": null
@@ -72281,15 +72281,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 667,
+      "duration": 491,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -72422,21 +72422,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 418,
+      "duration": 153,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 39,
+        "daysLeft": 38,
         "validTo": "2026-11-06T00:51:11.000Z",
         "error": null
       },
@@ -72563,21 +72563,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 1064,
+      "duration": 636,
       "dns": {
         "ns": [
           "dolly.ns.cloudflare.com",
           "wilson.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.209.23",
-          "104.21.58.222"
+          "104.21.58.222",
+          "172.67.209.23"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 54,
+        "daysLeft": 53,
         "validTo": "2026-11-20T19:19:49.000Z",
         "error": null
       },
@@ -72689,7 +72689,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 1081,
+      "duration": 810,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -72703,7 +72703,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 54,
+        "daysLeft": 53,
         "validTo": "2026-11-21T01:34:35.000Z",
         "error": null
       },
@@ -72845,15 +72845,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 863,
+      "duration": 1001,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.174.142",
-          "104.21.47.243"
+          "104.21.47.243",
+          "172.67.174.142"
         ],
         "ok": true,
         "error": null
@@ -72986,15 +72986,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 943,
+      "duration": 892,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
           "sara.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -73127,21 +73127,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 456,
+      "duration": 401,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
           "sergi.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 54,
+        "daysLeft": 53,
         "validTo": "2026-11-21T03:57:49.000Z",
         "error": null
       },
@@ -73268,7 +73268,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 434,
+      "duration": 425,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
@@ -73282,7 +73282,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 54,
+        "daysLeft": 53,
         "validTo": "2026-11-21T02:00:13.000Z",
         "error": null
       },
@@ -73439,7 +73439,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 829,
+      "duration": 762,
       "dns": {
         "ns": [
           "alexis.ns.cloudflare.com",
@@ -73565,7 +73565,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 889,
+      "duration": 419,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -73579,7 +73579,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-30T00:39:36.000Z",
         "error": null
       },
@@ -73691,7 +73691,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 1363,
+      "duration": 447,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -73847,21 +73847,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 754,
+      "duration": 668,
       "dns": {
         "ns": [
           "cartman.ns.cloudflare.com",
           "hadlee.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 64,
+        "daysLeft": 63,
         "validTo": "2026-11-30T19:35:35.000Z",
         "error": null
       },
@@ -73988,7 +73988,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 744,
+      "duration": 850,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -74002,7 +74002,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-29T22:14:26.000Z",
         "error": null
       },
@@ -74129,7 +74129,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 930,
+      "duration": 1025,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -74143,7 +74143,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-30T03:45:13.000Z",
         "error": null
       },
@@ -74285,7 +74285,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 477,
+      "duration": 977,
       "dns": {
         "ns": [
           "dolly.ns.cloudflare.com",
@@ -74299,7 +74299,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-29T22:06:17.000Z",
         "error": null
       },
@@ -74426,7 +74426,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 610,
+      "duration": 643,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -74440,7 +74440,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-29T23:35:32.000Z",
         "error": null
       },
@@ -74552,7 +74552,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 148,
+      "duration": 488,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -74566,7 +74566,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 73,
+        "daysLeft": 72,
         "validTo": "2026-12-10T05:51:16.000Z",
         "error": null
       },
@@ -74693,15 +74693,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 953,
+      "duration": 1058,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -74849,15 +74849,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 829,
+      "duration": 788,
       "dns": {
         "ns": [
           "cartman.ns.cloudflare.com",
           "hadlee.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.15.138",
-          "172.67.162.171"
+          "172.67.162.171",
+          "104.21.15.138"
         ],
         "ok": true,
         "error": null
@@ -74990,7 +74990,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 404,
+      "duration": 1119,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -75131,7 +75131,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 699,
+      "duration": 445,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -75272,7 +75272,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 341,
+      "duration": 506,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -75443,15 +75443,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 656,
+      "duration": 613,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -75545,7 +75545,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 156,
+      "duration": 433,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
@@ -75649,15 +75649,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 447,
+      "duration": 637,
       "dns": {
         "ns": [
           "cartman.ns.cloudflare.com",
           "hadlee.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.186.44",
-          "104.21.19.126"
+          "104.21.19.126",
+          "172.67.186.44"
         ],
         "ok": true,
         "error": null
@@ -75837,7 +75837,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 406,
+      "duration": 782,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -75966,15 +75966,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 489,
+      "duration": 682,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -76068,21 +76068,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 842,
+      "duration": 577,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.188.73",
-          "104.21.32.235"
+          "104.21.32.235",
+          "172.67.188.73"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 73,
+        "daysLeft": 72,
         "validTo": "2026-12-10T06:15:02.000Z",
         "error": null
       },
@@ -76209,21 +76209,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 366,
+      "duration": 517,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.68.52",
-          "172.67.186.222"
+          "172.67.186.222",
+          "104.21.68.52"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 73,
+        "daysLeft": 72,
         "validTo": "2026-12-10T05:57:56.000Z",
         "error": null
       },
@@ -76365,7 +76365,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 1001,
+      "duration": 561,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
@@ -76506,15 +76506,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 565,
+      "duration": 367,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -76647,15 +76647,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 558,
+      "duration": 533,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.85.54",
-          "172.67.202.183"
+          "172.67.202.183",
+          "104.21.85.54"
         ],
         "ok": true,
         "error": null
@@ -76788,7 +76788,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 795,
+      "duration": 884,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
@@ -76802,7 +76802,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 74,
+        "daysLeft": 73,
         "validTo": "2026-12-11T01:32:48.000Z",
         "error": null
       },
@@ -76929,15 +76929,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 210,
+      "duration": 599,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -77085,15 +77085,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 843,
+      "duration": 508,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.172.191",
-          "104.21.30.104"
+          "104.21.30.104",
+          "172.67.172.191"
         ],
         "ok": true,
         "error": null
@@ -77226,15 +77226,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 229,
+      "duration": 149,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.79.12",
-          "172.67.168.175"
+          "172.67.168.175",
+          "104.21.79.12"
         ],
         "ok": true,
         "error": null
@@ -77367,15 +77367,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 772,
+      "duration": 701,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -77508,15 +77508,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 569,
+      "duration": 439,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -77709,7 +77709,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 724,
+      "duration": 663,
       "dns": {
         "ns": [
           "betty.ns.cloudflare.com",
@@ -77723,7 +77723,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 42,
+        "daysLeft": 41,
         "validTo": "2026-11-09T06:29:02.000Z",
         "error": null
       },
@@ -77896,15 +77896,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 964,
+      "duration": 243,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.167.9",
-          "104.21.57.214"
+          "104.21.57.214",
+          "172.67.167.9"
         ],
         "ok": true,
         "error": null
@@ -78083,21 +78083,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 600,
+      "duration": 320,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 42,
+        "daysLeft": 41,
         "validTo": "2026-11-09T06:29:52.000Z",
         "error": null
       },
@@ -78270,21 +78270,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 762,
+      "duration": 702,
       "dns": {
         "ns": [
           "nina.ns.cloudflare.com",
           "rodney.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.22.35",
-          "172.67.202.59"
+          "172.67.202.59",
+          "104.21.22.35"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 42,
+        "daysLeft": 41,
         "validTo": "2026-11-09T06:31:55.000Z",
         "error": null
       },
@@ -78457,7 +78457,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 188,
+      "duration": 345,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -78640,7 +78640,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 236,
+      "duration": 250,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
@@ -78823,7 +78823,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 149,
+      "duration": 177,
       "dns": {
         "ns": [
           "amir.ns.cloudflare.com",
@@ -79006,7 +79006,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 174,
+      "duration": 165,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -79176,15 +79176,15 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 223,
+      "duration": 315,
       "dns": {
         "ns": [
           "colette.ns.cloudflare.com",
           "santino.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -79234,15 +79234,15 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 552,
+      "duration": 174,
       "dns": {
         "ns": [
           "elisabeth.ns.cloudflare.com",
           "maxim.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -79292,15 +79292,15 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 631,
+      "duration": 220,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
           "liberty.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.159.172",
-          "104.21.14.142"
+          "104.21.14.142",
+          "172.67.159.172"
         ],
         "ok": true,
         "error": null
@@ -79350,7 +79350,7 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 283,
+      "duration": 171,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -79408,15 +79408,15 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 494,
+      "duration": 256,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.155.145",
-          "104.21.90.99"
+          "104.21.90.99",
+          "172.67.155.145"
         ],
         "ok": true,
         "error": null
@@ -79466,15 +79466,15 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 541,
+      "duration": 139,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
           "paloma.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.220.112",
-          "104.21.70.56"
+          "104.21.70.56",
+          "172.67.220.112"
         ],
         "ok": true,
         "error": null
@@ -79524,15 +79524,15 @@
       "status": 301,
       "ok": false,
       "alive": false,
-      "duration": 567,
+      "duration": 154,
       "dns": {
         "ns": [
           "pedro.ns.cloudflare.com",
           "sloan.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -79824,7 +79824,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 310,
+      "duration": 282,
       "dns": {
         "ns": [
           "gannon.ns.cloudflare.com",
@@ -79838,7 +79838,7 @@
         "error": null
       },
       "ssl": {
-        "daysLeft": 57,
+        "daysLeft": 56,
         "validTo": "2026-11-24T05:02:13.000Z",
         "error": null
       },
@@ -80222,21 +80222,21 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 263,
+      "duration": 341,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 63,
+        "daysLeft": 62,
         "validTo": "2026-11-30T06:25:56.000Z",
         "error": null
       },
@@ -80553,7 +80553,7 @@
       "status": "SSL_ERROR",
       "ok": false,
       "alive": false,
-      "duration": 262,
+      "duration": 425,
       "dns": {
         "ns": [
           "ns1.dnsowl.com",
@@ -80707,7 +80707,7 @@
       "status": 436,
       "ok": false,
       "alive": false,
-      "duration": 424,
+      "duration": 402,
       "dns": {
         "ns": [
           "ns1.dnsowl.com",
@@ -81033,12 +81033,12 @@
       "status": "ERROR",
       "ok": false,
       "alive": false,
-      "duration": 10246,
+      "duration": 10093,
       "dns": {
         "ns": [
           "ina2.registrar.eu",
-          "ina1.registrar.eu",
-          "ina3.registrar.eu"
+          "ina3.registrar.eu",
+          "ina1.registrar.eu"
         ],
         "a": [
           "185.53.179.136"
@@ -81200,21 +81200,21 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 258,
+      "duration": 321,
       "dns": {
         "ns": [
           "lochlan.ns.cloudflare.com",
           "ollie.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.29.154",
-          "172.67.149.108"
+          "172.67.149.108",
+          "104.21.29.154"
         ],
         "ok": true,
         "error": null
       },
       "ssl": {
-        "daysLeft": 85,
+        "daysLeft": 84,
         "validTo": "2026-12-21T20:35:30.000Z",
         "error": null
       },
@@ -81387,12 +81387,12 @@
       "status": "ERROR",
       "ok": false,
       "alive": false,
-      "duration": 10142,
+      "duration": 10087,
       "dns": {
         "ns": [
-          "ina3.registrar.eu",
           "ina2.registrar.eu",
-          "ina1.registrar.eu"
+          "ina1.registrar.eu",
+          "ina3.registrar.eu"
         ],
         "a": [
           "185.53.179.136"
@@ -81727,7 +81727,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 481,
+      "duration": 505,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -81910,7 +81910,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 490,
+      "duration": 488,
       "dns": {
         "ns": [
           "ashton.ns.cloudflare.com",
@@ -82093,7 +82093,7 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 435,
+      "duration": 464,
       "dns": {
         "ns": [
           "carter.ns.cloudflare.com",
@@ -82276,15 +82276,15 @@
       "status": 200,
       "ok": true,
       "alive": true,
-      "duration": 513,
+      "duration": 449,
       "dns": {
         "ns": [
           "karina.ns.cloudflare.com",
           "randy.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.159.106",
-          "104.21.58.118"
+          "104.21.58.118",
+          "172.67.159.106"
         ],
         "ok": true,
         "error": null
@@ -82459,7 +82459,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 199,
+      "duration": 373,
       "dns": {
         "ns": [
           "amos.ns.cloudflare.com",
@@ -82521,7 +82521,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 465,
+      "duration": 190,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
@@ -82583,15 +82583,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 517,
+      "duration": 349,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.48.252",
-          "172.67.157.26"
+          "172.67.157.26",
+          "104.21.48.252"
         ],
         "ok": true,
         "error": null
@@ -82645,15 +82645,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 313,
+      "duration": 185,
       "dns": {
         "ns": [
           "buck.ns.cloudflare.com",
           "diana.ns.cloudflare.com"
         ],
         "a": [
-          "172.67.201.133",
-          "104.21.66.61"
+          "104.21.66.61",
+          "172.67.201.133"
         ],
         "ok": true,
         "error": null
@@ -82707,7 +82707,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 185,
+      "duration": 351,
       "dns": {
         "ns": [
           "riya.ns.cloudflare.com",
@@ -82769,15 +82769,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 425,
+      "duration": 319,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -82831,15 +82831,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 590,
+      "duration": 226,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
           "tom.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.97.2",
-          "188.114.96.2"
+          "188.114.96.2",
+          "188.114.97.2"
         ],
         "ok": true,
         "error": null
@@ -82893,15 +82893,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 324,
+      "duration": 419,
       "dns": {
         "ns": [
           "liberty.ns.cloudflare.com",
           "rohin.ns.cloudflare.com"
         ],
         "a": [
-          "104.21.2.214",
-          "172.67.129.182"
+          "172.67.129.182",
+          "104.21.2.214"
         ],
         "ok": true,
         "error": null
@@ -82955,15 +82955,15 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 483,
+      "duration": 474,
       "dns": {
         "ns": [
           "imani.ns.cloudflare.com",
           "will.ns.cloudflare.com"
         ],
         "a": [
-          "188.114.96.2",
-          "188.114.97.2"
+          "188.114.97.2",
+          "188.114.96.2"
         ],
         "ok": true,
         "error": null
@@ -83017,7 +83017,7 @@
       "status": 302,
       "ok": false,
       "alive": true,
-      "duration": 440,
+      "duration": 433,
       "dns": {
         "ns": [
           "autumn.ns.cloudflare.com",
