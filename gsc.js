@@ -1,6 +1,8 @@
 /**
- * Динамика Google Search Console: последние 14 дней против предыдущих 14.
- * Пишет `gsc` в каждую строку status.json. Квоту URL Inspection не трогает.
+ * Динамика Google Search Console.
+ * В строку пишет итог 14 дней (как seodrug) и ряд по дням за 6 месяцев
+ * плюс предыдущие 6 месяцев, чтобы панель могла переключить период.
+ * Квоту URL Inspection не трогает.
  */
 const fs = require("fs");
 const {
@@ -16,6 +18,8 @@ const SITES_PATH = "./sites.json";
 const CSV_PATH = "./sites.csv";
 const TZ = "America/Los_Angeles";
 const QUERY_TIMEOUT_MS = 30000;
+/** Столько дней можно выбрать в панели, и столько же нужно для «было». */
+const HISTORY_MONTH_DAYS = 180;
 
 function ymdInPt(date) {
     return new Intl.DateTimeFormat("en-CA", {
@@ -42,7 +46,8 @@ function gscWindows(now = new Date()) {
     const start = addDays(end, -13);
     const prevEnd = addDays(start, -1);
     const prevStart = addDays(prevEnd, -13);
-    return { start, end, prevStart, prevEnd };
+    const historyStart = addDays(end, -(HISTORY_MONTH_DAYS * 2 - 1));
+    return { start, end, prevStart, prevEnd, historyStart };
 }
 
 function sumWindow(rows, start, end) {
@@ -58,9 +63,9 @@ function sumWindow(rows, start, end) {
         const pos = Number(row.position);
         clicks += clk;
         impressions += imp;
-        if (Number.isFinite(pos)) {
-            posSum += pos;
-            posDays += 1;
+        if (Number.isFinite(pos) && imp > 0) {
+            posSum += pos * imp;
+            posDays += imp;
         }
     }
     return {
@@ -69,6 +74,27 @@ function sumWindow(rows, start, end) {
         ctr: impressions ? clicks / impressions : null,
         position: posDays ? Math.round((posSum / posDays) * 100) / 100 : null,
     };
+}
+
+/** [дата, клики, показы, место]. Пустые сутки не пишем: на сумму они не влияют. */
+function dayPoints(rows) {
+    const points = [];
+    for (const row of rows || []) {
+        const day = row.keys && row.keys[0];
+        if (!day) continue;
+        const impressions = Number(row.impressions) || 0;
+        const clicks = Number(row.clicks) || 0;
+        if (!impressions && !clicks) continue;
+        const pos = Number(row.position);
+        points.push([
+            day,
+            clicks,
+            impressions,
+            Number.isFinite(pos) ? Math.round(pos * 100) / 100 : null,
+        ]);
+    }
+    points.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+    return points;
 }
 
 function gscErrorStatus(err) {
@@ -124,7 +150,7 @@ async function queryDaily(sc, siteUrl, startDate, endDate) {
                 dimensions: ["date"],
                 type: "web",
                 dataState: "all",
-                rowLimit: 50,
+                rowLimit: 500,
             },
         }),
         QUERY_TIMEOUT_MS,
@@ -133,16 +159,21 @@ async function queryDaily(sc, siteUrl, startDate, endDate) {
     return res.data?.rows || [];
 }
 
+function queryStart(windows) {
+    return windows.historyStart || windows.prevStart;
+}
+
 async function queryWithFallback(sc, domain, windows) {
+    const from = queryStart(windows);
     const primary = `sc-domain:${domain}`;
     try {
-        const rows = await queryDaily(sc, primary, windows.prevStart, windows.end);
+        const rows = await queryDaily(sc, primary, from, windows.end);
         return { rows, siteUrl: primary };
     } catch (err) {
         if (gscErrorStatus(err) !== 403) throw err;
     }
     const fallback = `https://${domain}/`;
-    const rows = await queryDaily(sc, fallback, windows.prevStart, windows.end);
+    const rows = await queryDaily(sc, fallback, from, windows.end);
     return { rows, siteUrl: fallback };
 }
 
@@ -164,6 +195,7 @@ function buildGscRecord({ rows, siteUrl, windows, checkedAt, error }) {
             prev_position: null,
             checked_at: checkedAt,
             error,
+            days: null,
         };
     }
     const current = sumWindow(rows, windows.start, windows.end);
@@ -184,6 +216,7 @@ function buildGscRecord({ rows, siteUrl, windows, checkedAt, error }) {
         prev_position: prev.position,
         checked_at: checkedAt,
         error: null,
+        days: dayPoints(rows),
     };
 }
 
@@ -312,6 +345,7 @@ module.exports = {
     addDays,
     gscWindows,
     sumWindow,
+    dayPoints,
     buildGscRecord,
     runGsc,
 };
